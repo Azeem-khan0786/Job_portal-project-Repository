@@ -1,0 +1,417 @@
+﻿Install django and run server
+Note : Make sure you have Python version 3.8.x 👈
+Install a few prerequisite files before running the project 👀
+
+pip install Django
+pip install pillow
+pip install Django-crispy-forms
+pip install crispy-bootstrap4  
+pip install django_cleanup
+pip install sslcommerz-python 
+
+pip --version 
+python3 –version
+dajngoa-admin –version 
+  
+                                                    Projecet Structure
+1. cd Desktop
+2.mkdir myfirstproject
+3. cd myfirstproject
+4. virtualenv myenv(create virtual envi named as myenv)
+5. source  myenv/bin/activate (activate your virtualenv)
+6.  pip install django
+7. python3 -m django-- version
+8. django-admin startproject blog-project (create project as blog-project )
+9. cd  blog-project ( go to project )
+10. python3 manage.py startapp homeapp( make app as homeapp)
+11. python3 manage.py runserver ( run your server)
+   
+                         `			Project structure 
+
+my_project/
+├── manage.py                                                        
+├── my_project/
+│ ├── __init__.py
+│ ├── asgi.py
+│ ├─ settings.py
+│ ├─ urls.py
+│ ├── wsgi.py
+├── my_app/
+├── migrations/
+│ └── __init__.py
+├── __init__.py
+├── admin.py
+├── apps.py
+├── models.py
+├── tests.py
+├── urls.py
+└── views.py
+
+                                                      Add Apps into setting.py
+
+# Application definition
+
+INSTALLED_APPS = [
+..............
+]
+EXTERNAL_APP=[
+'rest_framework',
+'homeapi',
+]
+INSTALLED_APPS+=EXTERNAL_APP 
+
+
+views in django 
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
+
+
+
+///        function based views
+
+def members(request):
+    return HttpResponse("Hello world!")
+
+def fifth_view(request):
+  return HttpResponse('<h1>Response from Fifth View</h1>')
+
+ 
+def home(request):
+data =ProductModel.objects.all() 
+mess=’ ’ 
+
+return render(request,'Alibaba/home.html',{'data':data}) if u use data
+       //  return render(request,'Alibaba/home.html',context={"data ":data ,”mess”:mess }) u can write as also 
+
+//      class  based views
+
+
+
+urls .py
+
+from django.contrib import admin
+from django.urls import include, path
+form Alibaba import views
+
+
+// urls for function based views
+
+ urlpatterns = [
+    path('', include('members.urls')),
+    path('admin/', admin.site.urls),
+    path(“home/”,views.home,name=’home’),
+    
+
+ ]
+
+// urls for class based views
+    
+urlpatterns = [
+ path('blog/', views.BlogPostView.as_view(), name='blog-post-list'),
+ path('blog/update/<int:post_id>/', views.BlogPostView.as_view(), name='blogupdate'),
+
+]
+
+
+
+				
+                                                                        Model in django 
+models.py
+
+from django.db import models
+ TITLE_CHOICES = {       
+    "MR": "Mr.",
+    "MRS": "Mrs.",
+    "MS": "Ms.",
+}
+
+  Create your models here.
+ class Employee(models.Model):
+     
+      eno=models.IntegerField()
+      ename=models.CharField(max_length=30)
+      title = models.CharField(max_length=3, choices=TITLE_CHOICES)
+
+      
+      def __str__(self): 
+            return f'{self.name} – {self.location}'
+
+  
+Defining __str__() in your model helps maintain consistency and clarity throughout your Django application by ensuring that instances of your models are represented in a meaningful way wherever they are displayed or referenced as strings.
+
+
+Once we write Model class, we have to generate the corresponding SQL Code. For this, we
+have to use “makemigrations” command.
+
+Python manage.py make migrations
+
+After generating sql code, we have to execute that sql code to create table in database.
+For this, we have to use ‘migrate’ command.
+
+python manage.py migrate
+
+
+How to Check created Table in Django admin Interface:
+We have to register model class in ‘admin.py’ file.
+
+admin.py                               // admin use list_display 
+     
+from django.contrib import admin
+from testApp.models import Employee
+
+# Register your models here.
+admin.site.register(Employee)
+   		or 
+// if we create class
+class EmployeeAdmin(admin.ModelAdmin):
+       list_display=['name','city']
+admin.site.register(Employee,EmployeeAdmin) 
+
+
+create superadmin 
+python manage.py createsuperuser   //(email,pass)
+
+
+Difference between makemigrations and migrate:
+“makemigrations” is responsible to generate SQL code for Python model class whereas
+“migrate” is responsible to execute that SQL code so that tables will be created in the
+database.
+
+				
+				Django From and ModelForm
+
+from django.db import models
+from django import forms
+from django.forms import ModelForm
+  //Form                                                                      // form use fields = ["name", "authors"]
+                                                      OR 
+                                                 fields = "__all__"
+                                                                                                           exclude = ["title"] 
+class BookForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    authors = forms.ModelMultipleChoiceField(queryset=Author.objects.all())
+widgets={
+'email':forms.EmailInput(attrs={'class':'form-control','placeholder':'Enter your email'}),
+
+}
+
+
+// ModelForm 
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book                // because we using model here!!
+        fields = ["name", "authors"]
+           OR 
+        fields = "__all__"
+        exclude = ["title"]
+
+
+widgets
+username = forms.CharField(max_length=63,widget=forms.TextInput(attrs={'class':'form-control bg-smoke','placeholder':'username1'}))
+password = forms.CharField(max_length=63, widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'password'}))
+
+
+widgets={name = forms.CharField(label='Name', widget=forms.TextInput(attrs={ 'placeholder': 'Enter your name', 'style': 'color: red; font-size: 10px;' })),
+}
+
+
+class CustomerProfileForm(forms.ModelForm):
+          class Meta:
+                model=CustomerModel
+               fields= ('name','location','city', 'mobile','zipcode','state')
+               widgets={'name':forms.TextInput(attrs={'class':'form-control'}),
+ 	  location':forms.TextInput(attrs={'class':'form-control'}),
+'city':forms.TextInput(attrs={'class':'form-control'}),
+'mobile':forms.NumberInput(attrs={'class':'form-control'}),
+'zipcode':forms.NumberInput(attrs={'class':'form-control'}),
+'state':forms.Select(attrs={'class':'form-control'}),
+
+ The view for form submission
+
+1. //Function based view
+
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from .forms import NameForm
+def get_name(request):
+    # if this is a POST request we need to process the form data
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+       form = NameForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ..
+            # redirect to a new URL:
+            messages.success(request,'Profile updated successfully!')
+           return redirect('home')       name of  url
+
+        else: # Form is not valid, display a warning message                           		messages.warning(request,'Form submission failed. Please correct the     			errors.')
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = NameForm()
+
+    return render(request, "name.html", {"form": form})
+
+
+2. // Class based View
+
+class RegistrationView(View):
+  def get(self,request):                     
+         form=RegistrationForm()
+         return render(request,"Alibaba/registration.html",context={"register_form":form})
+  def post(self,request):
+        form=RegistrationForm(request.POST)
+        if form.is_valid():
+             form.save()
+             messages.success(request,'Registration has been completed!!!!!!!!!!')
+       else:
+               messages.warning(request, "Data was not inserted")
+               return render(request,"Alibaba/registration.html",context={"register_form":form})
+
+//  process the data in form.cleaned_data as required (here we just write it to the model due_back field)
+
+if form.is_valid():
+
+          name=form.cleaned_data['name']
+          location=form.cleaned_data['location']
+         data=CustomerModel(name=name,location=location) 
+        data.save()
+           
+To update record using user_id
+
+   class Updateprofile(View)
+       def get(self,request,pk):
+            add=CustomerModel.objects.get(user=pk)
+             form=CustomerProfileForm(instance=add)
+
+        def post(self,request,pk):
+              form=CustomerProfileForm(request.POST)
+              print('get Form Herer',form)
+              form.is_valid()
+
+Delete record of specific id
+ def delete(self, request):
+	id=request.GET.get('id')
+	Student_obj=Student.objects.get(id=id)
+	Student_obj.delete()
+
+
+HTML file for form
+{% extends "Alibaba/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{% endblock %}
+{% block content %}
+{% include "Alibaba/navbar.html" %}
+          <h3 class="text-center">Registration Form</h3>
+          <div class="w-50 m-auto">
+             <form action="" method="post">       
+                  {% csrf_token %}                               
+                  {{register_form|crispy}}
+                 <button class="btn btn-primary m-auto"><a href="{% url 'home' %}"                   			></a>Submit</button> 
+           </form>
+           <p class="text-center fs-7">if you registered Already <a href="{% url 'home' %}"  	style="text-decoration: none;">login</a> here!!</p>
+        </div>
+{% include "Alibaba/footer.html" %}
+
+{% endblock %}
+
+Messages in django success / warning / info / error  
+ {% if messages %} 
+           <ul class="messages"> 
+                {% for message in messages %} 
+                     <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message                    		}}</li> 
+                {% endfor %} 
+          </ul>
+{% endif %}
+
+
+url.py
+path('contact',views.contactUs,name='contact'),
+path('catagory/<slug:val>',views.CatagoryView.as_view(),name='catagory'),
+path('productDetail/<int:pk>',views.ProductView.as_view(),name='productDetail'),
+
+anchor tag
+       <a href="{% url 'home' %}" 
+ 
+anchor tag with id 
+path('product/<int:pk>',views.ProductView.as_view(),name='productDetail'),
+
+<a href="{% url 'productDetail' data.id %}" class=" ">product  Detail</a>
+        // here use name of url 
+<a href=' /product/{{ data.id }}` class=" ">product  Detail</a>
+         // here use   url 
+
+
+  Redirect 
+    return redirect('home')       name of  url
+
+      
+     
+What is a CSRF?
+CSRF means cross-site request forgery. In this type of attack, the attacker sends a link in the form of sms, email, or chat. In this way, the attacker tricks the user who is already authenticated on the website to perform various actions such as transfer of funds, change of email, and so on. Depending upon the nature of the attack the attacker may take full access to the account.
+Syntax of CSRF Token in Django
+  {% csrf_token %} 
+   
+
+
+<form method="post">
+     {% csrf_token %}
+      <!-- Other form fields here -->
+       <button type="submit">Submit</button>
+</form>
+
+
+
+Styling Django Forms with django-crispy-forms
+Django by default doesn’t provide any Django form styling method due to which it takes a lot of effort and precious time to beautifully style a form. django-crispy-forms solves this problem for us. It will let you control the rendering behavior of your Django forms in a very elegant and DRY way.
+
+
+Installing django-crispy-forms and crispy-bootstrap4:
+       pip install django-crispy-forms
+       pip install crispy-bootstrap4
+
+Configuring Django settings:
+Add ‘crispy_forms’ and ‘crispy_bootstrap4’ to the INSTALLED_APPS in settings.py, and also add 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+after INSTALLED_APPS as you can see in the below image.
+# Application definition
+
+INSTALLED_APPS = [
+
+"crispy_forms",
+"crispy_bootstrap4",
+...........
+]
+
+CRISPY_ALLOWED_TEMPLATE_PACK = "bootstrap4"  // not confirmed
+CRISPY_TEMPLATE_PACK = "bootstrap4" // comfirmed
+
+Using django-crispy-forms in Django templates
+{%load crispy_forms_tags %} 
+
+<form action="" method="post">
+        {% csrf_token %}
+       {{register_form|crispy}}             // register_form is a form name come from controller 
+       <button class=""><a href="{% url 'home' %}" ></a>Submit</button> 
+</form>
+
+Migrated Fields
+    fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('password', models.CharField(max_length=128, verbose_name='password')),
+                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
+                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
+                ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
+                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
+                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
+                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
+                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
+                ('email', models.EmailField(max_length=254, unique=True, verbose_name='email address')),
+                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
+                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+            ],
+
