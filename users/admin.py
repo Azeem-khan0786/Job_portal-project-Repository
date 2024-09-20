@@ -1,12 +1,35 @@
 from django.contrib import admin
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-<<<<<<< HEAD
-# Register your models here.
+from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .models import CustomUser
 
-class CustomUserAdmin(admin.ModelAdmin):
-   pass
-admin.site.register(CustomUser,CustomUserAdmin)
-=======
->>>>>>> 96d728892f783fa2abfe3f8feb7341fa5459ca79
-    
+
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = CustomUser
+    list_display = ("email", "is_staff", "is_active",)
+    list_filter = ("email", "is_staff", "is_active",)
+    fieldsets = (
+        (None, {"fields": ("email", "password")}),
+        ("Permissions", {"fields": ("is_staff", "is_active", "groups", "user_permissions")}),
+    )
+    add_fieldsets = (
+        (None, {
+            "classes": ("wide",),
+            "fields": (
+                "email", "password1", "password2", "is_staff",
+                "is_active", "groups", "user_permissions"
+            )}
+        ),
+    )
+    search_fields = ("email",)
+    ordering = ("email",)
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
+
+
     
