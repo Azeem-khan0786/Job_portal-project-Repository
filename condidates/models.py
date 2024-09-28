@@ -12,9 +12,8 @@ status=(('apl','applied'),('intw','intervew'),('hrd','hired'),('rjct','rejected'
 
 class CondidateProfile(models.Model):
     
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    first_name=models.CharField(_("first_name"), max_length=50,blank=True)
-    last_name=models.CharField(_("last_name"), max_length=50,blank=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    
     cond_email=models.EmailField(_("Email-address"), max_length=254,unique=True,default="")
     cond_password=models.CharField(_("Condidate password"), max_length=50,)
     is_condidate=models.BooleanField(_("is-condidate"), max_length=50,default=True)
