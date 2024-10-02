@@ -3,11 +3,11 @@
 <!-- templates/registration/register.html -->
 
     
-    {% block title %}Register{% endblock  %}
+    {% block title %}Login page{% endblock  %}
 
     {% block content %}
     <div class="container-fluid">
-        <h2>Register</h2>
+        <h2>Login page</h2>
     <form method="post">
         {% csrf_token %}
         {{form|crispy}}
@@ -16,6 +16,3 @@
         <button class='btn-primary' type="reset">cancel</button>
     </form>{% endblock  %}  
     </div>
-
-    
-

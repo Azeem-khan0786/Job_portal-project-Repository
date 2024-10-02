@@ -1,6 +1,7 @@
-from django.shortcuts import render,HttpResponseRedirect
+from django.shortcuts import render,HttpResponseRedirect ,redirect
 from condidates.forms import CondidateRegisteration
 from django.http import HttpResponse
+
 
 # Create your views here.
 def registration(request):
@@ -8,7 +9,8 @@ def registration(request):
         form = CondidateRegisteration(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponse('Hey')
+            
+            return redirect('admin')
         else:
             print(form.errors)  # Add this to see form validation errors
     else:
