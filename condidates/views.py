@@ -24,24 +24,30 @@ def registration(request):
 # login page for condidates
 def Login(request):
     if request.method=='POST':
-        form =AuthenticationForm(request.POST)
+        form =AuthenticationForm(request,data=request.POST)
         if form.is_valid():
             user=authenticate(
                 username=request.POST['username'],
                 password=request.POST['password']
             )
             if user is not None:
-                login(user,request)
-                messages.info('Condidate has been loged in !')
-                return redirect('signout')
+                login(request,user)
+                messages.info(request,'Condidate has been loged in !')
+                # return HttpResponse('hello signin')
+                return redirect('/admin/')
             else:
-                messages.warning('Invalid input ')
+                messages.warning(request,'Invalid input ')
+                return redirect('signout')
     else:
         form =AuthenticationForm()
     return render(request, 'Condidates/login.html', {'loginform':form})
                   
-def LogOut(request):
-     logout(request)
-     return redirect('signin')
+def signout(request):
+    logout(request)
+    return redirect('login') 
      
+
+
+def custom_csrf_failure(request, reason=""):
+    return render(request, "csrf_failure.html", {"reason": reason})
                       
