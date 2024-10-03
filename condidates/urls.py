@@ -4,5 +4,6 @@ app_name='condidates'
 
 urlpatterns = [
     path('signup/',views.registration,name='singup'),
+    path('signin/',views.Login,name='signin')
     
 ]

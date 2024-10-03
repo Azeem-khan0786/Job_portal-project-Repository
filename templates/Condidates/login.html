@@ -10,7 +10,7 @@
         <h2>Login page</h2>
     <form method="post">
         {% csrf_token %}
-        {{form|crispy}}
+        {{loginform|crispy}}
         <button class="btn-primary" type="submit">submit</button>
 
         <button class='btn-primary' type="reset">cancel</button>
