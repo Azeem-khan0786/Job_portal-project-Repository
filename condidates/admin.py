@@ -12,7 +12,7 @@ admin.site.register(User)
 
 # @admin.register(CondidateProfile)
 class CondidateProfileAdmin(admin.ModelAdmin):
-    list_display=['user','cond_email','is_condidate','status','date_applied']
+    list_display=['cond_email','is_condidate','status','date_applied']
 admin.site.register(CondidateProfile,CondidateProfileAdmin)    
     
 

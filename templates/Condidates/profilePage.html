@@ -1,0 +1,38 @@
+<!-- myapp/templates/myapp/profile.html -->
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Profile Details</h1>
+    {% for pro in profile %}
+    <div class="card">
+        <div class="card-body">
+            <div class="text-center">
+                
+                
+               
+                {% if pro.resume %}
+                    <img src="{{ pro.resume.url }}" alt="Profile Picture" class="rounded-circle" width="150" height="150">
+                {% else %}
+                    <img src="{% static 'myapp/default-profile.png' %}" alt="Default Profile Picture" class="rounded-circle" width="150" height="150">
+                {% endif %}
+            </div>
+            <h5 class="card-title">{{ pro.first_name }} {{ pro.last_name }}</h5>
+            <p class="card-text"><strong>Email:</strong> {{ pro.cond_email }}</p>
+            <p class="card-text"><strong>Gender:</strong> {{ pro.get_gender_display }}</p>
+            <p class="card-text"><strong>Status:</strong> {{ pro.get_status_display }}</p>
+            <p class="card-text"><strong>Date Applied:</strong> {{ pro.date_applied }}</p>
+            {% if pro.has_resume %}
+                <p class="card-text"><strong>Resume:</strong> <a href="{{ pro.resume.url }}" class="btn btn-primary">Download</a></p>
+            {% else %}
+                <p class="card-text">No resume uploaded.</p>
+            {% endif %}
+            <div class="text-center mt-4">
+                <a href="{% url 'edit_profile' pro.id %}" class="btn btn-warning">Edit Profile</a>
+                <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
