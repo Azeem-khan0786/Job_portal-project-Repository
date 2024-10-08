@@ -1,10 +1,10 @@
 from django.shortcuts import render,HttpResponseRedirect ,redirect
-from condidates.forms import CondidateRegisteration ,ProfileForm
-from condidates.models import CondidateProfile
+from condidates.forms import CondidateRegisteration 
 from django.http import HttpResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from .models import UserProfile
 
 
 
@@ -64,5 +64,5 @@ def profile_view(request):
         form= ProfileForm(instance=request.user)
     return render(request,'Condidates/ProfileAdd.html',locals())      
 def my_profile(request):
-    profile=CondidateProfile.objects.all()
+    profiles=UserProfile.objects.all()
     return render(request,'Condidates/profilePage.html',locals())                      
