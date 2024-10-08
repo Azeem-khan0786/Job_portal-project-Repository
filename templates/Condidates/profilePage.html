@@ -1,35 +1,31 @@
-<!-- myapp/templates/myapp/profile.html -->
+<!-- myapp/templates/myapp/profilefile.html -->
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center">Profile Details</h1>
-    {% for pro in profile %}
+    <h1 class="text-center">profilefile Details</h1>
+    {% for profile in profiles %}
     <div class="card">
         <div class="card-body">
             <div class="text-center">
                 
                 
                
-                {% if pro.resume %}
-                    <img src="{{ pro.resume.url }}" alt="Profile Picture" class="rounded-circle" width="150" height="150">
-                {% else %}
-                    <img src="{% static 'myapp/default-profile.png' %}" alt="Default Profile Picture" class="rounded-circle" width="150" height="150">
-                {% endif %}
+                
             </div>
-            <h5 class="card-title">{{ pro.first_name }} {{ pro.last_name }}</h5>
-            <p class="card-text"><strong>Email:</strong> {{ pro.cond_email }}</p>
-            <p class="card-text"><strong>Gender:</strong> {{ pro.get_gender_display }}</p>
-            <p class="card-text"><strong>Status:</strong> {{ pro.get_status_display }}</p>
-            <p class="card-text"><strong>Date Applied:</strong> {{ pro.date_applied }}</p>
-            {% if pro.has_resume %}
-                <p class="card-text"><strong>Resume:</strong> <a href="{{ pro.resume.url }}" class="btn btn-primary">Download</a></p>
+            <h5 class="card-title">{{ profile.first_name }} {{ profile.last_name }}</h5>
+            <p class="card-text"><strong>Email:</strong> {{ profile.cond_email }}</p>
+            <p class="card-text"><strong>Gender:</strong> {{ profile.get_gender_display }}</p>
+            <p class="card-text"><strong>Status:</strong> {{ profile.get_status_display }}</p>
+            <p class="card-text"><strong>Date Applied:</strong> {{ profile.date_applied }}</p>
+            {% if profile.has_resume %}
+                <p class="card-text"><strong>Resume:</strong> <a href="{{ profile.resume.url }}" class="btn btn-primary">Download</a></p>
             {% else %}
                 <p class="card-text">No resume uploaded.</p>
             {% endif %}
             <div class="text-center mt-4">
-                <a href="{% url 'edit_profile' pro.id %}" class="btn btn-warning">Edit Profile</a>
-                <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+                <a href="" class="btn btn-warning">Edit profilefile</a>
+                <a href="" class="btn btn-danger">Logout</a>
             </div>
         </div>
     </div>
