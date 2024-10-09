@@ -11,6 +11,6 @@ urlpatterns = [
     path('my_profile/',views.my_profile,name='my_profile'),
     
     
-    path('custom_csrf_failure/',views.custom_csrf_failure)
+    path('custom_csrf_failure/',views.custom_csrf_failure),
    
 ]

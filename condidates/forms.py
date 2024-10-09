@@ -12,10 +12,10 @@ class CondidateRegisteration(UserCreationForm):
         
         
 # 2.  condidates profile form 
-class portfolioForm(forms.ModelForm):
+class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = "__all__"
+        exclude = ['user']
 
     
 

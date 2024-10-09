@@ -1,0 +1,8 @@
+{{emp_profile}}
+{% for profile in emp_profile %}
+      
+       <h3>{{profile.user}}</h3>
+       <h3>{{profile.company_name}}</h3>
+       <h3>{{profile.contact_email}}</h3>
+       <h3>{{profile.recruiter_name}}</h3>
+{% endfor %}
