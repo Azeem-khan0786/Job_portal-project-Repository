@@ -11,6 +11,7 @@ class RecruiterProfile(models.Model):
     company_name=models.CharField(_("Your company name"), max_length=50)
     contact_email=models.EmailField(_("Company Email"), max_length=254)
     contact_phone=models.CharField(_("Phone number"), max_length=50,blank=True,null=True)
+    location=models.TextField(_("Location "),max_length=100,default='New Dehli')
     bio=models.TextField(_("Write your bio here!!!!!!!"),blank=True)
     
     def __str__(self):

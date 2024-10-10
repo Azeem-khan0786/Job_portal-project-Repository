@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    'condidates',
+    'candidates',
     'recruiters',
     'core',
     'crispy_forms',
@@ -138,4 +138,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/proImage')  # Directory for uploaded 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.CustomUser"
 
-CSRF_FAILURE_VIEW = 'condidates.views.custom_csrf_failure'
+CSRF_FAILURE_VIEW = 'candidates.views.custom_csrf_failure'

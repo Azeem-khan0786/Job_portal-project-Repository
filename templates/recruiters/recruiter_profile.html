@@ -1,0 +1,82 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/employer_profile.css' %}" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+/>
+{% include "candidates/navbar.html" %}
+<section class="vh-100" style="background-color: #84a8f0">
+  <div class="container py-5 h-100">
+    {% if emp_profile %} 
+     {{emp_profile}}
+    {% for profile in emp_profile %}
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-6 mb-4 mb-lg-0">
+        <div class="card mb-3" style="border-radius: 0.5rem">
+          <div class="row g-0">
+            <div
+              class="col-md-4 text-center text-white bg-dark"
+              style="
+                border-top-left-radius: 0.5rem;
+                border-bottom-left-radius: 0.5rem;
+              "
+            >
+              <img
+                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                alt="{{ profile.recruiter_name }}'s Avatar"
+                class="img-fluid my-5"
+                style="width: 80px"
+              />
+              <h5>{{ profile.recruiter_name }}</h5>
+              <p class="bg-warning m-3"><b>{{ profile.company_name }}</b></p>
+              <i class="far fa-edit mb-5"></i>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body p-4">
+                <h6>Profile Information</h6>
+                <hr class="mt-0 mb-4" />
+                <div class="row pt-1">
+                  <div class="col-6 mb-3">
+                    <h6>Email</h6>
+                    <p class="">{{ profile.contact_email }}</p>
+                  </div>
+                  <div class="col-6 mb-3">
+                    <h6>Phone</h6>
+                    <p class="">{{ profile.contact_phone }}</p>
+                  </div>
+                </div>
+                <h4><b>Company Information</b></h4>
+                <hr class="mt-0 mb-4" />
+                <div class="row pt-1">
+                  <div class="col-6 mb-3">
+                    <h6>Company location</h6>
+                    <p class="">{{profile.location}}</p>
+                  </div>
+                  <div class="col-6 mb-3">
+                    <h6>Recruiter Bio</h6>
+                    <article class="">{{profile.bio}}</article>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <a href="{{ profile.facebook_url }}"
+                    ><i class="fab fa-facebook-f fa-lg me-3"></i
+                  ></a>
+                  <a href="{{ profile.twitter_url }}"
+                    ><i class="fab fa-twitter fa-lg me-3"></i
+                  ></a>
+                  <a href="{{ profile.instagram_url }}"
+                    ><i class="fab fa-instagram fa-lg"></i
+                  ></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %} {% else %}
+    <p>No profiles available.</p>
+    {% endif %} {% endblock %}
+  </div>
+</section>

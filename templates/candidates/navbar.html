@@ -20,13 +20,20 @@
       <ul class="nav navbar-nav navbar-right mr-1">
         {% if user.is_authenticated %}
             
-       
+         <!-- Check user type and show the appropriate profile link -->
+         {% if user.user_type == 'candidate' %}
+         <li><a href="{% url 'candidates:candidate_profile' %}">My Profile (Candidate)</a></li>
+     {% elif user.user_type == 'recruiter' %}
+         <li><a href="{% url 'recruiter:recruiter_profile' %}">My Profile (Recruiter)</a></li>
+     {% endif %}
+     
+     <!-- Other links common to both user types --> 
         <li class="nav-item">
-            <a href="{% url 'condidates:signout' %}" class="nav-link">{{ request.user }}  logout</a>
+            <a href="{% url 'candidates:signout' %}" class="nav-link">{{ request.user }}  logout</a>
         </li>
         {% else %}
         <li class="nav-item">
-            <a href="{% url 'condidates:signin' %}" class="nav-link">login</a>
+            <a href="{% url 'candidates:signin' %}" class="nav-link">login</a>
             
         </li>
         {% endif %}

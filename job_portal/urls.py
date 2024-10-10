@@ -22,8 +22,8 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account/',include('condidates.urls')),
-    path('jobprovider/',include('recruiters.urls')),
+    path('candidate/',include('candidates.urls')),
+    path('recruiter/',include('recruiters.urls')),
      # Redirect the root URL to the admin page
     path('', RedirectView.as_view(url='/admin/', permanent=True)),
    
