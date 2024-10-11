@@ -24,7 +24,7 @@
          {% if user.user_type == 'candidate' %}
          <li><a href="{% url 'candidates:candidate_profile' %}">My Profile (Candidate)</a></li>
      {% elif user.user_type == 'recruiter' %}
-         <li><a href="{% url 'recruiter:recruiter_profile' %}">My Profile (Recruiter)</a></li>
+         <li><a href="{% url 'recruiters:recruiter_profile' %}">My Profile (Recruiter)</a></li>
      {% endif %}
      
      <!-- Other links common to both user types --> 

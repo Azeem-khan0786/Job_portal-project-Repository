@@ -17,17 +17,17 @@
             <h5 class="card-title">{{ profile.first_name }} {{ profile.last_name }}</h5>
             <p class="card-text"><strong>Email:</strong> {{ profile.cond_email }}</p>
             <p class="card-text"><strong>Gender:</strong> {{ profile.get_gender_display }}</p>
-            <p class="card-text"><strong>My skills:</strong> {{ profile.skill }}</p>
-            <p class="card-text"><strong>My experience:</strong> {{ profile.experience }}</p>
+            <p class="card-text"><strong>My skills:</strong> {{ profile.get_skill_display }}</p>
+            <p class="card-text"><strong>My experience:</strong> {{ profile.get_experience_display }}</p>
 
             {% if profile.has_resume %}
                 <p class="card-text"><strong>Resume:</strong> <a href="" class="btn btn-primary">Download</a></p>
             {% else %}
                 <p class="card-text">No resume uploaded.</p>
             {% endif %}
-            <div><p class="card-text">{{profile.bio}}.</p></div>
+            <strong>About section: </strong><artical class="card-text border border-secondary m-1 p-2 h-100 w-100">{{profile.bio}}.</artical>
             <div class="text-center mt-4">
-                <a href="" class="btn btn-warning">Edit profilefile</a>
+                <a href="{% url 'candidates:update_candidate_profile' %}" class="btn btn-warning">Edit profile</a>
                 <a href="" class="btn btn-danger">Logout</a>
             </div>
         </div>

@@ -81,3 +81,21 @@ def custom_csrf_failure(request, reason=""):
 def candidate_profile_view(request):
     profiles=CandidateProfile.objects.all()
     return render(request,'candidates/profilePage.html',locals())                     
+
+def update_candidate_profile(request):
+    try:  
+        profile=CandidateProfile.objects.get(user=request.user)
+    except CandidateProfile.DoesNotExist:
+        profile=CandidateProfile(user=request.user)
+            
+    if request.method=='POST':
+        form= CandidateProfileForm(request.POST, instance=profile)
+        if form.is_valid():                                                                                                                                                                                                                                      
+            form.save()
+            return redirect('candidates:candidate_profile')
+    else:
+        form =CandidateProfileForm(instance=profile)
+    return render(request ,'candidates/update_profile_form.html', {'form':form})
+            
+            
+    
