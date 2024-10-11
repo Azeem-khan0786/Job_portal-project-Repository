@@ -17,17 +17,41 @@ class RecruiterProfile(models.Model):
     def __str__(self):
         return f"{self.user.email} have {self.company_name} with {self.contact_email}"
 
-class JobModel(models.Model):
-    recruiter = models.ForeignKey(RecruiterProfile, on_delete=models.CASCADE, related_name='jobs')  # Link to the recruiter
-    title = models.CharField(max_length=200)
+class Job(models.Model):
+    recruiter = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        limit_choices_to={'user_type': 'recruiter'}
+    )
+    title = models.CharField(max_length=255)
     description = models.TextField()
-    requirements = models.TextField()
-    location = models.CharField(max_length=100)
-    job_type = models.CharField(max_length=50, choices=[('FT', 'Full-Time'), ('PT', 'Part-Time'), ('CT', 'Contract')])
-    salary = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    posted_at = models.DateTimeField(default=timezone.now)
-    application_deadline = models.DateTimeField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
+    location = models.CharField(max_length=255)
+    job_type = models.CharField(
+        max_length=50,
+        choices=[
+            ('full-time', 'Full-time'),
+            ('part-time', 'Part-time'),
+            ('internship', 'Internship')
+        ]
+    )
+    salary = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+    requirements = models.TextField(help_text="List of job requirements")
+    experience_required = models.CharField(
+        max_length=100,
+        help_text="Required experience level"
+    )
+    specifications = models.TextField(
+        null=True,
+        blank=True,
+        help_text="Any other specific requirements"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
