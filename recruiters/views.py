@@ -1,10 +1,10 @@
 from django.shortcuts import render ,redirect, HttpResponseRedirect
-from recruiters.models import RecruiterProfile
+from recruiters.models import RecruiterProfile, Job
 from recruiters.forms import RecruiterProfileForm
 
 
 
-# Recruiter Profile View
+# Recruiter Profile View@id:dongli.python-preview
 def recruiter_profile_view(request):
     emp_profile = RecruiterProfile.objects.get(user=request.user)
     print(emp_profile) 
@@ -22,3 +22,13 @@ def update_recruiter_profile(request):
         form=RecruiterProfileForm(instance=profile)
     return render(request,"recruiters/update_profile_form.html", {'form':form})
                 
+                
+def job_view(request):
+    print(request.user.user_type)
+    jobs=Job.objects.filter(recruiter=request.user)
+    return render(request, 'recruiters/jobPage.html', {'jobs':jobs})
+    
+    
+    
+    
+   

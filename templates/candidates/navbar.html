@@ -32,9 +32,14 @@
             <a href="{% url 'candidates:signout' %}" class="nav-link">{{ request.user }}  logout</a>
         </li>
         {% else %}
-        <li class="nav-item">
-            <a href="{% url 'candidates:signin' %}" class="nav-link">login</a>
-            
+        <li class="nav-item dropdown">
+            <a class ="nav-link dropdown-toggle " href="{% url 'candidates:signin' %}" class="nav-link">login</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
         </li>
         {% endif %}
 

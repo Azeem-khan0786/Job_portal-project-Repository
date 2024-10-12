@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %} Job Recruiments{% endblock  %}
+{% block content %}
+{% include "candidates/navbar.html" %}
+   {% if jobs %}
+    
+ <!-- Job Cards -->
+ <div class="container my-5">
+    
+    <div class="row">
+        {% for job in jobs %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <article class="card-body">
+                    <h5 class="card-title "><b>{{ job.title }}</b></h5>
+                    <p class="card-text">{{ job.description|truncatewords:20 }}</p>
+                    <p><strong>Location:</strong> {{ job.location }}</p>
+                    <p><strong>Job Type:</strong> {{ job.get_job_type_display }}</p>
+                    <p><strong>Experience Required:</strong> {{ job.experience_required }}</p>
+                    <p><strong>Salary:</strong> {{ job.salary|default:"Not specified" }}</p>
+                    <p><strong>Requirements:</strong> {{ job.requirements|linebreaksbr }}</p>
+                    {% if job.specifications %}
+                    <p><strong>Specifications:</strong> {{ job.specifications|linebreaksbr }}</p>
+                    {% endif %}
+                    <div class="row p-1 m-1 d-flex justify-content-between">
+                        <a href="" class="btn btn-primary">Apply for Job</a>
+                    <a href="" class="btn btn-dark">Visit Job</a>
+                    </div>
+                    
+                    
+                </article>
+                <div class="card-footer text-muted">
+                    Posted on: {{ job.created_at|date:"F d, Y" }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+      
+
+   
+   {% endif %}
+   <!-- Footer -->
+<footer class="bg-light py-3">
+    <div class="container">
+        <p class="text-center mb-0">&copy; 2024 Job Portal. All Rights Reserved.</p>
+    </div>
+</footer>
+{% endblock  %}
+
+  
