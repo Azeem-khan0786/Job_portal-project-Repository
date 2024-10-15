@@ -24,10 +24,15 @@ def update_recruiter_profile(request):
                 
                 
 def job_view(request):
-    print(request.user.user_type)
     jobs=Job.objects.filter(recruiter=request.user)
     return render(request, 'recruiters/jobPage.html', {'jobs':jobs})
     
+# post your job on candidate site
+def post_job(request):
+    postJob=Job.objects.filter(recruiter=request.user)
+    template_name='candidates/jobPage.html'
+    return render(request, template_name, {'postJob':postJob})
+        
     
     
     

@@ -4,10 +4,19 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .models import CandidateProfile
+from .models import CandidateProfile 
+from recruiters.models import Job
 
 
+def home(request,form=''):
+    postJob=Job.objects.all()
+    template_name='candidates/jobPage.html'
+    # return render(request, 'home.html', )
+    return render(request, template_name, {'postJob':postJob})
+    
+    
 
+    
 
 # Create your views here.
 def registration_view(request):

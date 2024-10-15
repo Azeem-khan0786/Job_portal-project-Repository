@@ -10,7 +10,7 @@
           <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="/">Admin</a>
+          <a class="nav-link" href="/">Admin</a>
         </li>
         
         <li class="nav-item">
@@ -29,17 +29,16 @@
      
      <!-- Other links common to both user types --> 
         <li class="nav-item">
-            <a href="{% url 'candidates:signout' %}" class="nav-link">{{ request.user }}  logout</a>
+            <a href="{% url 'candidates:signout' %}" class="nav-link">logout</a>
         </li>
         {% else %}
-        
-        <li class="nav-item">
+      <li class="nav-item">
           <a href="{% url 'candidates:signin' %}" class="nav-link"> SignIn</a>
       </li>
       
         {% endif %}
         <li class="nav-item">
-          <a href="{% url 'recruiters:job_view' %}" class="nav-link">Employer / Job post</a>
+          <a href="{% url 'candidates:home' %}" class="nav-link">Find job</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">

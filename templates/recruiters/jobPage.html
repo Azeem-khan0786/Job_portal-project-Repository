@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %} Job Recruiments{% endblock  %}
 {% block content %}
-{% include "candidates/navbar.html" %}
+{% include "recruiters/navbar.html" %}
    {% if jobs %}
     
  <!-- Job Cards -->
@@ -20,11 +20,11 @@
                     <p><strong>Salary:</strong> {{ job.salary|default:"Not specified" }}</p>
                     <p><strong>Requirements:</strong> {{ job.requirements|linebreaksbr }}</p>
                     {% if job.specifications %}
-                    <p><strong>Specifications:</strong> {{ job.specifications|linebreaksbr }}</p>
+                   <p><strong>Specifications:</strong> {{ job.specifications|linebreaksbr }}</p>
                     {% endif %}
                     <div class="row p-1 m-1 d-flex justify-content-between">
-                        <a href="" class="btn btn-primary">Apply for Job</a>
-                    <a href="" class="btn btn-dark">Visit Job</a>
+                        <a href="" class="btn btn-primary">Upload Job</a>
+                    <a href="" class="btn btn-dark">Manage Job</a>
                     </div>
                     
                     

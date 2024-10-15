@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Job Recruiments{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% include "candidates/navbar.html" %}
+
+{% if postJob %}
+<!-- Job Cards -->
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8">  <!-- Adjusted column size for job cards -->
+            <div class="input-group rounded mb-3">
+                <input type="search" class="form-control rounded" placeholder="job title, keyword, company name" aria-label="Search" aria-describedby="search-addon" />
+                <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+
+            {% for job in postJob %}
+            <div class="card  shadow-sm mb-4 border border-dark rounded" >
+                <article class="card-body">
+                    <h5 class="card-title"><b>{{ job.title }}</b></h5>
+                    <p class="card-text">{{ job.description|truncatewords:20 }}</p>
+                    <p><i class="fa-sharp fa-solid fa-location-dot"></i>
+                        <strong>Location:</strong> {{ job.location }}</p>
+                    <p><i class="fa-solid fa-briefcase"></i> <strong>Job Type:</strong> {{ job.get_job_type_display }}</p>
+                    <p> <i class="fa-solid fa-indian-rupee-sign"></i> <strong>Salary:</strong> {{ job.salary|default:"Not specified" }}</p>
+                    <p> <strong>Experience Required:</strong> {{ job.experience_required }}</p>
+                    <p><strong>Requirements:</strong> {{ job.requirements|linebreaksbr }}</p>
+                    {% if job.specifications %}
+                    <p><strong>Specifications:</strong> {{ job.specifications|linebreaksbr }}</p>
+                    {% endif %}
+                    <div class="row p-1 m-1 d-flex justify-content-between">
+                        <a href="" class="btn btn-primary">Apply Job</a>
+                        <a href="" class="btn btn-dark">Visit Job</a>
+                    </div>
+                </article>
+                <div class="card-footer text-muted">
+                    Posted on: {{ job.created_at|date:"F d, Y" }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Empty right side with black border -->
+        <div class="col-md-4" style="border-left: 2px solid black; height: 100vh;">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet esse culpa veritatis dolorum error obcaecati aspernatur aut non tempora dolorem exercitationem corporis rerum vero impedit ducimus similique nam, ab voluptas?</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Footer -->
+<footer class="bg-light py-3">
+    <div class="container">
+        <p class="text-center mb-0">&copy; 2024 Job Portal. All Rights Reserved.</p>
+    </div>
+</footer>
+{% endblock %}
