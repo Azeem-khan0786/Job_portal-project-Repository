@@ -18,14 +18,15 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from JobApp.views import job_view 
 
 
 urlpatterns = [
+    path('', job_view, name='job_view'),
     path('admin/', admin.site.urls),
-    path('',include('candidates.urls')),
+    path('',include('Account.urls')),
+    path('',include('JobApp.urls')),
     
-    path('candidate/',include('candidates.urls')),
-    path('recruiter/',include('recruiters.urls')),
      # Redirect the root URL to the admin page
     
    

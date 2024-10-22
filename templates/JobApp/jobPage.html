@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Candidate Job ListPage{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
+{% include "candidate_navbar.html" %}
+
+{% if jobs %}
+<!-- Job Cards -->
+<div class="container my-5">
+    <div class="row">
+        <div class="input-group rounded mb-3">
+            <input type="search" class="form-control rounded" placeholder="job title, keyword, company name" aria-label="Search" aria-describedby="search-addon" />
+            <span class="input-group-text border-0" id="search-addon">
+                <i class="fas fa-search"></i>
+            </span> 
+        </div>
+        <!-- Left Side: Job Cards -->
+        <div class="col-md-4"> <!-- Adjusted to 4 columns for the job list -->
+            
+
+            {% for job in jobs %}
+            <div class="card shadow-sm mb-4 border border-dark rounded job-item" data-job-id="{{ job.id }}" onclick="showJobDetails({{ job.id }})">
+                <article class="card-body">
+                    <h5 class="card-title"><b>{{ job.title }}</b></h5>
+                    <p class="card-text">{{ job.description|truncatewords:20 }}</p>
+                    <p><i class="fa-sharp fa-solid fa-location-dot"></i> <strong>Location:</strong> {{ job.location }}</p>
+                    <p><i class="fa-solid fa-briefcase"></i> <strong>Job Type:</strong> {{ job.get_job_type_display }}</p>
+                    <p> <strong>Experience Required:</strong> {{ job.experience_required }}</p>
+                    <p> <strong>Work Mode:</strong> {{ job.work_mode }}</p>
+                    
+                    <div class="row p-1 m-1 d-flex justify-content-between">
+                        <a href="{% url 'JobApp:single_job_view' job.id %}" class="btn btn-primary">Apply Job</a>
+                        <a href="" class="btn btn-dark">Visit Job</a>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Right Side: Job Details -->
+        <div class="col-md-8" style="border-left: 2px solid black; height: 100vh;">
+            <!-- Job details will be dynamically displayed here -->
+            <div id="job-details-container">
+                <h3>{{ jobs.0.title }}</h3>  <!-- Default to the first job's details -->
+                <p>{{ jobs.0.description }}</p>
+                <p><strong>Location:</strong> {{ job.location }}</p>
+                <p><i class="fa-solid fa-briefcase"></i> <strong>Job Type:</strong> {{ jobs.0.get_job_type_display }}</p>
+                <p><strong>Salary:</strong> {{ jobs.0.salary|default:"Not specified" }}</p>
+                <p><strong>Experience Required:</strong> {{ jobs.0.experience_required }}</p>
+                <p><strong>Education:</strong> {{ jobs.0.get_education_display }}</p>
+                <p><strong>Languages:</strong> {{ jobs.0.language }}</p>
+                <p><strong>Shift and Schedule:</strong> {{ jobs.0.schedule }}</p>
+                <p><strong>Work Mode:</strong> {{ jobs.0.get_work_mode_display }}</p>
+                <p><strong>Requirements:</strong> {{ jobs.0.requirements|linebreaksbr }}</p>
+                {% if jobs.0.specifications %}
+                <p><strong>Specifications:</strong> {{ jobs.0.specifications|linebreaksbr }}</p>
+                {% endif %}
+                <p><strong>Vacancy:</strong> {{ jobs.0.Vacancy|default:"Not specified" }}</p>
+
+                
+            </div>
+            <div class="row p-1 m-1 d-flex justify-content-between">
+                <a href="" class="btn btn-primary">Apply Job</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Footer -->
+<footer class="bg-light py-3">
+    <div class="container">
+        <p class="text-center mb-0">&copy; 2024 Job Portal. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- JavaScript to handle job clicks -->
+<script>
+    function showJobDetails(jobId) {
+        fetch(`/job-details/${jobId}/`)
+            .then(response => response.json())
+            .then(data => {
+                const detailsContainer = document.getElementById('job-details-container');
+                detailsContainer.innerHTML = `
+                    <h3>${data.title}</h3>
+                    <p>${data.description}</p>
+                    <p><strong>Location:</strong> ${data.location}</p>
+                    <p><strong>Job Type:</strong> ${data.job_type}</p>
+                    <p><strong>Salary:</strong> ${data.salary || 'Not specified'}</p>
+                    <p><strong>Experience Required:</strong> ${data.experience_required}</p>
+                    <p><strong>Education:</strong> ${data.education}</p>
+                    <p><strong>Languages:</strong> ${data.language}</p>
+                    <p><strong>Shift and Schedule:</strong> ${data.schedule}</p>
+                    <p><strong>Work Mode:</strong> ${data.work_mode}</p>
+                    <p><strong>Requirements:</strong> ${data.requirements}</p>
+                    ${data.specifications ? `<p><strong>Specifications:</strong> ${data.specifications}</p>` : ''}
+                    <p><strong>Vacancy:</strong> ${data.Vacancy || 'Not specified'}</p>
+                    
+                `;
+            });
+    }
+
+    // Optionally, display the first job's details by default when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        showJobDetails({{ jobs.0.id }});  // First job as default
+    });
+</script>
+{% endblock %}

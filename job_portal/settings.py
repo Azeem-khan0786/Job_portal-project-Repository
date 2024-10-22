@@ -37,10 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Account',
     'users',
-    'candidates',
-    'recruiters',
-    'core',
+    'JobApp',
     'crispy_forms',
     'crispy_bootstrap4',
 ]
@@ -138,4 +137,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/proImage')  # Directory for uploaded 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.CustomUser"
 
-CSRF_FAILURE_VIEW = 'candidates.views.custom_csrf_failure'
+CSRF_FAILURE_VIEW = 'JobApp.views.custom_csrf_failure'

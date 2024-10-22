@@ -14,7 +14,7 @@ class CustomUser(AbstractUser):
         ('candidate', 'Candidate'),
         ('recruiter', 'Recruiter'),
     )
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES ,default='candidate')
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
     USERNAME_FIELD="email"
     REQUIRED_FIELDS=[]
     objects=CustomUserManager()
@@ -26,14 +26,17 @@ class CustomUser(AbstractUser):
 
 @receiver(post_save, sender=CustomUser)
 def create_profile(sender, instance, created, **kwargs):
-    from candidates.models import CandidateProfile
-    from recruiters.models import RecruiterProfile
+    from Account.models import CandidateProfile ,RecruiterProfile
+    
     if created:
         if instance.user_type == 'candidate':
             CandidateProfile.objects.create(user=instance)
+            print(f'Created CandidateProfile for {instance.email}')
         elif instance.user_type == 'recruiter':
             RecruiterProfile.objects.create(user=instance)
-
+            print(f'Created RecruiterProfile for {instance.email}')
+    else:
+        print(f'Profile save triggered for {instance.email}')
 @receiver(post_save, sender=CustomUser)
 def save_profile(sender, instance, **kwargs):
     if instance.user_type == 'candidate':
