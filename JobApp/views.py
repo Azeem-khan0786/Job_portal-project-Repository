@@ -88,13 +88,13 @@ def single_job_view(request, id):
      
     single_job = get_object_or_404(Job, id=id)
     company = single_job.recruiter.recruiterprofile.company_name
+    com_logo=single_job.recruiter.recruiterprofile.company_logo
     print('company_name',company)    
     context = {
         'single_job': single_job,
         'company': company,
+        'com_logo': com_logo,
 
-        
 
     }
-    
     return render(request, 'JobApp/job-single.html', context)        

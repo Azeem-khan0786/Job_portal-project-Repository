@@ -46,6 +46,7 @@ class RecruiterProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     recruiter_name=models.CharField(_("name"),default='xyz', max_length=50)
     company_name=models.CharField(_("Your company name"), max_length=50)
+    company_logo=models.ImageField(_("Image  Company"), upload_to='proImage',blank=True,null=True)
     contact_email=models.EmailField(_("Company Email"), max_length=254)
     contact_phone=models.CharField(_("Phone number"), max_length=50,blank=True,null=True)
     location=models.CharField(_("Location "),max_length=50,default='New Dehli')

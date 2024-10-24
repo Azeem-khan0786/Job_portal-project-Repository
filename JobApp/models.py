@@ -5,6 +5,9 @@ from django.utils import timezone
 
 
 status_choices=(('apl','applied'),('intw','intervew'),('hrd','hired'),('rjct','rejected'),)
+gender_chioce=(( "m","male"
+    
+),('f','female'),('oth','Others'),)
 WORK_MODE_CHOICES = (('REMOTE', 'Remote'),
         ('Onsite', 'Onsite'),
         ('Hybrid', 'Hybrid'),)
@@ -68,6 +71,10 @@ class Job(models.Model):
     is_published = models.BooleanField(default=False)
     is_closed = models.BooleanField(default=False)
     Vacancy = models.CharField(max_length=10, null=True)
+    passedout = models.CharField(max_length=30 ,default='2023-2024')
+    timestamp = models.DateTimeField(auto_now=True)
+    end_date = models.DateField(max_length=20, null=True)
+    gender = models.CharField(max_length=30,choices=gender_chioce ,blank=True)
 
     def __str__(self):
         return self.title

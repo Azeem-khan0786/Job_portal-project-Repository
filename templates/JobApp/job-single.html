@@ -8,41 +8,85 @@
 
 {% if single_job %}
 <!-- Job Cards -->
-<div class="container my-5">
-    <div class="row">
-        <div class="input-group rounded mb-3">
-            <input type="search" class="form-control rounded" placeholder="job title, keyword, company name" aria-label="Search" aria-describedby="search-addon" />
-            <span class="input-group-text border-0" id="search-addon">
-                <i class="fas fa-search"></i>
-            </span> 
+<div class="container m-1">
+  <div class="row align-items-center mb-5">
+    <div class="col-lg-8 mb-4 mb-lg-0">
+      <div class="d-flex align-items-center">
+        <div class="border p-2 d-inline-block mr-3 rounded">
+          <img src="{{ com_logo.url }}" alt="Company Logo"style="width: 100px; height: 80px;">
         </div>
-        <!-- Left Side: Job Cards -->
-        <div class="col-md-8"> <!-- Adjusted to 4 columns for the job list -->
-            
-            
-                <article class="card-body">
-                    <h5 class="card-title"><b>{{ single_job.title }}</b></h5>
-                    <h5 class="card-title"><b>{{ company }}</b></h5>
+        <div>
+          <h5>{{ single_job.title }}</h5>
+          <div>
+            <span class="ml-0 mr-2 mb-2 "><i class="fa-solid fa-briefcase "></i> <a class="text-success" href="">{{ company }}</a></span>
+            <span class="m-1"><i class="fa-sharp fa-solid fa-location-dot"></i> {{ single_job.location }}</span>
+            <span class="m-1"><i class="fa-solid fa-clock"></i></i></i>
+              <span class="text-success">
 
-                    <p class="card-text">{{ single_job.description|truncatewords:10 }}</p>
-                    <p><i class="fa-sharp fa-solid fa-location-dot"></i> <strong>Location:</strong> {{ single_job.location }}</p>
-                    <p><i class="fa-solid fa-briefcase"></i> <strong>single_job Type:</strong> {{ single_job.get_single_job_type_display }}</p>
-                    <p class=''> <strong>Experience Required:</strong> {{ single_job.experience_required }}</p>
-                    <p> <strong>Work Mode:</strong> {{ single_job.work_mode }}</p>
-                    <strong>Job Requirements:</strong><p class="card-text">{{ single_job.requirements|truncatewords:100 }}</p>
+                {% if job.job_type == '1' %}
+                Full Time
+                {% elif job.job_type == '2'%}
+                Part Time
+                {% else  %}
+                Internship
+                {% endif %}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+           <!-- Left Side: Job Cards -->
+        <div class="col-lg-8"> <!-- Adjusted to 4 columns for the job list -->
+                <article class="card-body">
+                    <strong><i class="fa-thin fa-subtitles"></i> Job Description</strong>
+                    <p class="card-text">{{ single_job.description|truncatewords:100 }}</p>
+                    
+                    <strong >Job Requirements and skills </strong><p class="card-text" name="editor1">{{ single_job.requirements|truncatewords:100 }}</p>
                     <strong>Job Specifications:</strong>
                     <p class="justify-text">{{ single_job.specifications|truncatewords:100 }}</p>
                     {% comment %} <p class="justify-text">Company name{{ job.recruiter }}</p>  {% endcomment %}
                     <a href="" class="btn btn-primary">Apply Job</a>
-                        
-                    
                 </article>
-            </div>
-            
         </div>
-
-        <!-- Right Side: Job Details -->
         
+        <!-- Right Side: Job Details -->
+        <div class="col-lg-4">
+            <div class="bg-light p-3 border rounded mb-4">
+              <h3 class="text-success  mt-3 h5 pl-3 mb-3 ">Job Summary</h3>
+              <ul class="list-unstyled pl-3 mb-0">
+                <li class="mb-2"><strong class="text-black">Published on:</strong> {{ single_job.timestamp|date:"d M Y" }}</li>
+                <li class="mb-2"><strong class="text-black">Vacancy:</strong> {{ single_job.Vacancy }}</li>
+                <li class="mb-2"><strong class="text-black">Year of Passed out:</strong> {{ single_job.passedout }}</li>
+                <li class="mb-2"><strong class="text-black">Employment Status:</strong>
+                  {% if single_job.job_type == 'full-time' %}
+                  Full Time
+                  {% elif single_job.job_type == 'part-time'%}
+                  Part Time
+                  {% else  %}
+                  Internship
+                  {% endif %}
+                </li>
+                <li class="mb-2"><strong class="text-black">Experience:</strong> {{ single_job.experience_required }}</li>
+                <li class="mb-2"><strong class="text-black">Work mode:</strong> {{ single_job.work_mode }}</li>
+                <li class="mb-2"><strong class="text-black">Job Location:</strong> {{ single_job.location }}</li>
+                <li class="mb-2"><strong class="text-black">Salary:</strong> {{ single_job.salary }}</li>
+                <li class="mb-2"><strong class="text-black">Gender:</strong> {{ single_job.get_gender_display }}</li>
+                <li class="mb-2"><strong class="text-black">Application Deadline:</strong> {{ single_job.end_date|date:"d M Y" }}
+                </li>
+              </ul>
+            </div>
+            <div class="bg-light p-3 border rounded">
+              <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Share</h3>
+              <div class="px-3">
+                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-facebook"></span></a>
+                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-twitter"></span></a>
+                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-instagram"></span></a>
+              </div>
+            </div>
+    
+          </div>
     </div>
 </div>
 {% endif %}
@@ -54,6 +98,8 @@
     </div>
 </footer>
 
-<!-- JavaScript to handle job clicks -->
-
+<script src="https://cdn.ckeditor.com/4.25.0-lts/standard/ckeditor.js"></script>
+<script>
+  CKEDITOR.replace( 'editor1' );
+</script>
 {% endblock %}
