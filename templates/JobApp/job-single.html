@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load is_job_already_applied %}
 {% block title %}Candidate Job ListPage{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
@@ -8,12 +9,12 @@
 
 {% if single_job %}
 <!-- Job Cards -->
-<div class="container m-1">
-  <div class="row align-items-center mb-5">
+<div class="container">
+  <div class="row align-items-center mb-3">
     <div class="col-lg-8 mb-4 mb-lg-0">
       <div class="d-flex align-items-center">
         <div class="border p-2 d-inline-block mr-3 rounded">
-          <img src="{{ com_logo.url }}" alt="Company Logo"style="width: 100px; height: 80px;">
+          <img src="{{ com_logo.url }}" alt="Company Logo" style="width: 100px; height: 80px;">
         </div>
         <div>
           <h5>{{ single_job.title }}</h5>
@@ -27,7 +28,7 @@
                 Full Time
                 {% elif job.job_type == '2'%}
                 Part Time
-                {% else  %}
+                {% else %}
                 Internship
                 {% endif %}
               </span>
@@ -37,69 +38,103 @@
       </div>
     </div>
     <div class="row">
-           <!-- Left Side: Job Cards -->
-        <div class="col-lg-8"> <!-- Adjusted to 4 columns for the job list -->
-                <article class="card-body">
-                    <strong><i class="fa-thin fa-subtitles"></i> Job Description</strong>
-                    <p class="card-text">{{ single_job.description|truncatewords:100 }}</p>
-                    
-                    <strong >Job Requirements and skills </strong><p class="card-text" name="editor1">{{ single_job.requirements|truncatewords:100 }}</p>
-                    <strong>Job Specifications:</strong>
-                    <p class="justify-text">{{ single_job.specifications|truncatewords:100 }}</p>
-                    {% comment %} <p class="justify-text">Company name{{ job.recruiter }}</p>  {% endcomment %}
-                    <a href="" class="btn btn-primary">Apply Job</a>
-                </article>
-        </div>
-        
-        <!-- Right Side: Job Details -->
-        <div class="col-lg-4">
-            <div class="bg-light p-3 border rounded mb-4">
-              <h3 class="text-success  mt-3 h5 pl-3 mb-3 ">Job Summary</h3>
-              <ul class="list-unstyled pl-3 mb-0">
-                <li class="mb-2"><strong class="text-black">Published on:</strong> {{ single_job.timestamp|date:"d M Y" }}</li>
-                <li class="mb-2"><strong class="text-black">Vacancy:</strong> {{ single_job.Vacancy }}</li>
-                <li class="mb-2"><strong class="text-black">Year of Passed out:</strong> {{ single_job.passedout }}</li>
-                <li class="mb-2"><strong class="text-black">Employment Status:</strong>
-                  {% if single_job.job_type == 'full-time' %}
-                  Full Time
-                  {% elif single_job.job_type == 'part-time'%}
-                  Part Time
-                  {% else  %}
-                  Internship
-                  {% endif %}
-                </li>
-                <li class="mb-2"><strong class="text-black">Experience:</strong> {{ single_job.experience_required }}</li>
-                <li class="mb-2"><strong class="text-black">Work mode:</strong> {{ single_job.work_mode }}</li>
-                <li class="mb-2"><strong class="text-black">Job Location:</strong> {{ single_job.location }}</li>
-                <li class="mb-2"><strong class="text-black">Salary:</strong> {{ single_job.salary }}</li>
-                <li class="mb-2"><strong class="text-black">Gender:</strong> {{ single_job.get_gender_display }}</li>
-                <li class="mb-2"><strong class="text-black">Application Deadline:</strong> {{ single_job.end_date|date:"d M Y" }}
-                </li>
-              </ul>
+      <!-- Left Side: Job Cards -->
+      <div class="col-lg-8"> <!-- Adjusted to 4 columns for the job list -->
+        <article class="card-body">
+          <strong><i class="fa-thin fa-subtitles"></i> Job Description</strong>
+          <p class="card-text">{{ single_job.description|truncatewords:100 }}</p>
+
+          <strong>Job Requirements and skills </strong>
+          <p class="card-text" name="editor1">{{ single_job.requirements|truncatewords:100 }}</p>
+          <strong>Job Specifications:</strong>
+          <p class="justify-text">{{ single_job.specifications|truncatewords:100 }}</p>
+          {% comment %} <p class="justify-text">Company name{{ job.recruiter }}</p> {% endcomment %}
+          <!-- saved job -->
+          <div class="row">
+            <!-- saved job -->
+            <div class="col-4">
+              Saved
             </div>
-            <div class="bg-light p-3 border rounded">
-              <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Share</h3>
-              <div class="px-3">
-                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-facebook"></span></a>
-                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-twitter"></span></a>
-                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-instagram"></span></a>
-              </div>
+            <!-- Apply For job -->
+            <div class="col-4">
+
+
+              {% if user.is_authenticated and user.user_type == 'candidate' %}
+              {% is_job_already_applied single_job request.user as is_applied %}
+              {% if is_applied %}
+              <span class="btn btn-block btn-danger btn-md">Already Applied</span>
+              {% else %}
+              <form action="{% url 'JobApp:apply_job' single_job.id %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="job" value="{{ single_job.id }}">
+                <input type="submit" class="btn btn-block btn-primary btn-md" value="Apply Now" />
+              </form>
+              {% endif %}
+              {% elif request.user.id == single_job.user.id and user.user_type == 'recruiter' %}
+              <a href="" class="btn btn-block btn-light btn-md">Edit</a>
+              {% else %}
+              <a href="" class="btn btn-block btn-primary btn-md">Publish Your Job</a>
+              {% endif %}
+
             </div>
-    
           </div>
-    </div>
-</div>
-{% endif %}
+        </article>
+      </div>
 
-<!-- Footer -->
-<footer class="bg-light py-3">
+      <!-- Right Side: Job Details -->
+      <div class="col-lg-4">
+        <div class="bg-light p-3 border rounded mb-4">
+          <h3 class="text-success  mt-3 h5 pl-3 mb-3 ">Job Summary</h3>
+          <ul class="list-unstyled pl-3 mb-0">
+            <li class="mb-2"><strong class="text-black">Published on:</strong> {{ single_job.timestamp|date:"d M Y" }}
+            </li>
+            <li class="mb-2"><strong class="text-black">Vacancy:</strong> {{ single_job.Vacancy }}</li>
+            <li class="mb-2"><strong class="text-black">Year of Passed out:</strong> {{ single_job.passedout }}</li>
+            <li class="mb-2"><strong class="text-black">Employment Status:</strong>
+              {% if single_job.job_type == 'full-time' %}
+              Full Time
+              {% elif single_job.job_type == 'part-time'%}
+              Part Time
+              {% else %}
+              Internship
+              {% endif %}
+            </li>
+            <li class="mb-2"><strong class="text-black">Experience:</strong> {{ single_job.experience_required }}</li>
+            <li class="mb-2"><strong class="text-black">Work mode:</strong> {{ single_job.work_mode }}</li>
+            <li class="mb-2"><strong class="text-black">Job Location:</strong> {{ single_job.location }}</li>
+            <li class="mb-2"><strong class="text-black">Salary:</strong> {{ single_job.salary }}</li>
+            <li class="mb-2"><strong class="text-black">Gender:</strong> {{ single_job.get_gender_display }}</li>
+            <li class="mb-2"><strong class="text-black">Application Deadline:</strong> {{ single_job.end_date|date:"d M Y" }}
+            </li>
+          </ul>
+        </div>
+        <div class="bg-light p-3 border rounded">
+          <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Share</h3>
+          <div class="px-3">
+            <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-facebook"></span></a>
+            <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-twitter"></span></a>
+            <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-instagram"></span></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row">Lorem ipsum dolor sit amet consectetur adipisicing elit. Error minima maiores vel eligendi fuga
+      ipsam nisi libero officia ea, ratione ullam delectus nesciunt aspernatur distinctio exercitationem pariatur
+      possimus placeat, quasi explicabo numquam, tenetur deleniti cumque consequuntur.</div>
+  </div>
+  {% endif %}
+
+  <!-- Footer -->
+  <footer class="bg-light py-3">
     <div class="container">
-        <p class="text-center mb-0">&copy; 2024 Job Portal. All Rights Reserved.</p>
+      <p class="text-center mb-0">&copy; 2024 Job Portal. All Rights Reserved.</p>
     </div>
-</footer>
+  </footer>
 
-<script src="https://cdn.ckeditor.com/4.25.0-lts/standard/ckeditor.js"></script>
-<script>
-  CKEDITOR.replace( 'editor1' );
-</script>
-{% endblock %}
+  <script src="https://cdn.ckeditor.com/4.25.0-lts/standard/ckeditor.js"></script>
+  <script>
+    CKEDITOR.replace('editor1');
+  </script>
+  {% endblock %}

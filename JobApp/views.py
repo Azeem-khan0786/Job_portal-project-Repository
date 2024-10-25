@@ -3,12 +3,13 @@ from django.http import HttpResponse,JsonResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from JobApp.models import  Job
-from JobApp.forms import  JobForm
+from JobApp.models import  Job ,Applicant
+from JobApp.forms import  JobForm , JobApplyForm
 from users.models import CustomUser
 
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from .permission import *
 
 
@@ -94,7 +95,33 @@ def single_job_view(request, id):
         'single_job': single_job,
         'company': company,
         'com_logo': com_logo,
-
-
     }
     return render(request, 'JobApp/job-single.html', context)        
+
+# method for apply-job
+def apply_job_view(request, id):
+    form = JobApplyForm(request.POST or None)
+    user = get_object_or_404(CustomUser, id=request.user.id)
+    job = get_object_or_404(Job, id=id)
+    
+    # Check if the applicant has already applied
+    applicant_exists = Applicant.objects.filter(user=user, job=job).exists()
+
+    if not applicant_exists:
+        if request.method == 'POST':
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.user = user
+                instance.job = job
+                instance.timestamp = timezone.now()  # Set the timestamp
+                instance.save()
+
+                messages.success(request, 'You have successfully applied for this job!')
+                return redirect(reverse("JobApp:single-job", kwargs={'id': id}))
+            else:
+                messages.error(request, 'There was an error with your application. Please try again.')
+        return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
+    
+    # If already applied
+    messages.warning(request, 'You have already applied for this job.')
+    return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
