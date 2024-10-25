@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Candidate Job ListPage{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+<link rel="stylesheet" href="{% static 'css/about_us.css' %}">
+{% include "candidate_navbar.html" %}
+
+<header>
+    <h1>About Us</h1>
+    <p>Connecting talent with opportunity.</p>
+</header>
+
+<section class="mission">
+    <h2>Our Mission</h2>
+    <p>To empower job seekers and employers to connect easily and effectively, fostering a better job market for everyone.</p>
+</section>
+
+<section class="our-story">
+    <h2>Our Story</h2>
+    <p>Founded in [Year], our platform has grown from a small startup to a leading job portal, serving thousands of users. Our vision is to create a world where every job seeker finds their dream job.</p>
+</section>
+
+<section class="meet-the-team">
+    <h2>Meet the Team</h2>
+    <div class="team-member">
+        <img src="team_member_1.jpg" alt="Team Member 1">
+        <h3>Jane Doe</h3>
+        <p>CEO & Founder</p>
+        <p>Jane is passionate about connecting people with opportunities and driving innovation in the job market.</p>
+    </div>
+    <div class="team-member">
+        <img src="team_member_2.jpg" alt="Team Member 2">
+        <h3>John Smith</h3>
+        <p>CTO</p>
+        <p>John oversees our technology strategy and is committed to building a robust platform for our users.</p>
+    </div>
+    <!-- Add more team members as needed -->
+</section>
+
+<section class="our-values">
+    <h2>Our Values</h2>
+    <ul>
+        <li>Integrity</li>
+        <li>Innovation</li>
+        <li>Diversity & Inclusion</li>
+        <li>Customer Focus</li>
+    </ul>
+</section>
+
+<footer>
+    <h2>Contact Us</h2>
+    <p>If you have any questions, feel free to <a href="contact.html">contact us</a>.</p>
+    <div class="social-media">
+        <a href="https://facebook.com">Facebook</a>
+        <a href="https://twitter.com">Twitter</a>
+        <a href="https://linkedin.com">LinkedIn</a>
+    </div>
+</footer>
+
+
+
+
+{% endblock %}

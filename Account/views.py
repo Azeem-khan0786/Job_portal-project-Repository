@@ -45,7 +45,7 @@ def login_view(request):
                 print(request,user)
                 messages.info(request,'Candidate has been loged in !')
                 # return HttpResponse('hello signin')
-                return redirect('Account:candidate_profile')
+                return redirect('JobApp:job_view')
             else:
                 messages.warning(request,'Invalid input ')
                 return redirect('Account:signout')

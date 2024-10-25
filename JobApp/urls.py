@@ -13,6 +13,8 @@ urlpatterns = [
     path('create_job/', views.create_job, name='create_job'), 
     path('recruiter_job_view/', views.recruiter_job_view, name='recruiter_job_view'), 
 
+
+    path('about_us/', views.about_us, name='about_us'), 
     path('custom_csrf_failure/',views.custom_csrf_failure), 
 ]
 

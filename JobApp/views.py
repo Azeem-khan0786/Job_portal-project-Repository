@@ -99,11 +99,12 @@ def single_job_view(request, id):
     return render(request, 'JobApp/job-single.html', context)        
 
 # method for apply-job
+@user_is_candidate
 def apply_job_view(request, id):
     form = JobApplyForm(request.POST or None)
     user = get_object_or_404(CustomUser, id=request.user.id)
     job = get_object_or_404(Job, id=id)
-    
+    print(id)
     # Check if the applicant has already applied
     applicant_exists = Applicant.objects.filter(user=user, job=job).exists()
 
@@ -117,7 +118,7 @@ def apply_job_view(request, id):
                 instance.save()
 
                 messages.success(request, 'You have successfully applied for this job!')
-                return redirect(reverse("JobApp:single-job", kwargs={'id': id}))
+                return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
             else:
                 messages.error(request, 'There was an error with your application. Please try again.')
         return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
@@ -125,3 +126,6 @@ def apply_job_view(request, id):
     # If already applied
     messages.warning(request, 'You have already applied for this job.')
     return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
+def about_us(request):
+    return render(request, 'JobApp/about_us.html', locals())
+        
