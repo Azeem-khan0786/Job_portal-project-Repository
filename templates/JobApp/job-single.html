@@ -1,15 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
 {% load is_job_already_applied %}
+{% load is_job_already_saved %}
 {% block title %}Candidate Job ListPage{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
 {% include "candidate_navbar.html" %}
 
 {% if single_job %}
 <!-- Job Cards -->
-<div class="container">
+<div class="container-fluid">
   <div class="row align-items-center mb-3">
     <div class="col-lg-8 mb-4 mb-lg-0">
       <div class="d-flex align-items-center">
@@ -53,11 +56,24 @@
           <div class="row">
             <!-- saved job -->
             <div class="col-4">
-              Saved
+              {% if user.is_authenticated and user.user_type == 'candidate' %}
+                  {% is_job_already_saved single_job request.user as is_saved %}
+                   
+                  {% if is_saved %}
+                  <span class="btn btn-block btn-success btn-md">Already Saved</span>
+                  {% else %}
+                     <form action="{% url 'JobApp:bookmark_view' single_job.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="job" value="{{single_job.id}}">
+                        <input type="submit" class="btn btn-block btn-warning btn-md" value="Saved Now" />
+                     </form>
+                  {% endif %}
+              {% elif request.user.id == single_job.user.id and user.user_type == 'recruiter' %}
+                <button  class="btn btn-block btn-danger btn-md">Delete</button>
+              {% endif %}      
             </div>
             <!-- Apply For job -->
-            <div class="col-4">
-
+            <div class="col-4 ml-5">
 
               {% if user.is_authenticated and user.user_type == 'candidate' %}
               {% is_job_already_applied single_job request.user as is_applied %}
@@ -82,9 +98,9 @@
       </div>
 
       <!-- Right Side: Job Details -->
-      <div class="col-lg-4">
-        <div class="bg-light p-3 border rounded mb-4">
-          <h3 class="text-success  mt-3 h5 pl-3 mb-3 ">Job Summary</h3>
+      <div class="col-lg-4 ">
+        <div class="bg-light p-3 border rounded mb-4 mr-3">
+          <h2 class="text-success  mt-3 h5 pl-3 mb-3 ">Job Summary</h2>
           <ul class="list-unstyled pl-3 mb-0">
             <li class="mb-2"><strong class="text-black">Published on:</strong> {{ single_job.timestamp|date:"d M Y" }}
             </li>
@@ -108,33 +124,23 @@
             </li>
           </ul>
         </div>
-        <div class="bg-light p-3 border rounded">
-          <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Share</h3>
+        <div class="bg-light p-1 border rounded mr-3">
+          <h3 class="text-primary text-align-center mt-1 h6 mb-1 ">Share</h3>
           <div class="px-3">
-            <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-facebook"></span></a>
-            <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-twitter"></span></a>
-            <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-instagram"></span></a>
+            <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="fab fa-facebook"></span></a>
+            <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="fab fa-twitter"></span></a>
+            <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="fab fa-instagram"></span></a>
           </div>
         </div>
 
       </div>
     </div>
-
-    <div class="row">Lorem ipsum dolor sit amet consectetur adipisicing elit. Error minima maiores vel eligendi fuga
-      ipsam nisi libero officia ea, ratione ullam delectus nesciunt aspernatur distinctio exercitationem pariatur
-      possimus placeat, quasi explicabo numquam, tenetur deleniti cumque consequuntur.</div>
-  </div>
+    
   {% endif %}
 
   <!-- Footer -->
-  <footer class="bg-light py-3">
-    <div class="container">
-      <p class="text-center mb-0">&copy; 2024 Job Portal. All Rights Reserved.</p>
-    </div>
-  </footer>
+<div class="container-fluid ">
+  {% include "footer.html" %}
+</div>  
 
-  <script src="https://cdn.ckeditor.com/4.25.0-lts/standard/ckeditor.js"></script>
-  <script>
-    CKEDITOR.replace('editor1');
-  </script>
-  {% endblock %}
+{% endblock %}

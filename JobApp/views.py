@@ -3,8 +3,8 @@ from django.http import HttpResponse,JsonResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from JobApp.models import  Job ,Applicant
-from JobApp.forms import  JobForm , JobApplyForm
+from JobApp.models import  Job ,Applicant,BookmarkJob
+from JobApp.forms import  JobForm , JobApplyForm ,BookmarkJobForm
 from users.models import CustomUser
 
 from django.contrib.auth.decorators import login_required
@@ -119,13 +119,66 @@ def apply_job_view(request, id):
 
                 messages.success(request, 'You have successfully applied for this job!')
                 return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
-            else:
-                messages.error(request, 'There was an error with your application. Please try again.')
-        return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
+        else:
+            return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
     
     # If already applied
     messages.warning(request, 'You have already applied for this job.')
     return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
+
+
+# method for job bookmark
+@user_is_recruiter
+def bookmark_view(request,id):
+    form =BookmarkJobForm(request.POST or None)
+    user=get_object_or_404(CustomUser,id=request.user.id)
+    job=get_object_or_404(Job,id=id)
+    applicant=BookmarkJob.objects.filter(user=user,job=job)
+    if not applicant:
+        if request.method=='POST':
+            if form.is_valid():
+                    instance = form.save(commit=False)
+                    instance.user = user
+                   
+                    instance.timestamp = timezone.now()  # Set the timestamp
+                    instance.save()
+                    messages.success(request, 'You have saved the job as bookmark')
+                    return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))    
+        else:
+            return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
+    else:
+        messages.error(request,'You hae already saved the job')
+        return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
+
+
+# Method to dashboard page whether candidate or recruieter
+def dashboard_view(request):
+    jobs=[]
+    total_applicants=[]
+
+    if request.user.user_type == 'recruiter':
+        jobs=Job.objects.filter(user=request.user.id)
+        for job in jobs:
+            count=Applicant.filter(job=job.id).count()
+            total_applicants[job.id]=count
+    context={
+        'jobs':jobs,
+        'total_applicants':total_applicants
+    }
+    return render(request, 'JobApp/dashboard.html', context)
+    
+
+
+
+
+
+
+
+
+
+
+
 def about_us(request):
     return render(request, 'JobApp/about_us.html', locals())
         
+

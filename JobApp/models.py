@@ -96,6 +96,22 @@ class Applicant(models.Model):
 
     def __str__(self):
         return f"{self.job.title}  {self.user}"
+
+class BookmarkJob(models.Model):
+    user= models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    job=models.ForeignKey(Job, on_delete=models.CASCADE)
+    timestamp=models.DateTimeField(auto_now=False)
+
+    class Meta:
+        verbose_name = _("Bookmark")
+        verbose_name_plural = _("Bookmarks")
+
+    
+    def __str__(self):
+       return f"Bookmark by {self.user.email} for {self.job.title}"
+
+    
+
     
 
    
