@@ -152,26 +152,78 @@ def bookmark_view(request,id):
 
 
 # Method to dashboard page whether candidate or recruieter
+@login_required(login_url=reverse_lazy('Account:signin')) 
 def dashboard_view(request):
     jobs=[]
-    total_applicants=[]
+    saved_jobs=[]
+    applied_jobs=[]
+    total_applicants={}
 
     if request.user.user_type == 'recruiter':
-        jobs=Job.objects.filter(user=request.user.id)
+        jobs=Job.objects.filter(recruiter=request.user.id)
         for job in jobs:
-            count=Applicant.filter(job=job.id).count()
+            
+            count=Applicant.objects.filter(job=job.id).count()
             total_applicants[job.id]=count
+
+    if request.user.user_type =='candidate':
+        saved_jobs=BookmarkJob.objects.filter(user=request.user.id)
+        applied_jobs=Applicant.objects.filter(user=request.user.id)
+
+        print(saved_jobs)
     context={
         'jobs':jobs,
+        'saved_jobs':saved_jobs,
+        'applied_jobs':applied_jobs,
         'total_applicants':total_applicants
     }
+    
+
     return render(request, 'JobApp/dashboard.html', context)
     
 
+def edit_job(request,id):
+    pass
+
+# Delete Job via recruiter
+@login_required(login_url=reverse_lazy('account:login'))
+# @user_is_recruiter
+def delete_job(request,id):
+    job=get_object_or_404(Job,id=id,recruiter=request.user.id)
+    if job:
+         try: 
+            job.delete()
+            messages.success(request,'Job Delete Successfully')
+         except:
+            messages.error(request,'Something went wrong while delete')
+    
+    return redirect('JobApp:dashboard_view')
 
 
-
-
+# close the job 
+@login_required(login_url=reverse_lazy('account:login'))
+@user_is_recruiter
+def make_close_job(request,id):
+    job=get_object_or_404(Job,id=id,recruiter=request.user.id)
+    if job:
+        try:
+            job.is_closed = True
+            job.save()
+            messages.success(requestr,'Job successfully closed')
+        except:
+               messages.warning(request,'Something went wrong') 
+    return redirect('JobApp:dashboard_view')    
+    
+@login_required(login_url=reverse_lazy('account:login'))
+@user_is_candidate
+def delete_bookmark(request,id):
+    bookmarkjob=get_object_or_404(BookmarkJob,id=id,user=request.user.id)
+    if bookmarkjob:
+        
+        bookmarkjob.delete()
+        messages.success(request, 'Bookmark deleted successfully')
+    return redirect('JobApp:dashboard_view')        
+    
 
 
 
