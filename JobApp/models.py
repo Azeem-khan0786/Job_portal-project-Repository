@@ -73,7 +73,7 @@ class Job(models.Model):
     Vacancy = models.CharField(max_length=10, null=True)
     passedout = models.CharField(max_length=30 ,default='2023-2024')
     timestamp = models.DateTimeField(auto_now=True)
-    end_date = models.DateField(max_length=20, null=True)
+    end_date = models.DateField(max_length=20, null=True,default='None')
     gender = models.CharField(max_length=30,choices=gender_chioce ,blank=True)
 
     def __str__(self):

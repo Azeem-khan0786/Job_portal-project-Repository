@@ -13,7 +13,15 @@ urlpatterns = [
     path('bookmark_view/<int:id>/', views.bookmark_view, name='bookmark_view'),
 
     path('create_job/', views.create_job, name='create_job'), 
+    
+
     path('dashboard_view/', views.dashboard_view, name='dashboard_view'), 
+    path('dashboard/employer/edit_job/<int:id>', views.edit_job, name='edit_job'),
+    path('dashboard/employer/delete_job/<int:id>', views.delete_job, name='delete_job'),
+    path('dashboard/employer/close/<int:id>', views.make_close_job, name='make_close_job'),
+    path('dashboard/employer/delete_bookmark/<int:id>', views.delete_bookmark, name='delete_bookmark'),
+
+
 
     path('recruiter_job_view/', views.recruiter_job_view, name='recruiter_job_view'), 
 
