@@ -1,5 +1,5 @@
-from django.shortcuts import render,HttpResponseRedirect ,redirect,get_object_or_404
-from django.http import HttpResponse,JsonResponse
+from django.shortcuts import render,HttpResponseRedirect ,redirect,get_object_or_404,get_list_or_404
+from django.http import HttpResponse ,JsonResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
@@ -60,6 +60,7 @@ def create_job(request):
      template_name='JobApp/create_job.html'
      return render(request, template_name, context)
     
+# Details of single
 def job_details(request, job_id):
     try:
         job = Job.objects.get(id=job_id)
@@ -181,13 +182,29 @@ def dashboard_view(request):
 
     return render(request, 'JobApp/dashboard.html', context)
     
+# Edit job by Recruiter
 
 def edit_job(request,id):
-    pass
+    user=get_object_or_404(CustomUser,id=request.user.id)
+    job=get_object_or_404(Job,id=id,recruiter=user)
+    if request.method == 'POST':
+         form =JobForm(request.POST,instance=job)
+         if form.is_valid():
+            form.save()
+            messages.success(request, 'Job have been edit successfully')
+            return redirect('JobApp:dashboard_view')
+    else:
+        form =JobForm(instance=job)
+    context={"form":form,'job':job}  
+    template_name='JobApp/edit_job.html'
+    return render(request, template_name, context)
+        
+
+
 
 # Delete Job via recruiter
 @login_required(login_url=reverse_lazy('account:login'))
-# @user_is_recruiter
+@user_is_recruiter
 def delete_job(request,id):
     job=get_object_or_404(Job,id=id,recruiter=request.user.id)
     if job:
@@ -224,7 +241,23 @@ def delete_bookmark(request,id):
         messages.success(request, 'Bookmark deleted successfully')
     return redirect('JobApp:dashboard_view')        
     
+# View detail of single applicant
+def applicant_details(request,id):
+    applicant=get_object_or_404(CustomUser,id=id)
+    context={'applicant':applicant}
+    template_name='JobApp/applicant_details.html'
+    return render(request, template_name, context)
+          
 
+# View list of all applicants
+def applicants_list(request,id):
+    # user=get_object_or_404(CustomUser,user=request.user)
+    all_applicants=get_list_or_404(Applicant,job=id)
+    context={'all_applicants':all_applicants}
+    template_name='JobApp/applicants_list.html'
+    return render(request, template_name, context)
+    
+    
 
 
 

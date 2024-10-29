@@ -11,7 +11,7 @@
 <section class="section-hero overlay inner-page bg-image" style="background-image: url({% static 'images/hero_4.jpg' %});" id="home-section">
     <div class="container">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <h1 class="text font-weight-bold">Dashboard</h1>
                 <div class="custom-breadcrumbs">
                     <a href="{% url 'JobApp:job_view' %}">Job</a> <span class="mx-2 slash">/</span>
@@ -38,13 +38,18 @@
                                 <td class="text-left"><a href="{% url 'JobApp:single_job_view' job.id %}">{{ job.title }}</a></td>
                                 <td>{{ job.timestamp|date:"M d, Y" }}</td>
                                 <td>{{ job.job.end_date|date:"d M Y" }}</td>
-                                <td><span class="badge badge-info">Published</span></td>
+                                <td   class=" btn-sm mt-2 " style="color: palevioletred;"> <b>Published</b> </td>
                                 <td>
                                     {% get_total_applicants total_applicants job as is_applicant %}
                                     {% if is_applicant %}
-                                        <span>{{ is_applicant }} {% if is_applicant > 1 %}Applicants{% else %}Applicant{% endif %}</span>
+                                         
+                                        {% if is_applicant > 1 %} 
+                                               <a class="btn btn-info btn-sm" href="{% url 'JobApp:applicants_list' job.id %}" role="button">{{ is_applicant }} Applicants</a>  
+                                        {% else %}
+                                               <a class="btn btn-info btn-sm" href="{% url 'JobApp:applicant_details' job.id %}" role="button">{{ is_applicant }} Applicant</a>
+                                        {% endif %}</span>
                                     {% else %}
-                                        <span>0 Applicants</span>
+                                        <a>0 Applicants</a>
                                     {% endif %}
                                 </td>
                                 <td>

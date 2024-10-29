@@ -7,7 +7,7 @@ from django.utils import timezone
 status_choices=(('apl','applied'),('intw','intervew'),('hrd','hired'),('rjct','rejected'),)
 gender_chioce=(( "m","male"
     
-),('f','female'),('oth','Others'),)
+),('f','female'),)
 WORK_MODE_CHOICES = (('REMOTE', 'Remote'),
         ('Onsite', 'Onsite'),
         ('Hybrid', 'Hybrid'),)

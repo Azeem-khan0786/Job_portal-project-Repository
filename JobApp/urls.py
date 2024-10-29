@@ -20,7 +20,8 @@ urlpatterns = [
     path('dashboard/employer/delete_job/<int:id>', views.delete_job, name='delete_job'),
     path('dashboard/employer/close/<int:id>', views.make_close_job, name='make_close_job'),
     path('dashboard/employer/delete_bookmark/<int:id>', views.delete_bookmark, name='delete_bookmark'),
-
+    path('dashboard/employer/applicant_details/<int:id>', views.applicant_details, name='applicant_details'),
+    path('dashboard/employer/applicants_list/<int:id>', views.applicants_list, name='applicants_list'),
 
 
     path('recruiter_job_view/', views.recruiter_job_view, name='recruiter_job_view'), 

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Job Edit Form{% endblock  %}
+{% block content %}
+<div class="container_fluid m-2 p-3  bg-lightgreen">
+    <form action="" method="POST">
+      
+        {{form| crispy}}
+        {% csrf_token %}
+      <button class="btn-primary btn submit" type="submit">Edit</button>
+      <button class="secondry btn cancel" type="cancel">Cancel</button>
+   </form>
+     
+</div>
+ 
+{% endblock  %}

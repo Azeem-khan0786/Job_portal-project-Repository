@@ -8,7 +8,7 @@ from JobApp.models import Job ,Applicant ,BookmarkJob
 class JobForm(forms.ModelForm):
     class Meta:
         model=Job
-        fields='__all__'
+        exclude=['recruiter']
 
 class JobApplyForm(forms.ModelForm):
     
