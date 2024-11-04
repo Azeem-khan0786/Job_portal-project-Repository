@@ -18,6 +18,12 @@ from .permission import *
     
 def job_view(request):
     jobs=Job.objects.all()
+    # company = jobs.company_name
+    # {{company}}
+    # com_logo=jobs.recruiter.recruiterprofile.company_logo
+    # context={'jobs':jobs,'company':company,'com_logo':com_logo}
+
+
     # {{jobs.title}}
     return render(request, 'JobApp/jobPage.html', {'jobs':jobs})    
    
