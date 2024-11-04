@@ -2,20 +2,35 @@
 {% load static %}
 {% block title %}Candidate Job ListPage{% endblock %}
 {% block content %}
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 
 {% include "candidate_navbar.html" %}
 
 {% if jobs %}
 <!-- Job Cards -->
-<div class="container my-5">
+<div class="container-fluid">
+    
     <div class="row">
-        <div class="input-group rounded mb-3">
+        <div class="input-group rounded mt-3 m-auto mb-3 w-75 h-25 text-center">
             <input type="search" class="form-control rounded" placeholder="job title, keyword, company name" aria-label="Search" aria-describedby="search-addon" />
             <span class="input-group-text border-0" id="search-addon">
                 <i class="fas fa-search"></i>
             </span> 
-        </div>
+        </div><br>
+        
+        
+
+       
+    </div>
+    <div class="row d-flex align-items-center flex-column mt-3" style="height: 100px;  ">
+        <h5 class=""><a style="" href=""><b >Post your Resume</b></a>-it takes only few seconds</h5>
+        <h5 class=""><a style="" href=""><b>Post a job today</b></a> and connect with quality candidates</h5>
+
+        
+    </div>
+    <hr style=" border: 1px solid black; width:100%;text-align:left;margin-left:0 ">
+    <div class="row">
         <!-- Left Side: Job Cards -->
         <div class="col-md-4"> <!-- Adjusted to 4 columns for the job list -->
             
@@ -40,7 +55,7 @@
         </div>
 
         <!-- Right Side: Job Details -->
-        <div class="col-md-8" style="border-left: 2px solid black; height: 100vh;">
+        <div class="col-md-8 " style="border-left: 2px solid black; height: 100vh;">
             <!-- Job details will be dynamically displayed here -->
             <div id="job-details-container">
                 <h3>{{ jobs.0.title }}</h3>  <!-- Default to the first job's details -->
