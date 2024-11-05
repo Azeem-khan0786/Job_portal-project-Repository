@@ -31,6 +31,7 @@ class Job(models.Model):
         on_delete=models.CASCADE,
         limit_choices_to={'user_type': 'recruiter'}
     )
+   
     title = models.CharField(max_length=255)
     description = models.TextField()
     location = models.CharField(max_length=255)

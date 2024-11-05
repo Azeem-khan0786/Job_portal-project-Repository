@@ -6,6 +6,7 @@ from django.contrib import messages
 from JobApp.models import  Job ,Applicant,BookmarkJob
 from JobApp.forms import  JobForm , JobApplyForm ,BookmarkJobForm
 from users.models import CustomUser
+from Account.models import RecruiterProfile
 
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
@@ -18,12 +19,11 @@ from .permission import *
     
 def job_view(request):
     jobs=Job.objects.all()
-    # company = jobs.company_name
-    # {{company}}
-    # com_logo=jobs.recruiter.recruiterprofile.company_logo
-    # context={'jobs':jobs,'company':company,'com_logo':com_logo}
-
-
+    for job in jobs:
+        camm=job.recruiter.recruiterprofile.company_name
+        camp=RecruiterProfile.objects.get(id=job.id)
+        print(camm)
+    
     # {{jobs.title}}
     return render(request, 'JobApp/jobPage.html', {'jobs':jobs})    
    

@@ -3,27 +3,23 @@
 {% block title %}Candidate Job ListPage{% endblock %}
 {% block content %}
 <style>
-    .main-div {
+    .job-details-row {
         display: flex;
-        flex-direction: column;
-        height: 100vh; /* Full viewport height */
+        gap: 18px;         /* Space between each div */
+        align-items: center;
     }
     
-    /* Fixed top div */
-    .fixed-div {
-        background-color: #f8f8f8;
-        padding: 20px;
-        border-bottom: 1px solid #ccc;
+    .job-detail {
+        
+        
+        background-color: #80aaff; /* Background color */
+        padding: 5px;     /* Adds padding inside each div */
+        border-radius: 4px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     }
     
-    /* Scrollable div */
-    .scrollable-div {
-        flex-grow: 1;
-        overflow-y: auto;
-        padding: 20px;
-        background-color: #ffffff;
-    }
-</style>
+    
+    </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 <link rel="stylesheet" href="{% static 'css/searchbox.css' %}">
@@ -64,11 +60,26 @@
             <div class="card shadow-sm mb-4 border border-dark rounded job-item" data-job-id="{{ job.id }}" onclick="showJobDetails({{ job.id }})">
                 <article class="card-body">
                     <h5 class="card-title"><b>{{ job.title }}</b></h5>
-                    <p class="card-text">{{ job.description|truncatewords:20 }}</p>
+                    <p> <img src="{{ job.recruiter.recruiterprofile.company_logo.url }}" alt="Company Logo" style="width: 100px; height: 80px;"> {{ job.recruiter.recruiterprofile.company_name }}</p>
+                    {% comment %} <p class="card-text">{{ job.description|truncatewords:10 }}</p> {% endcomment %}
                     <p><i class="fa-sharp fa-solid fa-location-dot"></i> <strong>Location:</strong> {{ job.location }}</p>
-                    <p><i class="fa-solid fa-briefcase"></i> <strong>Job Type:</strong> {{ job.get_job_type_display }}</p>
+                    <div class="job-details-row">
+                        <div class="job-detail">
+                            <i class="fa-solid fa-briefcase"></i> 
+                             {{ job.get_job_type_display }}
+                        </div>
+                        
+                        <div class="job-detail">
+                             {{ job.work_mode }}
+                        </div>
+                        
+                        <div class="job-detail">
+                             ₹{{ jobs.0.salary|default:"Not specified" }} per year
+                        </div>
+                    </div>
+                    
+                    
                     <p> <strong>Experience Required:</strong> {{ job.experience_required }}</p>
-                    <p> <strong>Work Mode:</strong> {{ job.work_mode }}</p>
                     
                     <div class="row p-1 m-1 d-flex justify-content-between">
                         <a href="{% url 'JobApp:single_job_view' job.id %}" class="btn btn-primary">Apply Job</a>
@@ -78,40 +89,31 @@
             </div>
             {% endfor %}
         </div>
-
+        <div class="col-md-8">
         <!-- Right Side: Job Details -->
-        <div class=" main-div col-md-8  " style="border-left: 1px solid black; height: 100vh;">
-            <div class="fixed-div" >
-                <h3>{{ jobs.0.title }}</h3>  <!-- Default to the first job's details -->
-                
-                <p><strong>Location:</strong> {{ job.0.location }}</p>
-                <p>Compa{{ job.recruiter.recruiterprofile.company }}</p>
-
-                <a href="" class="btn btn-primary">Apply Job</a>
-            </div>
-            <div class="scrollable-div" id="job-details-container " style="height:180px">
+        <div id="job-details-container">
+            <h3>{{ jobs.0.title }}</h3>  <!-- Default to the first job's details -->
+            <h6>{{ jobs.0.recruiter.recruiterprofile.company_name }}</h6>
+            <h6> {{ jobs.0.location }}</h6>
+            <p>{{ jobs.0.description }}</p>
+            
+            <p><strong>Location:</strong> {{ jobs.0.location }}</p>
+            <p><i class="fa-solid fa-briefcase"></i> <strong>Job Type:</strong> {{ jobs.0.get_job_type_display }}</p>
+            <p><strong>Salary:</strong> {{ jobs.0.salary|default:"Not specified" }}</p>
+            <p><strong>Experience Required:</strong> {{ jobs.0.experience_required }}</p>
+            <p><strong>Education:</strong> {{ jobs.0.get_education_display }}</p>
+            <p><strong>Languages:</strong> {{ jobs.0.language }}</p>
+            
+            <p><strong>Shift and Schedule:</strong> {{ jobs.0.schedule }}</p>
+            <p><strong>Work Mode:</strong> {{ jobs.0.get_work_mode_display }}</p>
+            <p><strong>Requirements:</strong> {{ jobs.0.requirements|linebreaksbr }}</p>
+            {% if jobs.0.specifications %}
+            <p><strong>Specifications:</strong> {{ jobs.0.specifications|linebreaksbr }}</p>
+            {% endif %}
+            <p><strong>Vacancy:</strong> {{ jobs.0.Vacancy|default:"Not specified" }}</p>
 
             
-            <!-- Job details will be dynamically displayed here -->
-            
-                <h3>{{ jobs.0.title }}</h3>  <!-- Default to the first job's details -->
-                <p>{{ jobs.0.description }}</p>
-                <p><strong>Location:</strong> {{ job.location }}</p>
-                <p><i class="fa-solid fa-briefcase"></i> <strong>Job Type:</strong> {{ jobs.0.get_job_type_display }}</p>
-                <p><strong>Salary:</strong> {{ jobs.0.salary|default:"Not specified" }}</p>
-                <p><strong>Experience Required:</strong> {{ jobs.0.experience_required }}</p>
-                <p><strong>Education:</strong> {{ jobs.0.get_education_display }}</p>
-                <p><strong>Languages:</strong> {{ jobs.0.language }}</p>
-                <p><strong>Shift and Schedule:</strong> {{ jobs.0.schedule }}</p>
-                <p><strong>Work Mode:</strong> {{ jobs.0.get_work_mode_display }}</p>
-                <p><strong>Requirements:</strong> {{ jobs.0.requirements|linebreaksbr }}</p>
-                {% if jobs.0.specifications %}
-                <p><strong>Specifications:</strong> {{ jobs.0.specifications|linebreaksbr }}</p>
-                {% endif %}
-                <p><strong>Vacancy:</strong> {{ jobs.0.Vacancy|default:"Not specified" }}</p>
-
-                
-            </div>
+        </div>
             <div class="row p-1 m-1 d-flex justify-content-between">
                 <a href="" class="btn btn-primary">Apply Job</a>
 
@@ -137,6 +139,7 @@
                 const detailsContainer = document.getElementById('job-details-container');
                 detailsContainer.innerHTML = `
                     <h3>${data.title}</h3>
+                    <p>${data.recruiter.recruiterprofile.company_name }</p>
                     <p>${data.description}</p>
                     <p><strong>Location:</strong> ${data.location}</p>
                     <p><strong>Job Type:</strong> ${data.job_type}</p>
