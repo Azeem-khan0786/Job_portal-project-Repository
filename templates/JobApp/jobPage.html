@@ -1,122 +1,143 @@
-{% extends "base.html" %}
-{% load static %}
-{% block title %}Candidate Job ListPage{% endblock %}
-{% block content %}
-<style>
-    .job-details-row {
-        display: flex;
-        gap: 18px;         /* Space between each div */
-        align-items: center;
-    }
-    
-    .job-detail {
-        
-        
-        background-color: #80aaff; /* Background color */
-        padding: 5px;     /* Adds padding inside each div */
-        border-radius: 4px; /* Rounded corners */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    }
-    
-    
-    </style>
+{% extends "base.html" %} {% load static %} {% block title %} Job
+ListPage{% endblock %} {% block content %}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-<link rel="stylesheet" href="{% static 'css/searchbox.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-{% include "candidate_navbar.html" %}
-
+<!-- Load css fils  -->
+<link rel="stylesheet" href="{% static 'css/searchbox.css' %}" />
+<link rel="stylesheet" href="{% static 'css/jobpage.css' %}">
+{% include "candidate_navbar.html" %} 
 {% if jobs %}
 <!-- Job Cards -->
 <div class="container-fluid">
-     <!-- Search box -->
+    <!-- Search box -->
     <div class="row mt-3">
-        <div class="search-box ">
+        <div class="search-box">
             <div class="search-input">
                 <i class="fas fa-briefcase"></i>
-                <input type="text" placeholder=" Job Title ,keywords or company" id="location" required>
+                <input type="text" placeholder=" Job Title ,keywords or company" id="location" required />
             </div>
             <div class="divider">|</div>
             <div class="search-input">
                 <i class="fas fa-map-marker-alt"></i>
-                <input type="text" placeholder="location , city ,code ,'Remote'" id="location">
+                <input type="text" placeholder="location , city ,code ,'Remote'" id="location" />
             </div>
             <button class="find-button" onclick="findJob()">Find Job</button>
         </div>
-        <br>
-        
+        <br />
     </div>
-    <div class="row d-flex align-items-center flex-column mt-3" style="height: 70px;  ">
-        <h6 class=""><a style="" href=""><b >Post your Resume</b></a>-it takes only few seconds</h6>
-        <h6 class=""><a style="" href=""><b>Post a job today</b></a> and connect with quality candidates</h6>  
+    <div class="row d-flex align-items-center flex-column mt-3" style="height: 70px">
+        <h6 class="">
+            <a style="" href=""><b>Post your Resume</b></a>-it takes only few seconds
+        </h6>
+        <h6 class="">
+            <a style="" href=""><b>Post a job today</b></a> and connect with quality
+            candidates
+        </h6>
     </div>
-    <hr style="border: 1px solid #ccc; width: 100%; text-align: left; margin-left: 0;">
+    <hr style="
+      border: 1px solid #ccc;
+      width: 100%;
+      text-align: left;
+      margin-left: 0;
+    " />
     <div class="row">
         <!-- Left Side: Job Cards -->
-        <div class="col-md-4"> <!-- Adjusted to 4 columns for the job list -->
-            
+        <div class="col-md-4">
+            <!-- Adjusted to 4 columns for the job list -->
 
             {% for job in jobs %}
-            <div class="card shadow-sm mb-4 border border-dark rounded job-item" data-job-id="{{ job.id }}" onclick="showJobDetails({{ job.id }})">
+            <div class="card shadow-sm mb-3 border border-dark rounded job-item" data-job-id="{{ job.id }}"
+                onclick="showJobDetails({{ job.id }})">
                 <article class="card-body">
-                    <h5 class="card-title"><b>{{ job.title }}</b></h5>
-                    <p> <img src="{{ job.recruiter.recruiterprofile.company_logo.url }}" alt="Company Logo" style="width: 100px; height: 80px;"> {{ job.recruiter.recruiterprofile.company_name }}</p>
-                    {% comment %} <p class="card-text">{{ job.description|truncatewords:10 }}</p> {% endcomment %}
-                    <p><i class="fa-sharp fa-solid fa-location-dot"></i> <strong>Location:</strong> {{ job.location }}</p>
-                    <div class="job-details-row">
-                        <div class="job-detail">
-                            <i class="fa-solid fa-briefcase"></i> 
-                             {{ job.get_job_type_display }}
+                    <h4 class="card-title"><b>{{ job.title }}</b></h4>
+                    <h6>{{ job.recruiter.recruiterprofile.company_name }}</h6>
+                    {% comment %}
+                    <p class="card-text">{{ job.description|truncatewords:10 }}</p>
+                    {% endcomment %}
+                    <h6>{{ job.location }}</h6>
+                    <div class="job-details-row mb-2">
+                        <div class="job-detail" style="background-color: #4da6ff">
+                            <i class="fa-solid fa-briefcase"></i>
+                            {{ job.get_job_type_display }}
                         </div>
-                        
+
+                        <div class="job-detail">{{ job.get_schedule_display }}</div>
+
                         <div class="job-detail">
-                             {{ job.work_mode }}
-                        </div>
-                        
-                        <div class="job-detail">
-                             ₹{{ jobs.0.salary|default:"Not specified" }} per year
+                            ₹ {{ job.salary|default:"Not specified" }} per year
                         </div>
                     </div>
-                    
-                    
-                    <p> <strong>Experience Required:</strong> {{ job.experience_required }}</p>
-                    
-                    <div class="row p-1 m-1 d-flex justify-content-between">
-                        <a href="{% url 'JobApp:single_job_view' job.id %}" class="btn btn-primary">Apply Job</a>
-                        <a href="" class="btn btn-dark">Visit Job</a>
+
+                    <p class="mb-1">
+                        <strong>Experience Required:</strong> {{ job.experience_required }}
+                    </p>
+
+                    <div class="row m-1 mb-3 d-flex justify-content-between">
+                        <a href="{% url 'JobApp:single_job_view' job.id %}"
+                            style="text-decoration: none; color: black"><i class="fa-solid fa-paper-plane"></i> Easily
+                            apply</a>
+                        <!-- <a href="" class="btn btn-dark">Visit Job</a> -->
                     </div>
+                    {% if postdays == 0 %}
+                    <p>just post</p>
+                    {% elif postdays == 1%}
+
+                    <p>posted {{ postdays }} day ago</p>
+                    {% else %}
+                    <p>posted {{ postdays }} days ago</p>
+                    {% endif %}
                 </article>
             </div>
             {% endfor %}
         </div>
         <div class="col-md-8">
-        <!-- Right Side: Job Details -->
-        <div id="job-details-container">
-            <h3>{{ jobs.0.title }}</h3>  <!-- Default to the first job's details -->
-            <h6>{{ jobs.0.recruiter.recruiterprofile.company_name }}</h6>
-            <h6> {{ jobs.0.location }}</h6>
-            <p>{{ jobs.0.description }}</p>
-            
-            <p><strong>Location:</strong> {{ jobs.0.location }}</p>
-            <p><i class="fa-solid fa-briefcase"></i> <strong>Job Type:</strong> {{ jobs.0.get_job_type_display }}</p>
-            <p><strong>Salary:</strong> {{ jobs.0.salary|default:"Not specified" }}</p>
-            <p><strong>Experience Required:</strong> {{ jobs.0.experience_required }}</p>
-            <p><strong>Education:</strong> {{ jobs.0.get_education_display }}</p>
-            <p><strong>Languages:</strong> {{ jobs.0.language }}</p>
-            
-            <p><strong>Shift and Schedule:</strong> {{ jobs.0.schedule }}</p>
-            <p><strong>Work Mode:</strong> {{ jobs.0.get_work_mode_display }}</p>
-            <p><strong>Requirements:</strong> {{ jobs.0.requirements|linebreaksbr }}</p>
-            {% if jobs.0.specifications %}
-            <p><strong>Specifications:</strong> {{ jobs.0.specifications|linebreaksbr }}</p>
-            {% endif %}
-            <p><strong>Vacancy:</strong> {{ jobs.0.Vacancy|default:"Not specified" }}</p>
+            <!-- Right Side: Job Details -->
+            <div id="job-details-container" class='main-div'>
+                <div class="fixed-div " >
+                    <h3 style="font-weight: bold;">{{ jobs.0.title }}</h3>
+                    <!-- Default to the first job's details -->
+                    <h6 style="font-weight: bold;">{{ jobs.0.recruiter.recruiterprofile.company_name }}</h6>
+                    <h6 style="font-weight: bold;">{{ jobs.0.location }}</h6>
+                    <h6 style="font-weight: bold;" class="" style="background-color: #b3cccc;"></h6>₹ {{ jobs.0.salary|default:"Not specified" }}
+                    per
+                    year
+                </div>
+                <div class="scrollable-div">
+                    <h3 style="font-weight: bold;">Full Job description</h3>  
+                    <p>{{ jobs.0.description }}</p>
 
-            
-        </div>
+                    <p><strong>Location:</strong> {{ jobs.0.location }}</p>
+                    <p>
+                        <i class="fa-solid fa-briefcase"></i> <strong>Job Type:</strong> {{ jobs.0.get_job_type_display }}
+                    </p>
+                    <p>
+                        <strong>Salary</strong>₹ {{ jobs.0.salary|default:"Not specified" }} per year
+                    </p>
+                    <p>
+                        <strong>Experience Required:</strong> {{ jobs.0.experience_required }}
+                    </p>
+                    <p><strong>Education:</strong> {{ jobs.0.get_education_display }}</p>
+                    <p><strong>Languages:</strong> {{ jobs.0.get_language_display }}</p>
+
+                    <p><strong>Shift and Schedule:</strong> {{ jobs.0.get_schedule_display }}</p>
+                    <p><strong>Work Mode:</strong> {{ jobs.0.get_work_mode_display }}</p>
+                    <p>
+                        <strong>Requirements:</strong> {{ jobs.0.requirements|linebreaksbr }}
+                    </p>
+                    {% if jobs.0.specifications %}
+                    <p>
+                        <strong>Specifications:</strong> {{ jobs.0.specifications|linebreaksbr }}
+                    </p>
+                    {% endif %}
+                    <p>
+                        <strong>vacancy:</strong> {{ jobs.0.Vacancy|default:"Not specified" }}
+                    </p>
+                </div>
+            </div>
             <div class="row p-1 m-1 d-flex justify-content-between">
-                <a href="" class="btn btn-primary">Apply Job</a>
-
+                <a href="{% url 'JobApp:single_job_view' jobs.0.id %}" class="btn btn-primary">Apply Job</a>
             </div>
         </div>
     </div>
@@ -138,42 +159,42 @@
             .then(data => {
                 const detailsContainer = document.getElementById('job-details-container');
                 detailsContainer.innerHTML = `
-                    <h3>${data.title}</h3>
-                    <p>${data.recruiter.recruiterprofile.company_name }</p>
-                    <p>${data.description}</p>
-                    <p><strong>Location:</strong> ${data.location}</p>
-                    <p><strong>Job Type:</strong> ${data.job_type}</p>
-                    <p><strong>Salary:</strong> ${data.salary || 'Not specified'}</p>
-                    <p><strong>Experience Required:</strong> ${data.experience_required}</p>
-                    <p><strong>Education:</strong> ${data.education}</p>
-                    <p><strong>Languages:</strong> ${data.language}</p>
-                    <p><strong>Shift and Schedule:</strong> ${data.schedule}</p>
-                    <p><strong>Work Mode:</strong> ${data.work_mode}</p>
-                    <p><strong>Requirements:</strong> ${data.requirements}</p>
-                    ${data.specifications ? `<p><strong>Specifications:</strong> ${data.specifications}</p>` : ''}
-                    <p><strong>Vacancy:</strong> ${data.Vacancy || 'Not specified'}</p>
-                    
-                `;
+                  <h3>${data.title}</h3>
+                  <p>${data.recruiter.recruiterprofile.company_name}</p>
+                  <p>${data.description}</p>
+                  <p><strong>Location:</strong> ${data.location}</p>
+                  <p><strong>Job Type:</strong> ${data.job_type}</p>
+                  <p><strong>Salary:</strong>₹ {{ jobs.0.salary|default:"Not specified" }} per year</p>
+                  <p><strong>Experience Required:</strong> ${data.experience_required}</p>
+                  <p><strong>Education:</strong> ${data.education}</p>
+                  <p><strong>Languages:</strong> ${data.language}</p>
+                  <p><strong>Shift and Schedule:</strong> ${data.schedule}</p>
+                  <p><strong>Work Mode:</strong> ${data.work_mode}</p>
+                  <p><strong>Requirements:</strong> ${data.requirements}</p>
+                  ${data.specifications ? `<p><strong>Specifications:</strong> ${data.specifications}</p>` : ''}
+                  <p><strong>Vacancy:</strong> ${data.Vacancy || 'Not specified'}</p>
+
+              `;
             });
     }
 
     // Optionally, display the first job's details by default when the page loads
     document.addEventListener("DOMContentLoaded", function () {
         showJobDetails({{ jobs.0.id }});  // First job as default
-    });
+  });
 </script>
 <script>
     function findJob() {
-        const jobTitle = document.getElementById('job-title').value.trim();
-        const location = document.getElementById('location').value.trim();
-        
+        const jobTitle = document.getElementById("job-title").value.trim();
+        const location = document.getElementById("location").value.trim();
+
         if (!jobTitle) {
             alert("Please enter a job title to search.");
             return;
         }
 
         // Proceed with the search if job title is provided
-        alert(`Searching for ${jobTitle} jobs${location ? ' in ' + location : ''}`);
+        alert(`Searching for ${jobTitle} jobs${location ? " in " + location : ""}`);
     }
 </script>
 {% endblock %}

@@ -12,20 +12,26 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from .permission import *
-
+import re
 
 
 # from recruiters.models import Job
     
 def job_view(request):
-    jobs=Job.objects.all()
+    if request.user.is_authenticated:
+        if request.user.user_type=='recruiter':
+            
+                jobs=Job.objects.filter(recruiter=request.user)
+                print('Heloo Rec')
+        elif request.user.user_type=='candidate':
+            
+            jobs=Job.objects.all()
+    else: 
+        jobs=Job.objects.all()      
     for job in jobs:
-        camm=job.recruiter.recruiterprofile.company_name
-        camp=RecruiterProfile.objects.get(id=job.id)
-        print(camm)
-    
-    # {{jobs.title}}
-    return render(request, 'JobApp/jobPage.html', {'jobs':jobs})    
+      time_diff=timezone.now()-job.timestamp
+      postdays=time_diff.days    
+    return render(request, 'JobApp/jobPage.html', locals())    
    
 # specifice job list view for recruiter
 @login_required(login_url=reverse_lazy('Account:signin'))      
@@ -95,6 +101,10 @@ def single_job_view(request, id):
     """
      
     single_job = get_object_or_404(Job, id=id)
+    # Use regex to split on sentence-ending periods
+    specifications_bullets = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', single_job.specifications)
+    requirements_bullets = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', single_job.requirements)
+
     company = single_job.recruiter.recruiterprofile.company_name
     com_logo=single_job.recruiter.recruiterprofile.company_logo
     print('company_name',company)    
@@ -102,6 +112,9 @@ def single_job_view(request, id):
         'single_job': single_job,
         'company': company,
         'com_logo': com_logo,
+        'specifications_bullets':specifications_bullets,
+        'requirements_bullets':requirements_bullets,
+
     }
     return render(request, 'JobApp/job-single.html', context)        
 
@@ -271,5 +284,7 @@ def applicants_list(request,id):
 
 def about_us(request):
     return render(request, 'JobApp/about_us.html', locals())
+def contact_us(request):
+    return render(request, 'JobApp/contact_us.html', locals())
         
 

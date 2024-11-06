@@ -48,9 +48,24 @@
           <p class="card-text">{{ single_job.description|truncatewords:100 }}</p>
 
           <strong>Job Requirements and skills </strong>
-          <p class="card-text" name="editor1">{{ single_job.requirements|truncatewords:100 }}</p>
+          <p class="card-text" name="editor1">
+             <ul>
+              {% for bullet in requirements_bullets %}
+                  {% if bullet.strip %} <!-- Skip any empty strings -->
+                      <li>{{ bullet|safe }}.</li>
+                  {% endif %}
+              {% endfor %}
+              </ul></p>
           <strong>Job Specifications:</strong>
-          <p class="justify-text">{{ single_job.specifications|truncatewords:100 }}</p>
+          <p class="justify-text">
+            <ul>
+            {% for bullet in specifications_bullets %}
+                {% if bullet.strip %} <!-- Skip any empty strings -->
+                    <li>{{ bullet|safe }}.</li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+         </p>
           {% comment %} <p class="justify-text">Company name{{ job.recruiter }}</p> {% endcomment %}
           <!-- saved job -->
           <div class="row">

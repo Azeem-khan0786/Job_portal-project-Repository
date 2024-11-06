@@ -1,0 +1,40 @@
+
+    .job-details-row {
+        display: flex;
+        gap: 15px;
+        /* Space between each div */
+        align-items: center;
+    }
+
+    .job-detail {
+        background-color: #b3cccc;
+        /* Background color */
+        padding: 3px;
+        /* Adds padding inside each div */
+        border-radius: 4px;
+        /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* Subtle shadow */
+    }
+    .main-div {
+        display: flex;
+        flex-direction: column;
+        height: 100vh; /* Full viewport height */
+    }
+    /* Fixed top div */
+    .fixed-div {
+        font-weight: bold;
+        background-color: #f8f8f8;
+        padding: 20px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    /* Scrollable div */
+    .scrollable-div {
+        flex-grow: 1;
+        /* Allows it to grow and take up remaining space */
+        overflow-y: auto;
+        /* Enables vertical scrolling */
+        padding: 20px;
+        background-color: #ffffff;
+    }
