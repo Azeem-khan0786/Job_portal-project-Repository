@@ -28,7 +28,7 @@ urlpatterns = [
 
 
     path('about_us/', views.about_us, name='about_us'),
-    path('contact_us/', views.contact_us, name='contact_us'), 
+    path('', views.contact_us, name='contact_us'), 
 
     path('custom_csrf_failure/',views.custom_csrf_failure), 
 ]

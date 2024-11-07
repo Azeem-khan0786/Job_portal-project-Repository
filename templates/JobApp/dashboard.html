@@ -53,7 +53,7 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <a class="btn btn-info btn-sm" href="{% url 'JobApp:edit_job' job.id %}" role="button">Edit</a>
+                                    <a class="btn btn-info btn-sm "data-toggle='model' data-target='EditJobModal' href="{% url 'JobApp:edit_job' job.id %}" role="button">Edit</a>
                                     {% if job.is_published %}
                                         {% if not job.is_closed %}
                                             <a class="btn btn-info btn-sm" href="{% url 'JobApp:make_close_job' job.id %}" role="button">Make it Close</a>

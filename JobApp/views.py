@@ -206,17 +206,25 @@ def dashboard_view(request):
 def edit_job(request,id):
     user=get_object_or_404(CustomUser,id=request.user.id)
     job=get_object_or_404(Job,id=id,recruiter=user)
-    if request.method == 'POST':
+    form =JobForm(instance=job)
+    if request.method == "POST" and request.headers.get('x-requested-with') == 'XMLHttpRequest':
          form =JobForm(request.POST,instance=job)
          if form.is_valid():
+            title=form.cleaned_data['title']
+            description=form.cleaned_data['description']
             form.save()
-            messages.success(request, 'Job have been edit successfully')
-            return redirect('JobApp:dashboard_view')
-    else:
-        form =JobForm(instance=job)
-    context={"form":form,'job':job}  
+            return JsonResponse({'title':title,'description':description},status=200)
+            # messages.success(request, 'Job have been edit successfully')
+            # return redirect('JobApp:dashboard_view')
+         else:
+                errors = form.errors.as_json()
+                return JsonResponse({"errors": errors}, status=400)  
+    
+        
+
+      
     template_name='JobApp/edit_job.html'
-    return render(request, template_name, context)
+    return render(request, template_name, locals())
         
 
 
@@ -275,12 +283,6 @@ def applicants_list(request,id):
     context={'all_applicants':all_applicants}
     template_name='JobApp/applicants_list.html'
     return render(request, template_name, context)
-    
-    
-
-
-
-
 
 def about_us(request):
     return render(request, 'JobApp/about_us.html', locals())
