@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm 
 from users.models import  CustomUser
-from JobApp.models import Job ,Applicant ,BookmarkJob
+from JobApp.models import Job ,Applicant ,BookmarkJob ,Contact
 
 
 #create form for create_job 
@@ -22,7 +22,10 @@ class BookmarkJobForm(forms.ModelForm):
         model = BookmarkJob
         fields = ("job",)
 
-
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = '__all__'
     
         
 

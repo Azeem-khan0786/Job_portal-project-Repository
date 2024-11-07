@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from JobApp.models import  Job ,Applicant,BookmarkJob
-from JobApp.forms import  JobForm , JobApplyForm ,BookmarkJobForm
+from JobApp.forms import  JobForm , JobApplyForm ,BookmarkJobForm,ContactForm
 from users.models import CustomUser
 from Account.models import RecruiterProfile
 
@@ -285,6 +285,18 @@ def applicants_list(request,id):
 def about_us(request):
     return render(request, 'JobApp/about_us.html', locals())
 def contact_us(request):
+    form = ContactForm()
+    # Check if the request is POST and AJAX
+    if request.method == "POST" and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            form.save()
+            return JsonResponse({"name": name}, status=200)
+        else:
+            errors = form.errors.as_json()
+            return JsonResponse({"errors": errors}, status=400)
+
     return render(request, 'JobApp/contact_us.html', locals())
         
 
