@@ -12,11 +12,55 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from .permission import *
-import re
+import re 
+import json
 
 
 # from recruiters.models import Job
+
+# import  json_file (.json) to store record of Jobs
+def import_jobs(request):
+    if request.method == 'POST':
+        if 'json_file' not in request.FILES:
+            return HttpResponse('No file uploaded.')
+        json_file = request.FILES['json_file']
+        data = json.load(json_file)
+        for item in data:
+            recruiter_instance=CustomUser.objects.get(id=item['recruiter'])
+            job = Job(
+                recruiter=recruiter_instance,
+                title=item['title'],
+                description=item['description'],
+                location=item['location'],
+                
+                job_type=item['job_type'],
+                salary=item['salary'],
+                requirements=item['requirements'],
+                experience_required=item['experience_required'],
+                specifications=item['specifications'],
+                education=item['education'],
+                language=item['language'],
+                schedule=item['schedule'],
+                work_mode=item['work_mode'],
+                created_at=item['created_at'],
+                updated_at=item['updated_at'],
+                is_published=item['is_published'],
+                is_closed=item['is_closed'],
+                Vacancy=item['Vacancy'],
+                passedout=item['passedout'],
+                timestamp=item['timestamp'],
+                end_date=item['end_date'],
+                gender=item['gender'],
+                
+           
+
+                
+            )
+            job.save()
+        return render(request, 'successjson.html')
     
+    return render(request, 'loadjson.html')   
+
 def job_view(request):
     if request.user.is_authenticated:
         if request.user.user_type=='recruiter':

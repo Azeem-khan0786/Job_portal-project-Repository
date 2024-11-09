@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Account',
     'users',
     'JobApp',
+    'jsonApp',
     'crispy_forms',
     'crispy_bootstrap4',
 ]

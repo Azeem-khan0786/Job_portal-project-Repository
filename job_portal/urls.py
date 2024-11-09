@@ -26,6 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('Account.urls')),
     path('',include('JobApp.urls')),
+    path('',include('jsonApp.urls')),
+
     
      # Redirect the root URL to the admin page
     

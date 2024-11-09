@@ -5,7 +5,7 @@ app_name='JobApp'
 
 urlpatterns = [
     
-
+    path('import_jobs/', views.import_jobs, name='import_jobs'),
     path('jobs/', views.job_view, name='job_view'),
     path('job-details/<int:job_id>/', views.job_details, name='job_details'),
     path('single_job_view/<int:id>/', views.single_job_view, name='single_job_view'),
