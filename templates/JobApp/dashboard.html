@@ -54,6 +54,9 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-info btn-sm "data-toggle='model' data-target='EditJobModal' href="{% url 'JobApp:edit_job' job.id %}" role="button">Edit</a>
+                                    <button type="button" class="btn btn-warning edit-job-btn" data-toggle="modal" data-target="#editJobModal" data-job-id="{{ job.id }}">
+                                        Edit Job
+                                    </button>
                                     {% if job.is_published %}
                                         {% if not job.is_closed %}
                                             <a class="btn btn-info btn-sm" href="{% url 'JobApp:make_close_job' job.id %}" role="button">Make it Close</a>
