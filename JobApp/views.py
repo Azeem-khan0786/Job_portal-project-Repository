@@ -66,15 +66,18 @@ def job_view(request):
         if request.user.user_type=='recruiter':
             
                 jobs=Job.objects.filter(recruiter=request.user)
-                print('Heloo Rec')
+                
         elif request.user.user_type=='candidate':
             
             jobs=Job.objects.all()
+            
     else: 
-        jobs=Job.objects.all()      
+        jobs=Job.objects.all()     
     for job in jobs:
       time_diff=timezone.now()-job.timestamp
       postdays=time_diff.days    
+      job.skills_list = job.skills.all()[:4]
+       
     return render(request, 'JobApp/jobPage.html', locals())    
    
 # specifice job list view for recruiter
@@ -343,6 +346,6 @@ def contact_us(request):
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)
 
-    return render(request, 'JobApp/contact_us.html', locals())
+    return render(request, 'JobApp/about_us.html', locals())
         
 

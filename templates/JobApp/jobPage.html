@@ -7,6 +7,7 @@ ListPage{% endblock %} {% block content %}
 <!-- Load css fils  -->
 <link rel="stylesheet" href="{% static 'css/searchbox.css' %}" />
 <link rel="stylesheet" href="{% static 'css/jobpage.css' %}">
+<link rel="stylesheet" href="{% static 'css/recentSearches.css'%}">
 {% include "candidate_navbar.html" %} 
 {% if jobs %}
 <!-- Job Cards -->
@@ -23,7 +24,7 @@ ListPage{% endblock %} {% block content %}
                 <i class="fas fa-map-marker-alt"></i>
                 <input type="text" placeholder="location , city ,code ,'Remote'" id="location" />
             </div>
-            <button class="find-button" onclick="findJob()">Find Job</button>
+            <button class="find-button" onclick="findJob()">Find Jobs</button>
         </div>
         <br />
     </div>
@@ -36,33 +37,52 @@ ListPage{% endblock %} {% block content %}
             candidates
         </h6>
     </div>
+    <!-- anchor tag 'Jobs for you and recent searches' -->
+    <div class="d-flex justify-content-sm-around mt-1 " style="height: 12px;  ">
+        <h5 class="">
+            <a href="#" class="nav-item sliding active" style="font-size: 22px;" onclick="activate(this)">Jobs for you</a>
+        </h5>
+        <h5 class="">
+            <a href="#" class="nav-item sliding"  style="font-size: 22px;"onclick="activate(this)">Recent searches</a> 
+        </h5>
+        
+    </div>
     <hr style="
       border: 1px solid #ccc;
       width: 100%;
       text-align: left;
-      margin-left: 0;
+      
     " />
+    
     <div class="row">
         <!-- Left Side: Job Cards -->
         <div class="col-md-4">
             <!-- Adjusted to 4 columns for the job list -->
-
+            </h6  class='mr-3 text-center'> Jobs based on your activity on alibaba </h6>
             {% for job in jobs %}
+              
             <div class="card shadow-sm mb-3 border border-dark rounded job-item" data-job-id="{{ job.id }}"
                 onclick="showJobDetails({{ job.id }})">
-                <article class="card-body">
-                    <h4 class="card-title"><b>{{ job.title }}</b></h4>
+                
+                <article class="card-body" >
+                    <div class="row card-title d-flex justify-content-between font-weight-bold" style="font-size: 20px;">
+                        <div class="col-md-6"><b>{{ job.title }}</b></div>
+                        <div class="col-md-6 text-right"> {% include "dot.html" %}</div>
+                    </div>
+                    <!-- <h4 class="card-title"><b>{{ job.title }}</b></h4> -->
                     <h6>{{ job.recruiter.recruiterprofile.company_name }}</h6>
                     {% comment %}
                     <p class="card-text">{{ job.description|truncatewords:10 }}</p>
                     {% endcomment %}
                     <h6>{{ job.location }}</h6>
+                    
+                
                     <div class="job-details-row mb-2">
                         <div class="job-detail" style="background-color: #4da6ff">
                             <i class="fa-solid fa-briefcase"></i>
                             {{ job.get_job_type_display }}
                         </div>
-
+                        
                         <div class="job-detail">{{ job.get_schedule_display }}</div>
 
                         <div class="job-detail">
@@ -80,6 +100,7 @@ ListPage{% endblock %} {% block content %}
                             apply</a>
                         <!-- <a href="" class="btn btn-dark">Visit Job</a> -->
                     </div>
+                    
                     {% if postdays == 0 %}
                     <p>just post</p>
                     {% elif postdays == 1%}
@@ -88,6 +109,15 @@ ListPage{% endblock %} {% block content %}
                     {% else %}
                     <p>posted {{ postdays }} days ago</p>
                     {% endif %}
+
+                    {% if job.skills_list %}
+                            {% for skill in job.skills_list %}
+                                <span class="text-muted">{{ skill.skill_name }}{% if not forloop.last %}, {% endif %}</span>
+                            {% endfor %}
+                            <span>.....</span>
+                        {% else %}
+                            <p><b>No specific skills mentioned.</b></p>
+                        {% endif %}
                 </article>
             </div>
             {% endfor %}
@@ -197,4 +227,17 @@ ListPage{% endblock %} {% block content %}
         alert(`Searching for ${jobTitle} jobs${location ? " in " + location : ""}`);
     }
 </script>
+
+<!-- Script for slide anchor tag 'Jobs for you and recent searches' -->
+<script>
+    function activate(element) {
+      // Remove 'active' class from all nav items
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      // Add 'active' class to the clicked element
+      element.classList.add('active');
+    }
+  </script>
 {% endblock %}

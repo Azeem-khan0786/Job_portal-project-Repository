@@ -1,0 +1,33 @@
+
+.nav-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Adjust for the desired distance between the tags */
+  margin-top: 20px;
+}
+
+.nav-item {
+  position: relative;
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  padding: 5px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  font-weight: bold;
+  text-decoration: none;
+   /* Optional: Change color on active state */
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%; /* Center align the line */
+  transform: translateX(-50%); /* Adjust alignment */
+  width: 150%; /* Increase width of the line */
+  height: 3px; /* Adjust thickness of the line */
+  background-color: rgb(74, 74, 100);
+}

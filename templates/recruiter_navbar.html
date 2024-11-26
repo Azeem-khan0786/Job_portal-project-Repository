@@ -16,7 +16,13 @@
           <a class="nav-link" href="/">Admin</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'JobApp:about_us' %}">About us</a>
+          <a class="nav-link" href="">Post a job</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href=""> Find CVs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'JobApp:about_us' %}" data-bs-toggle="modal" data-bs-target="#contactModal">About us</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'JobApp:contact_us' %}">Contact us</a>

@@ -23,6 +23,11 @@ shift= (('morning','Morning Shift'),
 ('evening','Evening Shift'),)      
 
 
+# class for Technical skill
+class Skill(models.Model):
+    skill_name=models.CharField(_("skill"), max_length=200)
+    def __str__(self):
+             return self.skill_name
 
 class Job(models.Model):
     
@@ -49,6 +54,7 @@ class Job(models.Model):
         null=True,
         blank=True
     )
+    skills =models.ManyToManyField("Skill", related_name='technical_skill',blank=True)
     requirements = models.TextField(help_text="List of job requirements")
     experience_required = models.CharField(
         max_length=100,
