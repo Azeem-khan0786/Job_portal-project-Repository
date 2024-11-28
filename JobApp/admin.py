@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from JobApp.models import  JobApplication ,Job,Applicant ,BookmarkJob,Contact,Skill
+from JobApp.models import  JobApplication ,Job,Applicant ,BookmarkJob,Contact,Skill ,Resume
 
 
 # Register your models here.
@@ -12,6 +12,7 @@ admin.site.register(Skill)
 admin.site.register(Applicant)
 admin.site.register(BookmarkJob)
 admin.site.register(Contact)
+admin.site.register(Resume)
 
 
     

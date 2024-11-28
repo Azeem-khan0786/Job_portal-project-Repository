@@ -125,6 +125,110 @@ class Contact(models.Model):
     message = models.TextField()
     def __str__(self):
         return self.name
+
+# model to create resume
+class Resume(models.Model):
+    # Choices for title
+    TITLE_CHOICES = [
+        ("Software Developer", "Software Developer"),
+        ("Data Analyst", "Data Analyst"),
+        ("Project Manager", "Project Manager"),
+        ("UI/UX Designer", "UI/UX Designer"),
+        ("Other", "Other"),
+    ]
+
+    # Choices for education
+    EDUCATION_CHOICES = [
+        ("High School", "High School"),
+        ("Associate Degree", "Associate Degree"),
+        ("Bachelor's Degree", "Bachelor's Degree"),
+        ("Master's Degree", "Master's Degree"),
+        ("Ph.D.", "Ph.D."),
+    ]
+
+    # Choices for experience level
+    EXPERIENCE_CHOICES = [
+        ("Entry Level", "Entry Level (0-2 years)"),
+        ("Mid Level", "Mid Level (2-5 years)"),
+        ("Senior Level", "Senior Level (5+ years)"),
+    ]
+    SKILLS_CHOICES = [
+    ("Python", "Python"),
+    ("Django", "Django"),
+    ("JavaScript", "JavaScript"),
+    ("React", "React"),
+    ("HTML", "HTML"),
+    ("CSS", "CSS"),
+    ("SQL", "SQL"),
+    ("Java", "Java"),
+    ("C++", "C++"),
+    ("Other", "Other"),
+]
+
+    username = models.OneToOneField(
+        CustomUser,  # Use your custom user model here if applicable
+        on_delete=models.CASCADE,
+        related_name="resume"
+    )
+    title = models.CharField(
+        max_length=50,
+        choices=TITLE_CHOICES,
+        default="Other",
+        help_text="Title of the resume. Choose the most appropriate role."
+    )
+    objective = models.TextField(
+        max_length=1000,
+        help_text="A short paragraph about the candidate's career objectives and aspirations."
+    )
+    skills = models.ManyToManyField('Skill',
+    max_length=255,
+    
+    default="Java",
+    help_text="Select a key skill. Add multiple skills by creating separate entries."
+)
+    experience = models.CharField(
+        max_length=50,
+        choices=EXPERIENCE_CHOICES,
+        default="Entry Level",
+        help_text="Select the experience level of the candidate."
+    )
+    education = models.CharField(
+        max_length=50,
+        choices=EDUCATION_CHOICES,
+        default="Bachelor's Degree",
+        help_text="Select the highest level of education attained."
+    )
+    certifications = models.TextField(
+        blank=True,
+        help_text="Details of certifications or training. Use JSON or plain text for multiple entries."
+    )
+    achievements = models.TextField(
+        blank=True,
+        help_text="List of notable achievements or awards. Use JSON or plain text."
+    )
+    projects = models.TextField(
+        blank=True,
+        help_text="Summary of significant projects with details. Use JSON or plain text."
+    )
+    resume_file = models.FileField(
+        upload_to="resumes/",
+        blank=True,
+        null=True,
+        help_text="Upload a PDF or document version of the resume."
+    )
+    linkedin_profile = models.URLField(
+        blank=True,
+        help_text="URL to the candidate's LinkedIn profile."
+    )
+    portfolio_website = models.URLField(
+        blank=True,
+        help_text="URL to the candidate's portfolio or personal website."
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.username}'s Resume"
     
 
    

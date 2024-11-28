@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from JobApp.models import  Job ,Applicant,BookmarkJob
-from JobApp.forms import  JobForm , JobApplyForm ,BookmarkJobForm,ContactForm
+from JobApp.forms import  JobForm , JobApplyForm ,BookmarkJobForm,ContactForm,ResumeForm
 from users.models import CustomUser
 from Account.models import RecruiterProfile
 
@@ -331,8 +331,35 @@ def applicants_list(request,id):
     template_name='JobApp/applicants_list.html'
     return render(request, template_name, context)
 
+# method to post the resume 
+@login_required(login_url=reverse_lazy('Account:signin')) 
+@user_is_candidate
+def post_resume(request):
+    username= get_object_or_404(CustomUser,id=request.user.id)
+    if request.method=='POST':
+        form=ResumeForm(request.POST)
+        if form.is_valid():
+            instance=form.save(commit=False)
+            instance.username=username
+            instance.save()
+            
+            return redirect('JobApp:job_view')
+    else:
+        form=ResumeForm()
+ 
+    return render(request, 'JobApp/post_resume.html', locals())
+
+# method to post a job
+@login_required(login_url=reverse_lazy('Account:signin')) 
+@user_is_recruiter
+def post_job(request):
+    
+    return HttpResponse('jkbvkvvv')
+        
+    
+
 def about_us(request):
-    return render(request, 'JobApp/about_us.html', locals())
+    return render(request, 'dot.html', locals())
 def contact_us(request):
     form = ContactForm()
     # Check if the request is POST and AJAX
