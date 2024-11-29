@@ -147,7 +147,7 @@ def single_job_view(request, id):
     Provide the ability to view job details
     """
      
-    single_job = get_object_or_404(Job, id=id)
+    single_job = get_object_or_404(Job, idrecruiter_job_view=id)
     # Use regex to split on sentence-ending periods
     specifications_bullets = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', single_job.specifications)
     requirements_bullets = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', single_job.requirements)
@@ -195,7 +195,7 @@ def apply_job_view(request, id):
 
 
 # method for job bookmark
-@user_is_recruiter
+@login_required(login_url=reverse_lazy('Account:signin'))      
 def bookmark_view(request,id):
     form =BookmarkJobForm(request.POST or None)
     user=get_object_or_404(CustomUser,id=request.user.id)
@@ -349,15 +349,6 @@ def post_resume(request):
  
     return render(request, 'JobApp/post_resume.html', locals())
 
-# method to post a job
-@login_required(login_url=reverse_lazy('Account:signin')) 
-@user_is_recruiter
-def post_job(request):
-    
-    return HttpResponse('jkbvkvvv')
-        
-    
-
 def about_us(request):
     return render(request, 'dot.html', locals())
 def contact_us(request):
@@ -374,5 +365,3 @@ def contact_us(request):
             return JsonResponse({"errors": errors}, status=400)
 
     return render(request, 'JobApp/about_us.html', locals())
-        
-

@@ -45,7 +45,11 @@ def login_view(request):
                 print(request,user)
                 messages.info(request,'Candidate has been loged in !')
                 # return HttpResponse('hello signin')
-                return redirect('JobApp:job_view')
+                if user.user_type=='recruiter':
+                   return redirect('JobApp:recruiter_job_view')
+                else:
+                    return redirect('JobApp:job_view')   
+                   
             else:
                 messages.warning(request,'Invalid input ')
                 return redirect('Account:signout')
@@ -55,7 +59,7 @@ def login_view(request):
                   
 def logout_view(request):
     logout(request)
-    return redirect('Account:signin') 
+    return redirect('JobApp:job_view') 
      
 
 

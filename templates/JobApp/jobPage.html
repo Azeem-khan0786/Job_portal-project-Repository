@@ -67,19 +67,19 @@ ListPage{% endblock %} {% block content %}
                 onclick="showJobDetails({{ job.id }})">
                 
                 <article class="card-body" >
-                    <div class="row card-title d-flex justify-content-between font-weight-bold" style="font-size: 20px;">
-                        <div class="col-md-6"><b>{{ job.title }} {{ forloop.counter }}</b></div>
+                    <div class="row card-title d-flex justify-content-between font-weight-bold" style="font-size: 16px;">
+                        <div class="col-md-6"><b>{{ job.title }} </b></div>
                         <div class="col-md-6 text-right" onclick="showBox('buttonBox{{ forloop.counter }}')" >
                             <i class="fa-solid fa-ellipsis-vertical" ></i>
                             <!-- Hidden div for buttons -->
                             <div class="button-box" id="buttonBox{{ forloop.counter }}">
                                 <button>
-                                    <i class="fa-solid fa-bookmark"></i> Save Job
+                                    <a style="text-decoration: none;" class="bg-black" href="{% url 'JobApp:bookmark_view' job.id %}"><i class="fa-solid fa-bookmark"></i> Save Job</a> 
                                 </button>
             
                                 <!-- Second button: Report a problem with the job -->
                                 <button>
-                                    <i class="fa-sharp fa-solid fa-flag"></i> Is there a problem with this job
+                                    <a style="text-decoration: none;" href=""><i class="fa-sharp fa-solid fa-flag"></i> Is there a problem with this job?</a>
                                 </button>
                             </div>
                         </div>
@@ -92,15 +92,14 @@ ListPage{% endblock %} {% block content %}
                     <h6>{{ job.location }}</h6>
                     
                 
-                    <div class="job-details-row mb-2">
-                        <div class="job-detail" style="background-color: #4da6ff">
-                            <i class="fa-solid fa-briefcase"></i>
-                            {{ job.get_job_type_display }}
+                    <div class="job-details-row mb-2 p-1" style='font-size:14px; '>
+                        <div class="job-detail p-1" style="background-color: #4da6ff">
+                            <i class="fa-solid fa-briefcase"></i> {{ job.get_job_type_display }}
                         </div>
                         
-                        <div class="job-detail">{{ job.get_schedule_display }}</div>
+                        <div class="job-detail p-1">{{ job.get_schedule_display }}</div>
 
-                        <div class="job-detail">
+                        <div class="job-detail p-1">
                             ₹ {{ job.salary|default:"Not specified" }} per year
                         </div>
                     </div>

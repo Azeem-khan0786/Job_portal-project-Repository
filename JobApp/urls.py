@@ -11,7 +11,7 @@ urlpatterns = [
     path('single_job_view/<int:id>/', views.single_job_view, name='single_job_view'),
     path('apply_job_view/<int:id>/', views.apply_job_view, name='apply_job'),
     path('post_resume', views.post_resume, name='post_resume'),
-    path('post_job', views.post_job, name='post_job'),
+    # path('post_job', views.post_job, name='post_job'),
     path('bookmark_view/<int:id>/', views.bookmark_view, name='bookmark_view'),
     path('create_job/', views.create_job, name='create_job'), 
     
