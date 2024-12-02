@@ -1,18 +1,27 @@
 {%extends 'base.html'%}
 
 {%block content%}
+<style>
+	
+
+</style>
 
   <div class="center m-auto p-3" style="width: 50%;">
 	  <form method="post" class="card" novalidate class="m-1">
 	  	{% csrf_token %}
 	    <h2 class="text-center">Log in to your account</h2>
-		{% for field in loginform %}
+
+			{% for field in loginform %}
+		
 	    		{{ field.label_tag }}
 	        	{{ field }}
 	        	{% if field.errors %}
 	        		<small>{{ field.errors|striptags }}</small> 
 	        	{% endif %}
+		
 		{% endfor %}
+		
+		
 		
 		<input type="submit" value="Login" class="btn btn-primary full-width">
 		<hr>

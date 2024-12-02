@@ -6,6 +6,8 @@ from django.contrib import messages
 from JobApp.models import  Job ,Applicant,BookmarkJob
 from JobApp.forms import  JobForm , JobApplyForm ,BookmarkJobForm,ContactForm,ResumeForm
 from users.models import CustomUser
+from django.db.models import Q
+
 from Account.models import RecruiterProfile
 
 from django.contrib.auth.decorators import login_required
@@ -248,8 +250,23 @@ def dashboard_view(request):
 
     return render(request, 'JobApp/dashboard.html', context)
     
-# Edit job by Recruiter
+# search job via keyword, jobtitle, location
+def search_job(request):
+    if request.method=='POST':
+        # search_query=request.POST['job','location']
+        job = request.POST.get('job', '')
+        location = request.POST.get('location', '')
+        search_query={'job':job,'location':location}
+        
+        find_job=Job.objects.filter(Q(title__icontains=search_query) | Q(location__icontains=search_query))
+        print(find_job)
+        return render(request, 'JobApp/search_job.html', locals())
+    else:
+        return render(request, 'JobApp/search_job.html', {})    
+        
 
+        
+# Edit job by Recruiter
 def edit_job(request,id):
     user=get_object_or_404(CustomUser,id=request.user.id)
     job=get_object_or_404(Job,id=id,recruiter=user)

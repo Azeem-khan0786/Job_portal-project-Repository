@@ -13,7 +13,9 @@ urlpatterns = [
     path('post_resume', views.post_resume, name='post_resume'),
     # path('post_job', views.post_job, name='post_job'),
     path('bookmark_view/<int:id>/', views.bookmark_view, name='bookmark_view'),
-    path('create_job/', views.create_job, name='create_job'), 
+    path('create_job/', views.create_job, name='create_job'),
+    path('search_job/', views.search_job, name='search_job'),  
+
     
 
     path('dashboard_view/', views.dashboard_view, name='dashboard_view'), 
