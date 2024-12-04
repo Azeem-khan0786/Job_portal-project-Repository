@@ -32,6 +32,8 @@ def registration_view(request):
 
 # login page for candidates
 def login_view(request):
+   
+    print('request.session.session_key',request.session.session_key)
     if request.method=='POST':
         form =AuthenticationForm(request,data=request.POST)
         if form.is_valid():
@@ -43,6 +45,18 @@ def login_view(request):
             if user is not None:
                 login(request,user)
                 print(request,user)
+                # Store custom data in the session
+                # request.session['user_id'] = user.id
+                # request.session['user_name'] = user.username
+                # request.session['is_logged_in'] = True  # Custom session flag for login state
+                userType=request.session['user_role'] = user.user_type  # Assuming user has 'user_type' field
+                
+                # Optionally set the session expiry time (e.g., session expires after 30 minutes)
+                print('userType pre login',userType)
+                request.session.set_expiry(60)  # Session will expire after 60 sec
+                   # if  request.session.set_expiry(None) then expired when you delete manually
+                   # if request.session.set_expiry(0) then expired when you close the browser
+                print('userType post login',userType)
                 messages.info(request,'Candidate has been loged in !')
                 # return HttpResponse('hello signin')
                 if user.user_type=='recruiter':
