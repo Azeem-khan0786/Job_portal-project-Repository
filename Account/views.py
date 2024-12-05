@@ -45,7 +45,7 @@ def login_view(request):
             if user is not None:
                 login(request,user)
                 print(request,user)
-                # Store custom data in the session
+        # Store custom data in the session
                 # request.session['user_id'] = user.id
                 # request.session['user_name'] = user.username
                 # request.session['is_logged_in'] = True  # Custom session flag for login state
@@ -53,7 +53,8 @@ def login_view(request):
                 
                 # Optionally set the session expiry time (e.g., session expires after 30 minutes)
                 print('userType pre login',userType)
-                request.session.set_expiry(60)  # Session will expire after 60 sec
+                request.session.set_expiry(None)  
+                   # Session will expire after 60 sec request.session.set_expiry(60) 
                    # if  request.session.set_expiry(None) then expired when you delete manually
                    # if request.session.set_expiry(0) then expired when you close the browser
                 print('userType post login',userType)
@@ -84,7 +85,7 @@ def logout_view(request):
 
 #     # Ensure the user is authenticated
 #     if request.user.is_authenticated:
-#         # Get the CandidateProfile associated with the logged-in user
+#         # Get the CandidateProfile associated witNoneh the logged-in user
 #         user_profile = request.user.CandidateProfile
 
 #         if request.method == 'POST':
@@ -104,7 +105,9 @@ def logout_view(request):
 
 # Candidate_profile view   
 def candidate_profile_view(request):
-    profiles=CandidateProfile.objects.all()
+    profiles=CandidateProfile.objects.get(user=request.user)
+    print(profiles)
+    # return HttpResponse('Hekkkkko')
     return render(request,'account/candidate_profile.html',locals())                     
 # Candidate_profile view update
 def update_candidate_profile(request):
@@ -119,7 +122,7 @@ def update_candidate_profile(request):
             return redirect('Account:candidate_profile')
     else:
         form =CandidateProfileForm(instance=profile)
-    return render(request ,'JobApp/candidate_update_profile_form.html', {'form':form})
+    return render(request ,'account/candidate_update_profile_form.html', {'form':form})
             
 # Recruiter Profile View@id:dongli.python-preview
 def recruiter_profile_view(request):

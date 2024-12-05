@@ -5,7 +5,7 @@
 <div class="container">
     {% include "candidate_navbar.html" %}
     <h1 class="text-center">profilefile Details</h1>
-    {% for profile in profiles %}
+    {% if profiles %}
     <div class="card">
         <div class="card-body">
             <div class="">
@@ -14,24 +14,24 @@
                
                 
             </div>
-            <h5 class="card-title">{{ profile.first_name }} {{ profile.last_name }}</h5>
-            <p class="card-text"><strong>Email:</strong> {{ profile.cond_email }}</p>
-            <p class="card-text"><strong>Gender:</strong> {{ profile.get_gender_display }}</p>
-            <p class="card-text"><strong>My skills:</strong> {{ profile.get_skill_display }}</p>
-            <p class="card-text"><strong>My experience:</strong> {{ profile.get_experience_display }}</p>
+            <h5 class="card-title">{{ profiles.first_name }} {{ profiles.last_name }}</h5>
+            <p class="card-text"><strong>Email:</strong> {{ profiles.cond_email }}</p>
+            <p class="card-text"><strong>Gender:</strong> {{ profiles.get_gender_display }}</p>
+            <p class="card-text"><strong>My skills:</strong> {{ profiles.get_skill_display }}</p>
+            <p class="card-text"><strong>My experience:</strong> {{ profiles.get_experience_display }}</p>
 
-            {% if profile.has_resume %}
+            {% if profiles.has_resume %}
                 <p class="card-text"><strong>Resume:</strong> <a href="" class="btn btn-primary">Download</a></p>
             {% else %}
                 <p class="card-text">No resume uploaded.</p>
             {% endif %}
-            <strong>About section: </strong><artical class="card-text border border-secondary m-1 p-2 h-100 w-100">{{profile.bio}}.</artical>
+            <strong>About section: </strong><artical class="card-text border border-secondary m-1 p-2 h-100 w-100">{{profiles.bio}}.</artical>
             <div class="text-center mt-4">
                 <a href="{% url 'Account:update_candidate_profile' %}" class="btn btn-warning">Edit profile</a>
                 <a href="" class="btn btn-danger">Logout</a>
             </div>
         </div>
     </div>
-    {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}
