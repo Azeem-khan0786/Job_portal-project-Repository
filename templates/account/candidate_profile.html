@@ -1,37 +1,90 @@
-<!-- myapp/templates/myapp/profilefile.html -->
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="container">
-    {% include "candidate_navbar.html" %}
-    <h1 class="text-center">profilefile Details</h1>
+{% include "candidate_navbar.html" %}
+<div class="container my-5">
+    
+    <h1 class="text-center text-primary mb-4">Candidate Profile</h1>
+    
     {% if profiles %}
-    <div class="card">
+    <div class="card shadow-lg border-0">
         <div class="card-body">
-            <div class="">
-                
-                
-               
-                
+            <div class="d-flex flex-column align-items-center mb-4">
+                <!-- Profile Picture (optional) -->
+                <div class="profile-img mb-3">
+                    {% if profiles.profile_picture %}
+                    <img src="{{ profiles.profile_picture.url }}" class="rounded-circle" alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                    <img src="{% static 'images/default-profile.png' %}" class="rounded-circle" alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+                </div>
+                <h3 class="card-title text-center font-weight-bold">{{ profiles.first_name }} {{ profiles.last_name }}</h3>
+                <p class="card-text text-center text-muted">{{ profiles.job_title|default:"No job title available" }}</p>
             </div>
-            <h5 class="card-title">{{ profiles.first_name }} {{ profiles.last_name }}</h5>
-            <p class="card-text"><strong>Email:</strong> {{ profiles.cond_email }}</p>
-            <p class="card-text"><strong>Gender:</strong> {{ profiles.get_gender_display }}</p>
-            <p class="card-text"><strong>My skills:</strong> {{ profiles.get_skill_display }}</p>
-            <p class="card-text"><strong>My experience:</strong> {{ profiles.get_experience_display }}</p>
 
-            {% if profiles.has_resume %}
-                <p class="card-text"><strong>Resume:</strong> <a href="" class="btn btn-primary">Download</a></p>
-            {% else %}
-                <p class="card-text">No resume uploaded.</p>
-            {% endif %}
-            <strong>About section: </strong><artical class="card-text border border-secondary m-1 p-2 h-100 w-100">{{profiles.bio}}.</artical>
-            <div class="text-center mt-4">
-                <a href="{% url 'Account:update_candidate_profile' %}" class="btn btn-warning">Edit profile</a>
-                <a href="" class="btn btn-danger">Logout</a>
+            <div class="mb-3">
+                <p class="card-text"><strong>Email:</strong> <span>{{ profiles.cond_email }}</span></p>
+                <p class="card-text"><strong>Gender:</strong> <span>{{ profiles.get_gender_display }}</span></p>
+                <p class="card-text"><strong>Skills:</strong> <span>{{ profiles.get_education_display }}</span></p>
+                <p class="card-text"><strong>Experience:</strong> <span>{{ profiles.get_experience_display }}</span></p>
+            </div>
+
+            <div class="mb-3">
+                {% if profiles.has_resume %}
+                    <p class="card-text"><strong>Resume:</strong> <a href="" class="btn btn-success btn-sm" download>Download Resume</a></p>
+                {% else %}
+                    <p class="card-text">No resume uploaded.</p>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <strong>About me:</strong>
+                <p class="card-text border border-secondary rounded p-3" style="min-height: 120px; max-width: 100%; word-wrap: break-word;">
+                    {{ profiles.bio|default:"No bio available." }}
+                </p>
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'Account:update_candidate_profile' %}" class="btn btn-warning btn-lg mb-3">Edit Profile</a>
+                <a href="{% url 'Account:signout' %}" class="btn btn-danger btn-lg mb-3">Logout</a>
             </div>
         </div>
     </div>
     {% endif %}
 </div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-img img {
+        border: 5px solid #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    .card-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .btn-lg {
+        padding: 15px 40px;
+        font-size: 1.1rem;
+    }
+</style>
 {% endblock %}

@@ -1,36 +1,31 @@
 {%extends 'base.html'%}
 
 {%block content%}
-<style>
-	
-
-</style>
-
-  <div class="center m-auto p-3" style="width: 50%;">
-	  <form method="post" class="card" novalidate class="m-1">
-	  	{% csrf_token %}
-	    <h2 class="text-center">Log in to your account</h2>
-
-			{% for field in loginform %}
-		
-	    		{{ field.label_tag }}
-	        	{{ field }}
-	        	{% if field.errors %}
-	        		<small>{{ field.errors|striptags }}</small> 
-	        	{% endif %}
-		
-		{% endfor %}
-		
-		
-		
-		<input type="submit" value="Login" class="btn btn-primary full-width">
-		<hr>
-		<p class="text-center">Re <a href="#">Reset Password</a></p>
-		<p class="text-center">Forgot your password <a href="#">Reset Password</a></p>
-		<p class="text-center">Don't have a account? <a href="{% url 'Account:singup' %}">Join Now</a></p>
-	</form>
+	<div class="center m-auto p-3 m-3" style="width: 50%;">
+			<form method="post" class="card" novalidate class="m-3">
+				{% csrf_token %}
+				 
+				<h2 class="text-center">Log in to your account</h2>
+				<div class="m-auto mt-1">
+					{% for field in loginform %}
+					<div class="form-group">
+						<b>{{ field.label_tag }}</b>
+						<div class=" w-200" style=" color: rgb(7, 54, 70); width: 300px; padding: 0px; border-radius: 5px;">
+							{{ field }}
+						</div>
+						{% if field.errors %}
+						<small style="color: red;">{{ field.errors|striptags }}</small>
+						{% endif %}
+					</div>
+					{% endfor %}
+				</div>
+				<input type="submit" value="Login" class="btn btn-primary full-width m-3">
+			<p class="text-center">Forgot your password <a href="#">Reset Password</a></p>
+			<p class="text-center">Don't have a account? <a href="{% url 'Account:singup' %}">Join Now</a></p>
+			</div>
+						
+			
+		</form>
 </div>
-
-
 
 {%endblock content%}

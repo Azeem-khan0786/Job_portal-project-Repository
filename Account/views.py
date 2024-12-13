@@ -1,13 +1,13 @@
 from django.shortcuts import render,HttpResponseRedirect ,redirect
 from Account.forms import CandidateRegisteration ,CandidateProfileForm,RecruiterProfileForm
-from django.http import HttpResponse
+from django.http import HttpResponse 
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from Account.models import CandidateProfile ,RecruiterProfile
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
-
+from django.template.loader import render_to_string  # Import render_to_string
 
 
 
@@ -53,7 +53,7 @@ def login_view(request):
                 
                 # Optionally set the session expiry time (e.g., session expires after 30 minutes)
                 print('userType pre login',userType)
-                request.session.set_expiry(None)  
+                request.session.set_expiry(0)  
                    # Session will expire after 60 sec request.session.set_expiry(60) 
                    # if  request.session.set_expiry(None) then expired when you delete manually
                    # if request.session.set_expiry(0) then expired when you close the browser
@@ -67,10 +67,16 @@ def login_view(request):
                    
             else:
                 messages.warning(request,'Invalid input ')
-                return redirect('Account:signout')
+                return redirect('Job:post_resume')
     else:
         form =AuthenticationForm()
+    
     return render(request, 'account/login.html', {'loginform':form})
+    # html_form = render_to_string('account/login.html',
+    #     {'loginform':form},
+    #     request=request,
+    # )
+    # return Response({'html_form': html_form})
                   
 def logout_view(request):
     logout(request)

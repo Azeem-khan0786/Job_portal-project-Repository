@@ -21,10 +21,16 @@ class CandidateProfileForm(forms.ModelForm):
 
         widgets={'first_name': TextInput(attrs={
                 'class': "form-control",
-                'style': 'max-width: 300px;',
-                'placeholder': 'Name'
-                }),'last_name':TextInput(attrs={'class':'form-control','placeholder':'Enter your last name'})}
- 
+                
+                'placeholder': 'Name',
+                }),
+                'last_name': TextInput(attrs={
+                'class': "form-control",
+                
+                'placeholder': 'Name',
+                }),
+                }
+        
 
 class RecruiterProfileForm(forms.ModelForm):
     class Meta:

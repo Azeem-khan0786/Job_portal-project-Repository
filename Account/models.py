@@ -28,16 +28,16 @@ EXPERIENCE_CHOICES = [
  
 class CandidateProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    first_name=models.CharField(_("first_name"),default='xyz', max_length=50)
-    last_name=models.CharField(_("last_name"),default='xyz', max_length=50)
-    cond_email=models.EmailField(_("Email-address"), max_length=254,unique=True,default="")
-    education= models.CharField(_("Add your education"), max_length=50,choices=EDUCATION_CHOICES,default='masters')
+    first_name=models.CharField(_("First Name"),default='xyz', max_length=50)
+    last_name=models.CharField(_("Last Name"),default='xyz', max_length=50)
+    cond_email=models.EmailField(_("Your Email Address"), max_length=254,unique=True,default="")
+    education= models.CharField(_("Add your education criteria"), max_length=50,choices=EDUCATION_CHOICES,default='masters')
     # skills =models.ManyToManyField("Skill", related_name='technical_skill',blank=True)
-    experience=models.CharField(_("your work wxperience level"), max_length=50,choices=EXPERIENCE_CHOICES, default='0-1')
-    has_resume=models.BooleanField(_("has_resume"),default=True,max_length=5)
-    resume=models.FileField(_("Resume"), upload_to='profiles/', max_length=100,blank=True)
-    gender=models.CharField(_("Choice "), max_length=50,choices=gender_chioce,default="")
-    bio=models.TextField(_("Write your bio here!!!!!!!"),blank=True)
+    experience=models.CharField(_("Your work wxperience level"), max_length=50,choices=EXPERIENCE_CHOICES, default='0-1')
+    has_resume=models.BooleanField(_("Do you have resume"),default=True,max_length=5)
+    resume=models.FileField(_("Upload your resume here"), upload_to='profiles/', max_length=100,blank=True)
+    gender=models.CharField(_("Select your gender "), max_length=50,choices=gender_chioce,default="")
+    bio=models.TextField(_("Write your bio here!"),blank=True)
     
 
     def __str__(self):

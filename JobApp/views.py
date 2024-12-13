@@ -74,7 +74,9 @@ def job_view(request):
             jobs=Job.objects.all()
             
     else: 
-        jobs=Job.objects.all()     
+        jobs=Job.objects.all()    
+
+ 
     for job in jobs:
       time_diff=timezone.now()-job.timestamp
       postdays=time_diff.days    
@@ -142,14 +144,15 @@ def job_details(request, job_id):
         }
         return JsonResponse(data)
     except Job.DoesNotExist:
-        return JsonResponse({'error': 'Job not found'}, status=404)         
+        return JsonResponse({'error': 'Job not found'}, status=404)     
 
+@login_required(login_url=reverse_lazy('Account:signin')) 
 def single_job_view(request, id):
     """
     Provide the ability to view job details
     """
      
-    single_job = get_object_or_404(Job, idrecruiter_job_view=id)
+    single_job = get_object_or_404(Job, id=id)
     # Use regex to split on sentence-ending periods
     specifications_bullets = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', single_job.specifications)
     requirements_bullets = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', single_job.requirements)

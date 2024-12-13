@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'jsonApp',
     'crispy_forms',
     'crispy_bootstrap4',
+    'widget_tweaks',
 ]
 
 # INSTALLED_APPS+=EXTERNEL_APPS

@@ -9,11 +9,12 @@ ListPage{% endblock %} {% block content %}
 <link rel="stylesheet" href="{% static 'css/jobpage.css' %}">
 <link rel="stylesheet" href="{% static 'css/recentSearches.css'%}">
 <link rel="stylesheet" href="{% static 'css/dot.css'%}">
-
+<!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 {% include "candidate_navbar.html" %} 
 {% if jobs %}
 <!-- Job Cards -->
-<div class="container-fluid">
+<div class="container-fluid"> 
     <!-- Search box -->
     <div class="row mt-3">
         <form class="search-box" method="post" action="{% url 'JobApp:search_job' %}">
@@ -32,8 +33,11 @@ ListPage{% endblock %} {% block content %}
         <br />
     </div>
     <div class="row d-flex align-items-center flex-column mt-3" style="height: 70px">
+        
         <h6 class="">
-            <a style="" href="{% url 'JobApp:post_resume' %}"><b>Post your Resume</b></a>-it takes only few seconds
+            
+            <a class="js-create-book" href="" data-toggle="modal" data-target="#exampleModal"><b>Post your Resume</b></a>-it takes only few seconds
+            <!-- <a style="" href="{% url 'JobApp:post_resume' %}" ></a>><b>Post your Resume</b></a>-it takes only few seconds  -->
         </h6>
         <h6 class="">
             <a style="" href="{% url 'JobApp:create_job' %}"><b>Post a job today</b></a> and connect with quality
@@ -188,13 +192,58 @@ ListPage{% endblock %} {% block content %}
     </div>
 </div>
 {% endif %}
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        
+			<form method="post" class="card" novalidate class="m-1">
+				{% csrf_token %}
+				<div class="modal-header">
+                    <h4 class="modal-title">Create a new book</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+					</button>
+					
+				</div>	
+				<h2 class="text-center">Log in to your account</h2>
+				<div class="modal-body"> 
+                    field: {{loginform}}
+						{% for field in loginform %}
+					
+							{{ field.label_tag }}
+							{{ field }}
+							{% if field.errors %}
+								<small>{{ field.errors|striptags }}</small> 
+							{% endif %}
+					
+						{% endfor %}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			
+			
+			<input type="submit" value="Login" class="btn btn-primary full-width">
+			<hr>
+			<p class="text-center"><a href="#">Reset Password</a></p>
+			<p class="text-center">Forgot your password <a href="#">Reset Password</a></p>
+			<p class="text-center">Don't have a account? <a href="{% url 'Account:singup' %}">Join Now</a></p>
+		</form>
 
+      </div>
+    </div>
+  </div>
 <!-- Footer -->
 <footer class="bg-light py-3">
     <div class="container">
         <p class="text-center mb-0">&copy; 2024 Job Portal. All Rights Reserved.</p>
     </div>
 </footer>
+{% block JavaScript %}
+  
 
 <!-- JavaScript to handle job clicks -->
 <script>
@@ -334,6 +383,34 @@ ListPage{% endblock %} {% block content %}
         });
     }
 </script>
+
+{% comment %} Script for load Bootstrap Model  {% endcomment %}
+
+
+<script>
+    $(document).ready(function () {
+        $(".js-create-book").click(function () {
+            $.ajax({
+                url: "{% url 'Account:signin' %}", // Ensure the URL is correctly defined
+                type: 'get',
+                dataType: 'json',
+                beforeSend: function () {
+                    $("#modal-body").modal("show");
+                },
+                success: function (data) {
+                    console.log("Account:signin-", data);
+                    $("#modal-body .modal-content").html(data.html_form);
+                },
+                error: function (err) {
+                    console.log("Account:signin-err-", err);
+                }
+            });
+        });
+      });
+</script>
+
+
+{% endblock   %}
 
 
 {% endblock %}
