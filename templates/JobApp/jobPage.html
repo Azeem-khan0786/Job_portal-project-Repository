@@ -3,14 +3,22 @@ ListPage{% endblock %} {% block content %}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/brands.min.css">
 
 <!-- Load css fils  -->
 <link rel="stylesheet" href="{% static 'css/searchbox.css' %}" />
 <link rel="stylesheet" href="{% static 'css/jobpage.css' %}">
 <link rel="stylesheet" href="{% static 'css/recentSearches.css'%}">
 <link rel="stylesheet" href="{% static 'css/dot.css'%}">
+<link rel="stylesheet" href="{% static 'css/copyLink.css' %}">
+
+<script src="{% static 'js/copyLink.js' %}"></script>
+
+
 <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+ 
 {% include "candidate_navbar.html" %} 
 {% if jobs %}
 <!-- Job Cards -->
@@ -152,7 +160,15 @@ ListPage{% endblock %} {% block content %}
                     <h6 style="font-weight: bold;" class="" style="background-color: #b3cccc;"></h6>₹ {{ jobs.0.salary|default:"Not specified" }}
                     per
                     year
+                    
                 </div>
+                <!-- Button to trigger the URL copy -->
+                 <div class="row d-flex justify-content-around w-50 m-3">
+                    <div class="col-md"> <button class="btn  bg-primary " >Apply Now</button>   </div>
+                    <div class="col-md"><button class="btn  bg-success" id="copyURL">Copy URL</button></div>
+                    <div class="col-md"><i class="fa-regular fa-square-dashed"></i></div>
+                 </div>
+                
                 <div class="scrollable-div">
                     <h3 style="font-weight: bold;">Full Job description</h3>  
                     <p>{{ jobs.0.description }}</p>
@@ -242,8 +258,10 @@ ListPage{% endblock %} {% block content %}
         <p class="text-center mb-0">&copy; 2024 Job Portal. All Rights Reserved.</p>
     </div>
 </footer>
+
+ 
+
 {% block JavaScript %}
-  
 
 <!-- JavaScript to handle job clicks -->
 <script>
@@ -277,7 +295,8 @@ ListPage{% endblock %} {% block content %}
         showJobDetails({{ jobs.0.id }});  // First job as default
   });
 </script>
-{% comment %} <script>
+{% comment %} 
+<script>
     function findJob() {
         const jobTitle = document.getElementById("job-title").value.trim();
         const location = document.getElementById("location").value.trim();
@@ -383,10 +402,6 @@ ListPage{% endblock %} {% block content %}
         });
     }
 </script>
-
-{% comment %} Script for load Bootstrap Model  {% endcomment %}
-
-
 <script>
     $(document).ready(function () {
         $(".js-create-book").click(function () {
@@ -408,7 +423,7 @@ ListPage{% endblock %} {% block content %}
         });
       });
 </script>
-
+{% comment %} Script for load Bootstrap Model  {% endcomment %}
 
 {% endblock   %}
 

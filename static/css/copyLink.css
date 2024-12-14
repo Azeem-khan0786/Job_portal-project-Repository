@@ -1,0 +1,14 @@
+/* CSS for copyLink of current page */
+    /* Styling for the button */
+    #copyURL {
+        
+       
+        cursor: pointer;
+        
+        color: white;
+        border: none;
+        
+    }
+    #copyURL:hover {
+        background-color: #45a049;
+    }

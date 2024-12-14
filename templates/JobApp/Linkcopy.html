@@ -1,0 +1,46 @@
+<html lang="en">
+<head>https://www.w3schools.com/tryit/tryit.asp?filename=tryhtml_hello
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copy URL Example</title>
+    <style>
+        /* Styling for the button */
+        #copyURL {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #copyURL:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Copy Current URL</h1>
+    <p>Click the button below to copy the current page's URL to your clipboard:</p>
+    
+    <!-- Button to trigger the URL copy -->
+    <button id="copyURL">Copy URL</button>
+
+    <script>
+        const copyBtn = document.getElementById('copyURL');
+
+        copyBtn.addEventListener('click', () => {
+            const url = window.location.href;  // Get the current page URL
+            navigator.clipboard.writeText(url)  // Write URL to clipboard
+                .then(() => {
+                    alert('URL copied successfully!');
+                })
+                .catch(() => {
+                    alert('Error copying URL to clipboard');
+                });
+        });
+    </script>
+
+</body>
+</html>
