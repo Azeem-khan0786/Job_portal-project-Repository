@@ -11,10 +11,16 @@ urlpatterns = [
     path('single_job_view/<int:id>/', views.single_job_view, name='single_job_view'),
     path('apply_job_view/<int:id>/', views.apply_job_view, name='apply_job'),
     path('post_resume', views.post_resume, name='post_resume'),
-    # path('post_job', views.post_job, name='post_job'),
     path('bookmark_view/<int:id>/', views.bookmark_view, name='bookmark_view'),
     path('create_job/', views.create_job, name='create_job'),
-    path('search_job/', views.search_job, name='search_job'),  
+    path('search_job/', views.search_job, name='search_job'),
+    path('comment/', views.Comments_view.as_view(), name='comment'),
+    path('comment/<int:pk>', views.Comments_view.as_view(), name='comment'),   # get single record 
+    path('Commit/', views.Commit.as_view(), name='Commit'),
+
+    
+
+
 
     
 
@@ -27,12 +33,9 @@ urlpatterns = [
     path('dashboard/employer/applicants_list/<int:id>', views.applicants_list, name='applicants_list'),
 
 
-    path('recruiter_job_view/', views.recruiter_job_view, name='recruiter_job_view'), 
-
-
-    path('about_us/', views.about_us, name='about_us'),
+    path('recruiter_job_view/', views.recruiter_job_view, name='recruiter_job_view'),
+    path('about_us/', views.about_us, name='about_us'), 
     path('contact_us/', views.contact_us, name='contact_us'), 
-
     path('custom_csrf_failure/',views.custom_csrf_failure), 
 ]
 

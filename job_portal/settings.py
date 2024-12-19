@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'widget_tweaks',
+    'rest_framework',
 ]
 
 # INSTALLED_APPS+=EXTERNEL_APPS

@@ -163,7 +163,7 @@ class Resume(models.Model):
     ("Java", "Java"),
     ("C++", "C++"),
     ("Other", "Other"),
-]
+   ]
 
     username = models.OneToOneField(
         CustomUser,  # Use your custom user model here if applicable
@@ -184,8 +184,7 @@ class Resume(models.Model):
     max_length=255,
     
     default="Java",
-    help_text="Select a key skill. Add multiple skills by creating separate entries."
-)
+    help_text="Select a key skill. Add multiple skills by creating separate entries.")
     experience = models.CharField(
         max_length=50,
         choices=EXPERIENCE_CHOICES,
@@ -231,4 +230,10 @@ class Resume(models.Model):
         return f"{self.username}'s Resume"
     
 
-   
+# Comment Model 
+class CommentModel(models.Model):
+    user=models.ForeignKey(CustomUser, related_name='comments', on_delete=models.CASCADE)
+    job= models.ForeignKey('Job', related_name='job', on_delete=models.CASCADE)
+    comment = models.TextField()
+    created_at=models.DateTimeField( auto_now_add=True)
+    
