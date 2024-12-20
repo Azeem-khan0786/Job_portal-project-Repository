@@ -9,7 +9,7 @@
 
 
 {% include "candidate_navbar.html" %}
-
+ 
 {% if single_job %}
 <!-- Job Cards -->
 <div class="container-fluid">
@@ -76,6 +76,7 @@
                    
                   {% if is_saved %}
                   <span class="btn btn-block btn-success btn-md">Already Saved</span>
+                  <a href="{% url 'JobApp:do_comment'  %}">Comments:</a>
                   {% else %}
                      <form action="{% url 'JobApp:bookmark_view' single_job.id %}" method="POST">
                         {% csrf_token %}
@@ -106,7 +107,7 @@
               {% else %}
               <a href="" class="btn btn-block btn-primary btn-md">Publish Your Job</a>
               {% endif %}
-
+               Comments:  {{comment.comment}}
             </div>
           </div>
         </article>
@@ -155,6 +156,9 @@
 
   <!-- Footer -->
 <div class="container-fluid ">
+  
+    
+
   {% include "footer.html" %}
 </div>  
 

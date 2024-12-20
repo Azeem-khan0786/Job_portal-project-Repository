@@ -76,7 +76,7 @@ def job_view(request):
       postdays=time_diff.days    
       job.skills_list = job.skills.all()[:4]
     
-    render(request, 'JobApp/jobPage.html', locals())    
+    return render(request, 'JobApp/jobPage.html', locals())    
    
 # specifice job list view for recruiter
 @login_required(login_url=reverse_lazy('Account:signin'))      
@@ -253,6 +253,8 @@ def search_job(request):
 def edit_job(request,id):
     user=get_object_or_404(CustomUser,id=request.user.id)
     job=get_object_or_404(Job,id=id,recruiter=user)
+    print('user',user.id)
+    print('job',job.id)
     form =JobForm(instance=job)
     if request.method == "POST" and request.headers.get('x-requested-with') == 'XMLHttpRequest':
          form =JobForm(request.POST,instance=job)
@@ -356,6 +358,29 @@ def contact_us(request):
             return JsonResponse({"errors": errors}, status=400)
 
     return render(request, 'JobApp/about_us.html', locals())
+
+def comment(request,pk):
+    comment=get_object_or_404(CommentModel,pk=pk)
+    template_name='JobApp/job-single.html'
+    return render(request, template_name,locals())
+
+# submit your comment
+def do_comment(request):
+    # user=get_object_or_404(CustomUser,id=request.user.id)
+    # job=get_object_or_404(Job,id=pk)
+    comment=CommentModel.objects.all()
+    print(comment)
+    
+   
+    # print('user',user.id)
+    # print('job',job.id)
+    return render(request, 'comment.html', locals())
+    
+
+
+
+
+
 
 # def comment(request):
 class Comments_view(APIView):
