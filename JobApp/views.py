@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from JobApp.models import  Job ,Applicant,BookmarkJob
-from JobApp.forms import  JobForm , JobApplyForm ,BookmarkJobForm,ContactForm,ResumeForm
+from JobApp.forms import  JobForm , JobApplyForm ,BookmarkJobForm,ContactForm,ResumeForm,CommentForm
 from users.models import CustomUser
 from django.db.models import Q
 from Account.models import RecruiterProfile
@@ -138,7 +138,7 @@ def job_details(request, job_id):
     except Job.DoesNotExist:
         return JsonResponse({'error': 'Job not found'}, status=404)     
 
-@login_required(login_url=reverse_lazy('Account:signin')) 
+# @login_required(login_url=reverse_lazy('Account:signin')) 
 def single_job_view(request, id):
     """
     Provide the ability to view job details
@@ -206,7 +206,8 @@ def bookmark_view(request,id):
         else:
             return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
     else:
-        messages.error(request,'You hae already saved the job')
+        messages.error(request,'You hae already saved the job') 
+
         return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))
 # Method to dashboard page whether candidate or recruieter
 @login_required(login_url=reverse_lazy('Account:signin')) 
@@ -342,6 +343,7 @@ def post_resume(request):
  
     return render(request, 'JobApp/post_resume.html', locals())
 
+
 def about_us(request):
     return render(request, 'dot.html', locals())
 def contact_us(request):
@@ -359,28 +361,45 @@ def contact_us(request):
 
     return render(request, 'JobApp/about_us.html', locals())
 
-def comment(request,pk):
-    comment=get_object_or_404(CommentModel,pk=pk)
-    template_name='JobApp/job-single.html'
-    return render(request, template_name,locals())
 
-# submit your comment
-def do_comment(request):
-    # user=get_object_or_404(CustomUser,id=request.user.id)
-    # job=get_object_or_404(Job,id=pk)
-    comment=CommentModel.objects.all()
-    print(comment)
+# if have then show otherwise submit your comment 
+def do_comment(request,id):
+    user=get_object_or_404(CustomUser,id=request.user.id)
+    # user = request.user
+    job = get_object_or_404(Job, id=id)
+    comments = CommentModel.objects.filter(job=job).order_by('-created_at')  # Fetch job's comments
+    form = CommentForm()
+
+    if request.method == 'POST':
+        if  request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Check if the request is AJAX
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.user = user
+                instance.job = job
+                instance.save()
+                # Return a JSON response with the new comment details
+                return JsonResponse({
+                    'success': True,
+                    'comment': comments,
+                    'user': instance.user.username,
+                    'created_at': instance.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                })
+            return render(request, 'comment.html', {'form': form, 'job': job, 'comments': comments})
     
-   
-    # print('user',user.id)
-    # print('job',job.id)
-    return render(request, 'comment.html', locals())
-    
+    # Serialize the comments into JSON-friendly format
+    comments_data = [
+        { 
+            'comment': c.comment,
+            'user': c.user.email,
+            'created_at': c.created_at.strftime('%Y-%m-%d %H:%M:%S')
+           
+        }
+        for c in comments
+          
+    ]
 
-
-
-
-
+    return JsonResponse({'success': True, 'id':id ,'comments': comments_data})
 
 # def comment(request):
 class Comments_view(APIView):

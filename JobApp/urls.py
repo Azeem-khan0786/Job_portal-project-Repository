@@ -14,11 +14,11 @@ urlpatterns = [
     path('bookmark_view/<int:id>/', views.bookmark_view, name='bookmark_view'),
     path('create_job/', views.create_job, name='create_job'),
     path('search_job/', views.search_job, name='search_job'),
-    path('do_comment/', views.do_comment, name='do_comment'),
+    path('do_comment/<int:id>/', views.do_comment, name='do_comment'),
 
     # path('commentView/', views.Comments_view.as_view(), name='comment'),
     # path('comment/<int:pk>', views.Comments_view.as_view(), name='comment'),   # get single record 
-    # path('Commit/', views.Commit.as_view(), name='Commit'),
+    # path('comment/<int:id>/', views.comment, name='Commit'),
 
     
 

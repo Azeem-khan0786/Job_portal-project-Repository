@@ -1,14 +1,33 @@
 
+{% load crispy_forms_tags %}
+{% load static %}
 
-HIIIII
-{{user}}
-{{job}}
+<form action="">
+    
+     {% csrf_token %}
+     {{ form| crispy }}
+     <button type="submit"> submit</button>
 
+</form>
 
-{{comment}}
-{% for x in comment %}
-
+{% for x in comments %}
+  <h1>Foor loop</h1>
  {{x.comment}}
  {{x.user}}
  {{x.job}}
 {% endfor %}
+<div id="comments-section">
+    <h2>Comments</h2>
+    <ul id="comments-list">
+        {% for comment in comments %}
+            <li><strong>{{ comment.user }}</strong>: {{ comment.text }} <em>({{ comment.created_at }})</em></li>
+        {% endfor %}
+    </ul>
+</div>
+
+<h3>Submit a Comment</h3>
+<form id="comment-form" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>

@@ -3,7 +3,7 @@ from django.forms.widgets import CheckboxSelectMultiple
 
 from django.contrib.auth.forms import UserCreationForm 
 from users.models import  CustomUser
-from JobApp.models import Job ,Applicant ,BookmarkJob ,Contact,Resume
+from JobApp.models import Job ,Applicant ,BookmarkJob ,Contact,Resume,CommentModel
 
 
 #create form for create_job 
@@ -28,6 +28,13 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = '__all__'
+# form to do_comment
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model=CommentModel
+        fields='__all__'
+    
+        
 
 # django form for post_resume
 class ResumeForm(forms.ModelForm):

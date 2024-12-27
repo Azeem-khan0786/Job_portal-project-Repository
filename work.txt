@@ -8,3 +8,76 @@
     resume=models.FileField(_("Resume"), upload_to='profiles/', max_length=100,blank=True)
     gender=models.CharField(_("Choice "), max_length=50,choices=gender_chioce,default="")
     status=models.CharField(_("Status"), max_length=50,choices=status,default='apl')
+    
+
+    def do_comment(request,id):
+    user=get_object_or_404(CustomUser,id=request.user.id)
+    # user = request.user
+    job = get_object_or_404(Job, id=id)
+    comments = CommentModel.objects.filter(job=job).order_by('-created_at')  # Fetch job's comments
+    
+                # Return a JSON response with the new comment details
+                return JsonResponse({
+                    'success': True,
+                    'comment': comment,
+                    'user': instance.user.username,
+                    'created_at': instance.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                })
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments Section</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="comments-section">
+        <button id="load-comments-btn">Load Comments</button>
+        <div id="comments-container" style="display: none;">
+            <!-- Comments will be loaded here -->
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#load-comments-btn').click(function() {
+                // Show the comments container if hidden
+                $('#comments-container').toggle();
+
+                // Check if comments are already loaded
+                if ($('#comments-container').children().length === 0) {
+                    var jobId = 1;  // Replace with the actual job id dynamically
+                    $.ajax({
+                        url: `/comments/${jobId}/`,  // URL to your Django view
+                        method: 'GET',
+                        success: function(response) {
+                            if (response.success) {
+                                var comments = response.comments;
+                                comments.forEach(function(comment) {
+                                    var commentHtml = `
+                                        <div class="comment">
+                                            <p><strong>${comment.user}</strong> (${comment.created_at}):</p>
+                                            <p>${comment.comment}</p>
+                                        </div>
+                                    `;
+                                    $('#comments-container').append(commentHtml);
+                                });
+                            } else {
+                                alert('Failed to load comments');
+                            }
+                        },
+                        error: function() {
+                            alert('An error occurred while fetching comments');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+

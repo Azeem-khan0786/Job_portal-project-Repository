@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% load is_job_already_applied %}
 {% load is_job_already_saved %}
 {% block title %}Candidate Job ListPage{% endblock %}
@@ -76,7 +77,7 @@
                    
                   {% if is_saved %}
                   <span class="btn btn-block btn-success btn-md">Already Saved</span>
-                  <a href="{% url 'JobApp:do_comment'  %}">Comments:</a>
+                  <a href="{% url 'JobApp:do_comment' single_job.id %}">Comments:</a>
                   {% else %}
                      <form action="{% url 'JobApp:bookmark_view' single_job.id %}" method="POST">
                         {% csrf_token %}
@@ -107,12 +108,35 @@
               {% else %}
               <a href="" class="btn btn-block btn-primary btn-md">Publish Your Job</a>
               {% endif %}
-               Comments:  {{comment.comment}}
+               <!-- Comments:  {{comment.comment}} -->
+               <!-- <a href="{% url 'JobApp:do_comment' single_job.id %}" class="btn">Show Comment</a> -->
+               
+               <div id="comments-section">
+                <h2>Comments</h2>
+                <ul id="comments-list">
+                    {% for comment in comments %}
+                        <li><strong>{{ comment.user }}</strong>: {{ comment.text }} <em>({{ comment.created_at }})</em></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <!-- <h3>Submit a Comment</h3>
+            <form id="comment-form" method="POST" action="">
+                {% csrf_token %}
+                {{form|crispy}}
+                <button type="submit">Submit</button>
+            </form> -->
+            <div id="comments-section">
+              <button id="load-comments-btn">Load Comments</button>
+              <div id="comments-container" style="display: none;">
+                 <!-- <h3>I am displaying here</h3> -->
+              </div>
+          </div>
             </div>
           </div>
         </article>
       </div>
-
+      
       <!-- Right Side: Job Details -->
       <div class="col-lg-4 ">
         <div class="bg-light p-3 border rounded mb-4 mr-3">
@@ -153,13 +177,107 @@
     </div>
     
   {% endif %}
-
   <!-- Footer -->
 <div class="container-fluid ">
-  
-    
-
   {% include "footer.html" %}
 </div>  
+<script>
+  function myFunction() {
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "block") {
+      x.style.display = "none";
+    } else {
+      x.style.display = "block";
+    }
+  }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#comment-form').on('submit', function(e) {
+          
+            e.preventDefault();  // Prevent normal form submission
+            const formData = $(this).serialize();
+
+            $.ajax({
+                url: "JobApp/do_comment"+ single_job.id +"/",  // Update with the appropriate URL
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        // Add the new comment to the list
+                        const newComment = `
+                            <li><strong>${response.user}</strong>: ${response.comment} <em>(${response.created_at})</em></li>
+                        `;
+                        $('#comments-list').prepend(newComment);
+                        $('#comment-form textarea').val('');  // Clear the textarea
+                    } else {
+                        alert('Error: ' + JSON.stringify(response.error));
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while submitting the comment.');
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+  $(document).ready(function(){
+      
+    $('#load-comments-btn').click(function(){
+      // Show the comments container if hidden
+      $('#comments-container').toggle();
+      console.log("Comments container toggled. Visible:", $('#comments-container').is(":visible"));
+      
+
+      var jobId =  id;
+      console.log('Commnet Block JobId',jobId);
+      // Check if comments are already loaded to avoid making the request again
+      /*if ($('#comments-container').children().length === 0) {
+        var jobId = 1;  // Replace with the actual job id dynamically
+        console.log('JobId',id);*/
+        //url: "http://127.0.0.1:8000/JobApp/do_comment/id/", 
+        // Make the AJAX request to fetch comments
+        $.ajax({
+          url: "http://127.0.0.1:8000/JobApp/do_comment/id/",  // Assuming your URL pattern for fetching comments is like this
+          method: 'GET',
+          dataType: 'json',  // Ensure JSON response is parsed
+          
+          success: function(data){
+            console.log("AJAX Response:", data);
+            if (data.success){
+              var comments = data.comments;
+            // var form =data.form; -->
+              console.log("Loaded comments:", comments);
+              
+              // Loop through each comment and display it
+              comments.forEach(function(comment){
+                console.log("Displaying comment:", comment);  // Log each comment
+                var commentHtml = `
+                  <div class="comment" style='width:300px;'>
+                    <div><strong>${comment.user}</strong> (${comment.created_at})</div><p>${comment.comment}</p>
+                    
+                  </div>
+                `;
+                $('#comments-container').append(commentHtml);
+              });
+            } else {
+              console.log("Failed to load comments");
+              alert('Failed to load comments');
+            }
+          },
+          error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest);
+            console.log(errorThrown);
+            console.log("Error occurred during AJAX request:", textStatus);
+          }
+        });
+       
+   });
+  }); 
+</script>
+
 
 {% endblock %}
