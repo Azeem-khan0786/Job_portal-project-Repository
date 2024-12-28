@@ -149,10 +149,13 @@ def single_job_view(request, id):
     requirements_bullets = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', single_job.requirements)
     company = single_job.recruiter.recruiterprofile.company_name
     com_logo=single_job.recruiter.recruiterprofile.company_logo
+    comments_count=CommentModel.objects.filter(job=single_job).count()
+    print('comments_count',comments_count)
     print('company_name',company)    
     context = {
         'single_job': single_job,
         'company': company,
+        'comments_count':comments_count,
         'com_logo': com_logo,
         'specifications_bullets':specifications_bullets,
         'requirements_bullets':requirements_bullets,
@@ -368,6 +371,7 @@ def do_comment(request,id):
     # user = request.user
     job = get_object_or_404(Job, id=id)
     comments = CommentModel.objects.filter(job=job).order_by('-created_at')  # Fetch job's comments
+    comments_count=CommentModel.objects.filter(job=job).count()
     form = CommentForm()
 
     if request.method == 'POST':
@@ -375,15 +379,17 @@ def do_comment(request,id):
             form = CommentForm(request.POST)
             if form.is_valid():
                 instance = form.save(commit=False)
-                instance.user = user
+                instance.user = usercomments_count=CommentModel.objects.filter(job=job).count()
                 instance.job = job
                 instance.save()
+                comments_count = CommentModel.objects.filter(job=job).count() 
                 # Return a JSON response with the new comment details
                 return JsonResponse({
                     'success': True,
                     'comment': comments,
-                    'user': instance.user.username,
+                    'user': instance.user.email,
                     'created_at': instance.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                    'comments_count':comments_count
                 })
             return render(request, 'comment.html', {'form': form, 'job': job, 'comments': comments})
     
@@ -392,14 +398,14 @@ def do_comment(request,id):
         { 
             'comment': c.comment,
             'user': c.user.email,
-            'created_at': c.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            'created_at': c.created_at.strftime('%Y-%m-%d %H:%M:%S'),
            
         }
         for c in comments
           
     ]
 
-    return JsonResponse({'success': True, 'id':id ,'comments': comments_data})
+    return JsonResponse({'success': True, 'comments': comments_data,'comments_count':comments_count})
 
 # def comment(request):
 class Comments_view(APIView):

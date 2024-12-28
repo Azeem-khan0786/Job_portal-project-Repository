@@ -237,6 +237,11 @@ class CommentModel(models.Model):
     comment = models.TextField()
     created_at=models.DateTimeField( auto_now_add=True)
 
-    
+# Like Model 
+class LikeModel(models.Model):
+    user=models.ForeignKey(CustomUser, related_name='user', on_delete=models.CASCADE)
+    job= models.ForeignKey('Job', related_name='job', on_delete=models.CASCADE)
+    like = models.TextField()
+    created_at=models.DateTimeField( auto_now_add=True)    
         
     
