@@ -150,6 +150,9 @@ def single_job_view(request, id):
     company = single_job.recruiter.recruiterprofile.company_name
     com_logo=single_job.recruiter.recruiterprofile.company_logo
     comments_count=CommentModel.objects.filter(job=single_job).count()
+    # use to display number of likes
+   
+    total_likes=single_job.total_likes()
     print('comments_count',comments_count)
     print('company_name',company)    
     context = {
@@ -159,6 +162,7 @@ def single_job_view(request, id):
         'com_logo': com_logo,
         'specifications_bullets':specifications_bullets,
         'requirements_bullets':requirements_bullets,
+        'total_likes':total_likes
     }
     return render(request, 'JobApp/job-single.html', context)        
 
@@ -366,6 +370,7 @@ def contact_us(request):
 
 
 # if have then show otherwise submit your comment 
+@login_required(login_url=reverse_lazy('Account:signin'))  
 def do_comment(request,id):
     user=get_object_or_404(CustomUser,id=request.user.id)
     # user = request.user
@@ -406,6 +411,18 @@ def do_comment(request,id):
     ]
 
     return JsonResponse({'success': True, 'comments': comments_data,'comments_count':comments_count})
+
+# method to like job 
+def like_view(request,id):
+    job= get_object_or_404(Job,id=request.POST.get('likejob'))
+    if job.likes.filter(id=request.user.id).exists():
+        job.likes.remove(request.user)
+    else:
+        job.likes.add(request.user)
+    
+    return  HttpResponseRedirect(reverse('JobApp:single_job_view',args=[str(id)]))
+    
+    
 
 # def comment(request):
 class Comments_view(APIView):

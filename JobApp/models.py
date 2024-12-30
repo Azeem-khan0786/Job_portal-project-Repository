@@ -82,6 +82,10 @@ class Job(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     end_date = models.DateField(max_length=20, null=True,default='None')
     gender = models.CharField(max_length=30,choices=gender_chioce ,blank=True)
+    likes=models.ManyToManyField(CustomUser,related_name='job_likes')
+
+    def total_likes(self):
+        return self.likes.count()
 
     def __str__(self):
         return self.title
@@ -238,10 +242,10 @@ class CommentModel(models.Model):
     created_at=models.DateTimeField( auto_now_add=True)
 
 # Like Model 
-class LikeModel(models.Model):
-    user=models.ForeignKey(CustomUser, related_name='user', on_delete=models.CASCADE)
-    job= models.ForeignKey('Job', related_name='job', on_delete=models.CASCADE)
-    like = models.TextField()
-    created_at=models.DateTimeField( auto_now_add=True)    
+# class LikeModel(models.Model):
+#     user=models.ForeignKey(CustomUser, related_name='user', on_delete=models.CASCADE)
+#     job= models.ForeignKey('Job', related_name='job', on_delete=models.CASCADE)
+#     like = models.TextField()
+#     created_at=models.DateTimeField( auto_now_add=True)    
         
     
