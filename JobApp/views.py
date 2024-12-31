@@ -63,11 +63,14 @@ def import_jobs(request):
     return render(request, 'loadjson.html')   
 
 def job_view(request):
+    jobs = Job.objects.none()
     if request.user.is_authenticated:
         if request.user.user_type=='recruiter':
             jobs=Job.objects.filter(recruiter=request.user)
         elif request.user.user_type=='candidate':
-            jobs=Job.objects.all()   
+            jobs=Job.objects.all()  
+        else:
+            jobs=Job.objects.all()     
     else: 
         jobs=Job.objects.all()    
 
@@ -167,7 +170,8 @@ def single_job_view(request, id):
     return render(request, 'JobApp/job-single.html', context)        
 
 # method for apply-job
-@user_is_candidate
+
+@login_required(login_url=reverse_lazy('Account:signin'))      
 def apply_job_view(request, id):
     form = JobApplyForm(request.POST or None)
     user = get_object_or_404(CustomUser, id=request.user.id)
@@ -413,6 +417,7 @@ def do_comment(request,id):
     return JsonResponse({'success': True, 'comments': comments_data,'comments_count':comments_count})
 
 # method to like job 
+@login_required(login_url=reverse_lazy('Account:signin'))  
 def like_view(request,id):
     job= get_object_or_404(Job,id=request.POST.get('likejob'))
     if job.likes.filter(id=request.user.id).exists():

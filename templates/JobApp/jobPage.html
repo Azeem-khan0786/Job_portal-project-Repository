@@ -115,17 +115,20 @@ ListPage{% endblock %} {% block content %}
                             ₹ {{ job.salary|default:"Not specified" }} per year
                         </div>
                     </div>
-
+                    <a href="{% url 'JobApp:single_job_view' job.id %}" style="text-decoration: none;color:rgb(52, 70, 233); "></i> <b>View description</b></a>
                     <p class="mb-1">
                         <strong>Experience Required:</strong> {{ job.experience_required }}
                     </p>
-
-                    <div class="row m-1 mb-3 d-flex justify-content-between">
-                        <a href="{% url 'JobApp:single_job_view' job.id %}"
-                            style="text-decoration: none; color: black"><i class="fa-solid fa-paper-plane"></i> Easily
-                            apply</a>
-                        <!-- <a href="" class="btn btn-dark">Visit Job</a> -->
-                    </div>
+                   
+                    {% comment %} 
+                            <div class="row m-1 mb-3 d-flex justify-content-between"> 
+                                <a href="{% url 'JobApp:single_job_view' job.id %}"
+                                    style="text-decoration: none; color: black"><i class="fa-solid fa-paper-plane"></i> Easily
+                                    apply</a> 
+                                    <a href="{% url 'JobApp:single_job_view' job.id %}"
+                                    style="text-decoration: none; "></i> View description</a>
+                            </div> 
+                     {% endcomment %}
                     
                     {% if postdays == 0 %}
                     <p>just post</p>

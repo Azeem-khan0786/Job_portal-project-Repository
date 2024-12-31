@@ -22,7 +22,7 @@ def registration_view(request):
         if form.is_valid():
             form.save()
             
-            return redirect('admin')
+            return redirect('JobApp:job_details')
         else:
             print(form.errors)  # Add this to see form validation errors
     else:
@@ -111,8 +111,14 @@ def logout_view(request):
 
 # Candidate_profile view   
 def candidate_profile_view(request):
-    profiles=CandidateProfile.objects.get(user=request.user)
-    print(profiles)
+    if not request.user.is_authenticated:
+        return HttpResponse('You need to logged in first to view the profile')
+    try:
+        profiles=CandidateProfile.objects.get(user=request.user)
+    except CandidateProfile.DoesNotExist:
+        return HttpResponse('Candidate Does`t have the profile')
+             
+    
     # return HttpResponse('Hekkkkko')
     return render(request,'account/candidate_profile.html',locals())                     
 # Candidate_profile view update

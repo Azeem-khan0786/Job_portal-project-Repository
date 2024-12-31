@@ -7,10 +7,34 @@ from django.forms import ModelForm, TextInput, EmailInput
 
 #  1. Candidates registration Form
 class CandidateRegisteration(UserCreationForm):
-    email=forms.EmailField(required=False)
+    email = forms.EmailField(required=False, widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Email Address'
+    }))
+    phone_number = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Phone Number'
+    }))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'First Name'
+    }))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Last Name'
+    }))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Password'
+    }))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Confirm Password'
+    }))
+
     class Meta:
-        model=CustomUser
-        fields=['first_name','last_name','email','password1','password2',]
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'password1', 'password2']
         
         
 # 2.  candidates profile form 

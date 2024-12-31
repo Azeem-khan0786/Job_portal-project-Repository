@@ -11,6 +11,9 @@
   #load-comments-btn{
       background-color: none;
   }
+  .likebutton{
+    background-color: none;
+  }
 </style>
 
 {% include "candidate_navbar.html" %}
@@ -72,10 +75,37 @@
             </ul>
          </p>
           {% comment %} <p class="justify-text">Company name{{ job.recruiter }}</p> {% endcomment %}
-          <!-- saved job -->
+        
           <div class="row">
+            <!-- Apply For job -->
+            <div class="col-4 ">
+
+              {% if user.is_authenticated and user.user_type == 'candidate' %}
+              {% is_job_already_applied single_job request.user as is_applied %}
+              {% if is_applied %}
+              <span class="btn btn-block btn-danger btn-md">Already Applied</span>
+              {% else %}
+              <form action="{% url 'JobApp:apply_job' single_job.id %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="job" value="{{ single_job.id }}">
+                <input type="submit" class="btn btn-block btn-primary btn-md" value="Apply Now" />
+              </form>
+              {% endif %}
+              {% elif request.user.id == single_job.user.id and user.user_type == 'recruiter' %}
+              <a href="" class="btn btn-block btn-light btn-md">Edit</a>
+              {% else %}
+
+              
+              <form action="{% url 'JobApp:apply_job' single_job.id %}" method="POST" class="ml-3">
+                {% csrf_token %}
+                <input type="hidden" name="job" value="{{ single_job.id }}">
+                <input type="submit" class="btn  btn-primary " value="Apply Now" />
+              </form>
+              {% endif %}
+               
+            </div>
             <!-- saved job -->
-            <div class="col-4">
+            <div class="col-4 ml-5">
               {% if user.is_authenticated and user.user_type == 'candidate' %}
                   {% is_job_already_saved single_job request.user as is_saved %}
                    
@@ -93,44 +123,30 @@
                 <button  class="btn btn-block btn-danger btn-md">Delete</button>
               {% endif %}      
             </div>
-            <!-- Apply For job -->
-            <div class="col-4 ml-5">
-
-              {% if user.is_authenticated and user.user_type == 'candidate' %}
-              {% is_job_already_applied single_job request.user as is_applied %}
-              {% if is_applied %}
-              <span class="btn btn-block btn-danger btn-md">Already Applied</span>
-              {% else %}
-              <form action="{% url 'JobApp:apply_job' single_job.id %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="job" value="{{ single_job.id }}">
-                <input type="submit" class="btn btn-block btn-primary btn-md" value="Apply Now" />
-              </form>
-              {% endif %}
-              {% elif request.user.id == single_job.user.id and user.user_type == 'recruiter' %}
-              <a href="" class="btn btn-block btn-light btn-md">Edit</a>
-              {% else %}
-              <a href="" class="btn btn-block btn-primary btn-md">Publish Your Job</a>
-              {% endif %}
-               
-            </div>
+            
           </div>
-          <div class="row d-flex justify-content-between ">
-          <div class="col-md-6">total like</div>
-          {% if comments_count == 1 %}
-              <div class="col-md-6">{{comments_count}} comment</div>
-          {% else  %}    
-                <div class="col-md-6">{{comments_count}} comments</div>
-          {% endif %}
+          <!-- <form action="{% url 'JobApp:apply_job' single_job.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="job" value="{{ single_job.id }}">
+            <input type="submit" class="btn btn-block btn-primary btn-md" value="Apply Now" />
+          </form> -->
+          <div class="row d-flex justify-content-between " style="font-weight: bold;">
+                <div class="col-md-6"><i class="fa-solid fa-thumbs-up   ml-3"></i>  {{ total_likes }}</div>
+                {% if comments_count == 1 %}
+                <div class="col-md-6">{{comments_count}} comment</div>
+                {% elif  comments_count > 1 %}    
+                      <div class="col-md-6">{{comments_count}} comments</div>
+                {% endif %}
+              
+          </div>
          
-          </div>
-          <div class="row p-3">
-                           
+          <hr style=" border: 1px solid #ccc;  width: 100%; text-align: left; ">
+          <div class="row ">
             <div class="col-md-4">  
                    <!-- Button for do like to job -->
                     <form action="{% url 'JobApp:likes' single_job.id %}" method="POST">
                           {% csrf_token %}
-                          <button type="submit" class=" btn btn-primary btn-sm" name="likejob" value="{{ single_job.id }}" >likes</button>{{ total_likes }}
+                          <button type="submit" class="  likebutton" style="border: none;" name="likejob" value="{{ single_job.id }}" >likes</button>
                     </form>
             </div>
             <div class="col-md-4">
@@ -142,7 +158,7 @@
             <div class="col-md-4">Send</div>
           </div>
           <!-- form to submit comment -->
-          <div id="comment-form-section pt-1">       
+          <div id="comment-form-section " class="mt-3">       
               <form id="comment-form" method="POST">
                   {% csrf_token %}
                   <textarea name="comment" id="id_comment" class="form-control" placeholder="Write a comment..." required></textarea>
@@ -199,7 +215,10 @@
   <!-- Footer -->
 <div class="container-fluid ">
   {% include "footer.html" %}
-</div>  
+</div> 
+
+
+<!-- Script for demo purpose -->
 <script>
   function myFunction() {
     var x = document.getElementById("myDIV");
@@ -210,7 +229,6 @@
     }
   }
 </script>
-
 
 <!-- Script to submit form  -->
 <script>
@@ -262,6 +280,8 @@
     });
   });
 </script>
+
+<!-- Script to disply comment using ajax call -->
 <script>
   $(document).ready(function(){
       
@@ -291,7 +311,7 @@
               comments.forEach(function(comment){
                 console.log("Displaying comment:", comment);  // Log each comment
                 var commentHtml = `
-                  <div class="comment" style='width:300px;'>
+                  <div class="comment" style='width:500px;'>
                     <div><strong>${comment.user}</strong> (${comment.created_at})</div><p>${comment.comment}</p>
                     
                   </div>
