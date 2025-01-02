@@ -111,14 +111,17 @@ def logout_view(request):
 
 # Candidate_profile view   
 def candidate_profile_view(request):
+    print('ccccccccccccccccccccccccccc')
+    
     if not request.user.is_authenticated:
         return HttpResponse('You need to logged in first to view the profile')
     try:
         profiles=CandidateProfile.objects.get(user=request.user)
+
     except CandidateProfile.DoesNotExist:
         return HttpResponse('Candidate Does`t have the profile')
              
-    
+    print('UserType',request.user.user_type)
     # return HttpResponse('Hekkkkko')
     return render(request,'account/candidate_profile.html',locals())                     
 # Candidate_profile view update
@@ -138,8 +141,14 @@ def update_candidate_profile(request):
             
 # Recruiter Profile View@id:dongli.python-preview
 def recruiter_profile_view(request):
-    emp_profile = RecruiterProfile.objects.get(user=request.user)
-    print(emp_profile) 
+    print('jjjjjjjjjjjjjjjjjjjj')
+    if not request.user.is_authenticated:
+        HttpResponse('You have to loggin first to view profile ')
+    try:
+        emp_profile = RecruiterProfile.objects.get(user=request.user)
+    except RecruiterProfile.DoesNotExist:
+        return HttpResponse('User have not recruiter profile ')  
+    print('UserType',request.user.user_type) 
     return render(request, 'account/recruiter_profile.html', {'emp_profile': emp_profile})   
 
 # update_recruiter_profile

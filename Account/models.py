@@ -2,6 +2,7 @@ from users.models import CustomUser
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.utils import timezone
+from .models import CustomUser
 
 # Create your models here.
 gender_chioce=(( "m","male"
@@ -27,12 +28,17 @@ EXPERIENCE_CHOICES = [
     ]
  
 class CandidateProfile(models.Model):
+    USER_TYPE_CHOICES=CustomUser.USER_TYPE_CHOICES
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user_type = models.CharField(
+        max_length=10,
+        choices=USER_TYPE_CHOICES,
+        default='candidate',  # Default to 'candidate'
+    )
     first_name=models.CharField(_("First Name"),default='xyz', max_length=50)
     last_name=models.CharField(_("Last Name"),default='xyz', max_length=50)
-    cond_email=models.EmailField(_("Your Email Address"), max_length=254,unique=True,default="")
     education= models.CharField(_("Add your education criteria"), max_length=50,choices=EDUCATION_CHOICES,default='masters')
-    # skills =models.ManyToManyField("Skill", related_name='technical_skill',blank=True)
     experience=models.CharField(_("Your work wxperience level"), max_length=50,choices=EXPERIENCE_CHOICES, default='0-1')
     has_resume=models.BooleanField(_("Do you have resume"),default=True,max_length=5)
     resume=models.FileField(_("Upload your resume here"), upload_to='profiles/', max_length=100,blank=True)
@@ -41,17 +47,23 @@ class CandidateProfile(models.Model):
     
 
     def __str__(self):
-        return self.first_name
+        return f'{self.first_name} {self.last_name} with the email {self.user.email}' 
 class RecruiterProfile(models.Model):
+    USER_TYPE_CHOICES=CustomUser.USER_TYPE_CHOICES
     
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user_type = models.CharField(
+        max_length=10,
+        choices=USER_TYPE_CHOICES,
+        default='recruiter',  # Default to 'candidate'
+    )
+    
     recruiter_name=models.CharField(_("name"),default='xyz', max_length=50)
     company_name=models.CharField(_("Your company name"), max_length=50)
-    company_logo=models.ImageField(_("Image  Company"), upload_to='proImage',blank=True,null=True)
-    contact_email=models.EmailField(_("Company Email"), max_length=254)
+    company_logo=models.ImageField(_("Company Image"), upload_to='proImage',blank=True,null=True)
     contact_phone=models.CharField(_("Phone number"), max_length=50,blank=True,null=True)
     location=models.CharField(_("Location "),max_length=50,default='New Dehli')
     bio=models.TextField(_("Write your bio here!!!!!!!"),max_length=50,blank=True)
     
     def __str__(self):
-        return f"{self.user.email} have {self.company_name} with {self.contact_email}"
+        return f"{self.user.email} have {self.company_name} "

@@ -4,7 +4,7 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 />
-{% include "candidates/navbar.html" %}
+{% include "candidate_navbar.html" %}
 <section class="vh-100" style="background-color: #84a8f0">
   <div class="container py-5 h-100">
     {% if emp_profile %} 
@@ -30,7 +30,7 @@
               <h5>{{ emp_profile.recruiter_name }}</h5>
               <p class="bg-warning m-3"><b>{{ emp_profile.company_name }}</b></p>
               
-              <a href="{% url 'recruiters:update_recruiter_profile' %}">
+              <a href="{% url 'Account:update_recruiter_profile' %}">
                 <i class="far fa-edit mb-5"></i>
               </a>
               

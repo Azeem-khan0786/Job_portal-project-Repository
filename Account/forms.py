@@ -54,7 +54,14 @@ class CandidateProfileForm(forms.ModelForm):
                 'placeholder': 'Name',
                 }),
                 }
-        
+    # def save(self, commit=True):
+    #     instance = super().save(commit=False)
+    #     # Assign user_type to candidate
+    #     instance.user.user_type = 'candidate'
+    #     if commit:
+    #         instance.user.save()
+    #         instance.save()
+    #     return instance   
 
 class RecruiterProfileForm(forms.ModelForm):
     class Meta:
