@@ -14,15 +14,13 @@ class CustomUser(AbstractUser):
         ('candidate', 'Candidate'),
         ('recruiter', 'Recruiter'),
     )
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
+    user_type = models.CharField(max_length=10,choices=USER_TYPE_CHOICES)
     USERNAME_FIELD="email"
     REQUIRED_FIELDS=[]
     objects=CustomUserManager()
     
     def __str__(self):
         return  f'{self.email} {self.first_name}'
-    
-
 
 @receiver(post_save, sender=CustomUser)
 def create_profile(sender, instance, created, **kwargs):

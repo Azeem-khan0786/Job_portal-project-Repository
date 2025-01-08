@@ -7,37 +7,30 @@ from django.contrib import messages
 from Account.models import CandidateProfile ,RecruiterProfile
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
-from django.template.loader import render_to_string  # Import render_to_string
-
-
+from django.template.loader import render_to_string  # Import render_to_string.......
 
 # Create your views here.
 def registration_view(request):
     """   
-       candidate registration view
-        
+       candidate registration view   
     """
     if request.method == 'POST':
         form = CandidateRegisteration(request.POST)
         if form.is_valid():
             form.save()
-            
             return redirect('JobApp:job_details')
         else:
             print(form.errors)  # Add this to see form validation errors
     else:
         form = CandidateRegisteration()
-
     return render(request, 'account/registration.html', {'form': form})
 
 # login page for candidates
-def login_view(request):
-   
+def login_view(request):   
     print('request.session.session_key',request.session.session_key)
     if request.method=='POST':
         form =AuthenticationForm(request,data=request.POST)
         if form.is_valid():
-            
             user=authenticate(
                 username=request.POST['username'],
                 password=request.POST['password']
@@ -70,49 +63,15 @@ def login_view(request):
                 return redirect('Job:post_resume')
     else:
         form =AuthenticationForm()
-    
     return render(request, 'account/login.html', {'loginform':form})
-    # html_form = render_to_string('account/login.html',
-    #     {'loginform':form},
-    #     request=request,
-    # )
-    # return Response({'html_form': html_form})
                   
 def logout_view(request):
     logout(request)
     return redirect('JobApp:job_view') 
-     
-
-
-
-# def profile_view(request):
-#     # Debugging: Print logged-in user
-#     print(request.user)
-
-#     # Ensure the user is authenticated
-#     if request.user.is_authenticated:
-#         # Get the CandidateProfile associated witNoneh the logged-in user
-#         user_profile = request.user.CandidateProfile
-
-#         if request.method == 'POST':
-#             form = CandidateProfileForm(request.POST, instance=user_profile)  # Pass the CandidateProfile instance
-#             if form.is_valid():
-#                 form.save()
-#                 return redirect('candidates:my_profile')  # Redirect after successful save
-#         else:
-#             form = CandidateProfileForm(instance=user_profile)  # Pass the CandidateProfile instance for pre-filling the form
-
-#         # Render the profile add template with the form
-#         return render(request, 'candidates/ProfileAdd.html', {'form': form})  # Use dictionary for context
-#     else:
-#         # Handle the case where the user is not authenticated
-#         return redirect('login')  # Redirect to login page or show an error
-
 
 # Candidate_profile view   
 def candidate_profile_view(request):
     print('ccccccccccccccccccccccccccc')
-    
     if not request.user.is_authenticated:
         return HttpResponse('You need to logged in first to view the profile')
     try:
@@ -162,9 +121,4 @@ def update_recruiter_profile(request):
     else:
         form=RecruiterProfileForm(instance=profile)
     return render(request,"account/recruiter_update_profile_form.html", {'form':form})
-                            
-
-        
-# @login_required(login_url=reverse_lazy('JobApp:signin'))
-# def demo(request):
-#     return HttpResponse('fndn')       
+     
