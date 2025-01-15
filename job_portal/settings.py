@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'widget_tweaks',
     'rest_framework',
+    'ProxyApp', # just for use proxy models not for applications  use
+    'ProxyApp.ProxyManager',
 ]
 
 # INSTALLED_APPS+=EXTERNEL_APPS

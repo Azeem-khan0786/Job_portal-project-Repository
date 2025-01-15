@@ -356,7 +356,7 @@ def post_resume(request):
 
 
 def about_us(request):
-    return render(request, 'dot.html', locals())
+    return render(request, 'JobApp/about_us.html', locals())
 def contact_us(request):
     form = ContactForm()
     # Check if the request is POST and AJAX
