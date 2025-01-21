@@ -18,7 +18,7 @@ def registration_view(request):
         form = CandidateRegisteration(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('JobApp:job_details')
+            return redirect('Account:signin')
         else:
             print(form.errors)  # Add this to see form validation errors
     else:

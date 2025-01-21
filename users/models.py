@@ -40,5 +40,30 @@ def save_profile(sender, instance, **kwargs):
     if instance.user_type == 'candidate':
         instance.candidateprofile.save()
     elif instance.user_type == 'recruiter':
-        instance.recruiterprofile.save()    
-    
+        instance.recruiterprofile.save() 
+
+
+# @receiver(post_save, sender=CustomUser)
+# def create_profile(sender, instance, created, **kwargs):
+#     # Ensure profiles are created only when a new CustomUser instance is created
+#     if created:
+#         if instance.user_type == 'candidate':
+#             # Create the CandidateProfile if it's a new candidate user
+#             CandidateProfile.objects.create(user=instance)
+#             print(f'Created CandidateProfile for {instance.email}')
+#         elif instance.user_type == 'recruiter':
+#             # Create the RecruiterProfile if it's a new recruiter user
+#             RecruiterProfile.objects.create(user=instance)
+#             print(f'Created RecruiterProfile for {instance.email}')
+#     else:
+#         print(f'Profile save triggered for {instance.email}')
+
+
+# @receiver(post_save, sender=CustomUser)
+# def save_profile(sender, instance, **kwargs):
+    # Save the profile if it exists
+    if instance.user_type == 'candidate' and hasattr(instance, 'candidateprofile'):
+        instance.candidateprofile.save()
+    elif instance.user_type == 'recruiter' and hasattr(instance, 'recruiterprofile'):
+        instance.recruiterprofile.save()
+
