@@ -53,8 +53,8 @@ def import_jobs(request):
                 is_published=item['is_published'],
                 is_closed=item['is_closed'],
                 Vacancy=item['Vacancy'],
-                passedout=item['passedout'],
-                timestamp=item['timestamp'],
+               
+                
                 end_date=item['end_date'],
                 gender=item['gender'],
             )
@@ -75,7 +75,7 @@ def job_view(request):
         jobs=Job.objects.all()    
 
     for job in jobs:
-      time_diff=timezone.now()-job.timestamp
+      time_diff=timezone.now()-job.created_at
       postdays=time_diff.days    
       job.skills_list = job.skills.all()[:4]
     
@@ -185,7 +185,7 @@ def apply_job_view(request, id):
                 instance = form.save(commit=False)
                 instance.user = user
                 instance.job = job
-                instance.timestamp = timezone.now()  # Set the timestamp
+                instance.created_at = timezone.now()  # Set the created_at
                 instance.save()
 
                 messages.success(request, 'You have successfully applied for this job!')
@@ -210,7 +210,7 @@ def bookmark_view(request,id):
                     instance = form.save(commit=False)
                     instance.user = user
                    
-                    instance.timestamp = timezone.now()  # Set the timestamp
+                    instance.created_at = timezone.now()  # Set the created_at
                     instance.save()
                     messages.success(request, 'You have saved the job as bookmark')
                     return redirect(reverse('JobApp:single_job_view', kwargs={'id': id}))    

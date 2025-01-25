@@ -18,8 +18,6 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "2",
-      "passedout": "2023-2024",
-      "timestamp": "2024-11-01T10:00:00Z",
       "end_date": "2025-01-01",
       "gender": "any"
     },
@@ -42,8 +40,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "5",
-      "passedout": "2022-2023",
-      "timestamp": "2024-11-05T08:30:00Z",
+ 
       "end_date": "2025-05-31",
       "gender": "any"
     },
@@ -66,8 +63,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "3",
-      "passedout": "2024-2025",
-      "timestamp": "2024-10-20T12:00:00Z",
+
       "end_date": "2025-03-31",
       "gender": "any"
     },
@@ -90,8 +86,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "1",
-      "passedout": "2018-2019",
-      "timestamp": "2024-11-01T09:00:00Z",
+
       "end_date": "2025-06-30",
       "gender": "any"
     },
@@ -114,8 +109,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "1",
-      "passedout": "2016-2017",
-      "timestamp": "2024-10-25T15:00:00Z",
+ 
       "end_date": "2025-12-31",
       "gender": "any"
     },
@@ -138,8 +132,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "2",
-      "passedout": "2021-2022",
-      "timestamp": "2024-10-18T09:30:00Z",
+ 
       "end_date": "2025-11-30",
       "gender": "any"
     },
@@ -162,8 +155,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "2",
-      "passedout": "2020-2021",
-      "timestamp": "2024-10-15T14:00:00Z",
+
       "end_date": "2025-02-28",
       "gender": "any"
     },
@@ -186,8 +178,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "3",
-      "passedout": "2023-2024",
-      "timestamp": "2024-11-07T10:00:00Z",
+      
       "end_date": "2025-06-30",
       "gender": "any"
     },
@@ -210,8 +201,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "4",
-      "passedout": "2022-2023",
-      "timestamp": "2024-10-22T12:30:00Z",
+   
       "end_date": "2025-01-15",
       "gender": "any"
     },
@@ -234,8 +224,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "2",
-      "passedout": "2021-2022",
-      "timestamp": "2024-10-10T09:00:00Z",
+     
       "end_date": "2025-10-01",
       "gender": "any"
     },
@@ -258,8 +247,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "2",
-      "passedout": "2020-2021",
-      "timestamp": "2024-11-01T10:00:00Z",
+  
       "end_date": "2025-06-30",
       "gender": "any"
     },
@@ -282,8 +270,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "3",
-      "passedout": "2022-2023",
-      "timestamp": "2024-10-12T08:00:00Z",
+ 
       "end_date": "2025-04-30",
       "gender": "any"
     },
@@ -306,8 +293,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "2",
-      "passedout": "2017-2018",
-      "timestamp": "2024-10-05T10:00:00Z",
+   
       "end_date": "2025-10-15",
       "gender": "any"
     },
@@ -330,8 +316,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "1",
-      "passedout": "2016-2017",
-      "timestamp": "2024-09-30T08:00:00Z",
+
       "end_date": "2025-06-30",
       "gender": "any"
     },
@@ -354,8 +339,7 @@
       "is_published": true,
       "is_closed": false,
       "Vacancy": "2",
-      "passedout": "2019-2020",
-      "timestamp": "2024-09-20T12:00:00Z",
+
       "end_date": "2025-03-31",
       "gender": "any"
     }

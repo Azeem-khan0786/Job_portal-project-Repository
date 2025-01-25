@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponseRedirect ,redirect
-from Account.forms import CandidateRegisteration ,CandidateProfileForm,RecruiterProfileForm
+from Account.forms import CandidateRegisteration ,CandidateProfileForm,RecruiterProfileForm 
 from django.http import HttpResponse 
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -8,8 +8,13 @@ from Account.models import CandidateProfile ,RecruiterProfile
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
 from django.template.loader import render_to_string  # Import render_to_string.......
-
+from django.views.generic import CreateView ,TemplateView
+from users.models import CustomUser
 # Create your views here.
+
+class SignUpView(TemplateView):
+    template_name = 'account/signup.html'
+
 def registration_view(request):
     """   
        candidate registration view   
@@ -122,3 +127,15 @@ def update_recruiter_profile(request):
         form=RecruiterProfileForm(instance=profile)
     return render(request,"account/recruiter_update_profile_form.html", {'form':form})
      
+class  recruitersignup(CreateView):
+    model = CustomUser
+    form_class = RecruiterProfileForm
+    template_name = 'account/recruiter_register.html'
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('/')    
+
+class  candidatesignup(CreateView):
+    pass

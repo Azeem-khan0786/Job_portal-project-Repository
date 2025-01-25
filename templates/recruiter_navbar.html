@@ -64,9 +64,12 @@ body {
         </li>
         {% else %}
         <li class=" nav-item "><a href="" class="nav-link"> |</a></li>
-      <li class="nav-item">
+        <li class="nav-item">
+          <a href="{% url 'Account:signup' %}" class="nav-link"> Sign Up</a>
+        </li>
+        <li class="nav-item">
           <a href="{% url 'Account:signin' %}" class="nav-link"> Sign in</a>
-      </li>
+        </li>
       
         {% endif %}
         <li class="nav-item">
