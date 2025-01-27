@@ -40,21 +40,38 @@ class CandidateRegisteration(UserCreationForm):
         
 # 2.  candidates profile form 
 class CandidateProfileForm(forms.ModelForm):
-     class Meta:
-        model = CandidateProfile
-        exclude = ['user']
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    education= forms.CharField(max_length=244, required=True)
+    experience=forms.CharField( max_length=244, required=True)
+    has_resume=forms.BooleanField(required=False)
+    resume=forms.FileField(required=False)
+    gender=forms.CharField(max_length=244, required=True)
+    bio=forms.CharField(max_length=244, required=True)
 
-        widgets={'first_name': TextInput(attrs={
-                'class': "form-control",
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'first_name', 'last_name','password']
+
+    @transaction.atomic
+    def save(self):
+        # Save the user as a recruiter
+        user = super().save(commit=False)
+        user.user_type = 'candidate'
+        user.first_name=self.cleaned_data.get('first_name')
+        user.last_name= self.cleaned_data.get('last_name')
+        user.save()    
+
+        candidate = Candidate.objects.create(user=user)
+        candidate.education = self.cleaned_data.get('education')
+        candidate.experience = self.cleaned_data.get('experience')
+        candidate.has_resume = self.cleaned_data.get('has_resume')
+        candidate.resume = self.cleaned_data.get('resume')
+        candidate.gender = self.cleaned_data.get('gender')
+        candidate.bio = self.cleaned_data.get('bio')
+        candidate.save()
+        return user
                 
-                'placeholder': 'Name',
-                }),
-                'last_name': TextInput(attrs={
-                'class': "form-control",
-                
-                'placeholder': 'Name',
-                }),
-                }
    
 class RecruiterProfileForm(forms.ModelForm):
     first_name = forms.CharField(required=True)
@@ -69,6 +86,8 @@ class RecruiterProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['email', 'first_name', 'last_name','password']
+
+        
     # class Meta:
     #     model=RecruiterProfile
     #     fields="__all__"        

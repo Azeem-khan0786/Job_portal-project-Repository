@@ -31,11 +31,11 @@ class CandidateProfile(models.Model):
     USER_TYPE_CHOICES=CustomUser.USER_TYPE_CHOICES
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    user_type = models.CharField(
-        max_length=10,
-        choices=USER_TYPE_CHOICES,
-        default='candidate',  # Default to 'candidate'
-    )
+    # user_type = models.CharField(
+    #     max_length=10,
+    #     choices=USER_TYPE_CHOICES,
+    #     default='candidate',  # Default to 'candidate'
+    # )
     first_name=models.CharField(_("First Name"),default='xyz', max_length=50)
     last_name=models.CharField(_("Last Name"),default='xyz', max_length=50)
     education= models.CharField(_("Add your education criteria"), max_length=50,choices=EDUCATION_CHOICES,default='masters')
@@ -57,7 +57,7 @@ class RecruiterProfile(models.Model):
     #     choices=USER_TYPE_CHOICES,
     #     default='recruiter',  # Default to 'candidate'
     # )
-    
+    zmq
     company_name=models.CharField(_("Your company name"), max_length=50)
     company_logo=models.ImageField(_("Company Image"), upload_to='proImage',blank=True,null=True)
     contact_phone=models.CharField(_("Phone number"), max_length=50,blank=True,null=True)
