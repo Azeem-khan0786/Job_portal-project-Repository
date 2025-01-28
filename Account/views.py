@@ -134,8 +134,8 @@ class  recruitersignup(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
-        return redirect('/')    
+        login(self.request, user)  # after register create job
+        return redirect('JobApp/create_job')    
 
 class  candidatesignup(CreateView):
     model = CustomUser

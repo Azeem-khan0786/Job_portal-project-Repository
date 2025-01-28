@@ -25,7 +25,10 @@
     <div class="col-lg-8 mb-4 mb-lg-0">
       <div class="d-flex align-items-center">
         <div class="border p-2 d-inline-block mr-3 rounded">
+          {% if com_logo %}
           <img src="{{ com_logo.url }}" alt="Company Logo" style="width: 100px; height: 80px;">
+          
+          {% endif %}
         </div>
         <div>
           <h5>{{ single_job.title }}</h5>

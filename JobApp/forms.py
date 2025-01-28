@@ -8,9 +8,11 @@ from JobApp.models import Job ,Applicant ,BookmarkJob ,Contact,Resume,CommentMod
 
 #create form for create_job 
 class JobForm(forms.ModelForm):
+    
     class Meta:
         model=Job
-        exclude=['recruiter']
+        exclude=['recruiter','likes']
+
 
 class JobApplyForm(forms.ModelForm):
     

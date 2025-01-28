@@ -6,7 +6,7 @@ from django.forms import ModelForm, TextInput, EmailInput
 from django.db import transaction
 
 # from .choices import GENDER_CHOICES
-
+from Account.models import gender_chioce,EDUCATION_CHOICES,EXPERIENCE_CHOICES # import choices form models.py 
 
 #  1. Candidates registration Form
 class CandidateRegisteration(UserCreationForm):
@@ -44,12 +44,20 @@ class CandidateRegisteration(UserCreationForm):
 class CandidateProfileForm(forms.ModelForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
-    education= forms.CharField(max_length=244, required=True)
-    experience=forms.CharField( max_length=244, required=True)
+    education= forms.ChoiceField(choices=EDUCATION_CHOICES, required=True)  # use choiceField if using choices
+    experience=forms.ChoiceField(choices=EXPERIENCE_CHOICES, required=True)
     has_resume=forms.BooleanField(required=False)
     resume=forms.FileField(required=False)
-    gender = forms.ChoiceField(choices= gender_chioce, required=True)
-    bio=forms.CharField(max_length=244, required=True)
+    gender = forms.ChoiceField(choices=gender_chioce, required=True)
+    bio = forms.CharField(max_length=342,required=False,
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control col-md-12',  # Add Bootstrap classes for styling
+                'rows': 4,                # Number of rows for the textarea
+                'placeholder': 'Enter your bio here...',  # Placeholder text
+            }
+        ),label="Bio",  # Optional, you can customize the label
+    )
 
     class Meta:
         model = CustomUser
@@ -82,7 +90,16 @@ class RecruiterProfileForm(forms.ModelForm):
     company_logo = forms.ImageField(required=False)  # No `upload_to` here; it belongs to the model
     contact_phone = forms.CharField(max_length= 255,required=False)
     location = forms.CharField(max_length=232,required=False)
-    bio = forms.CharField(max_length= 342, required=False)
+    bio = forms.CharField(max_length=342,required=False,
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control col-md-12',  # Add Bootstrap classes for styling
+                # 'rows': 4,                # Number of rows for the textarea
+                'placeholder': 'Enter your bio here...',  # Placeholder text
+                'style': 'width: 100%;'
+            }
+        ),label="Bio",  # Optional, you can customize the label
+    )
 
 
     class Meta:
