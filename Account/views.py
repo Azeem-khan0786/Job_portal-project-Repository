@@ -138,4 +138,11 @@ class  recruitersignup(CreateView):
         return redirect('/')    
 
 class  candidatesignup(CreateView):
-    pass
+    model = CustomUser
+    form_class = CandidateProfileForm
+    template_name = 'account/candidate_register.html'
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('/')  

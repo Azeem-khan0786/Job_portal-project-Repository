@@ -57,7 +57,7 @@ class RecruiterProfile(models.Model):
     #     choices=USER_TYPE_CHOICES,
     #     default='recruiter',  # Default to 'candidate'
     # )
-    zmq
+     
     company_name=models.CharField(_("Your company name"), max_length=50)
     company_logo=models.ImageField(_("Company Image"), upload_to='proImage',blank=True,null=True)
     contact_phone=models.CharField(_("Phone number"), max_length=50,blank=True,null=True)

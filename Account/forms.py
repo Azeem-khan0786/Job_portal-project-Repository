@@ -5,6 +5,8 @@ from Account.models import CandidateProfile,RecruiterProfile
 from django.forms import ModelForm, TextInput, EmailInput
 from django.db import transaction
 
+# from .choices import GENDER_CHOICES
+
 
 #  1. Candidates registration Form
 class CandidateRegisteration(UserCreationForm):
@@ -46,7 +48,7 @@ class CandidateProfileForm(forms.ModelForm):
     experience=forms.CharField( max_length=244, required=True)
     has_resume=forms.BooleanField(required=False)
     resume=forms.FileField(required=False)
-    gender=forms.CharField(max_length=244, required=True)
+    gender = forms.ChoiceField(choices= gender_chioce, required=True)
     bio=forms.CharField(max_length=244, required=True)
 
     class Meta:
@@ -62,7 +64,7 @@ class CandidateProfileForm(forms.ModelForm):
         user.last_name= self.cleaned_data.get('last_name')
         user.save()    
 
-        candidate = Candidate.objects.create(user=user)
+        candidate = CandidateProfile.objects.create(user=user)
         candidate.education = self.cleaned_data.get('education')
         candidate.experience = self.cleaned_data.get('experience')
         candidate.has_resume = self.cleaned_data.get('has_resume')
