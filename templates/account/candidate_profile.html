@@ -4,50 +4,68 @@
 {% include "candidate_navbar.html" %}
 <div class="container my-5">
     
-    <h1 class="text-center text-primary mb-4">Candidate Profile</h1>
+    <h1 class="text-center text-primary mb-1">Candidate Profile</h1>
     
     {% if profiles %}
     <div class="card shadow-lg border-0">
-        <div class="card-body">
-            <div class="d-flex flex-column align-items-center mb-4">
-                <!-- Profile Picture (optional) -->
-                <div class="profile-img mb-3">
-                    {% if profiles.profile_picture %}
-                    <img src="{{ profiles.profile_picture.url }}" class="rounded-circle" alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
-                    {% else %}
-                    <img src="{% static 'images/default-profile.png' %}" class="rounded-circle" alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
-                    {% endif %}
-                </div>
-                <h3 class="card-title text-center font-weight-bold">{{ profiles.first_name }} {{ profiles.last_name }}</h3>
-                <p class="card-text text-center text-muted">{{ profiles.job_title|default:"No job title available" }}</p>
-            </div>
-
-            <div class="mb-3">
-                <p class="card-text"><strong>Email:</strong> <span>{{ profiles.cond_email }}</span></p>
-                <p class="card-text"><strong>Gender:</strong> <span>{{ profiles.get_gender_display }}</span></p>
-                <p class="card-text"><strong>Skills:</strong> <span>{{ profiles.get_education_display }}</span></p>
-                <p class="card-text"><strong>Experience:</strong> <span>{{ profiles.get_experience_display }}</span></p>
-            </div>
-
-            <div class="mb-3">
-                {% if profiles.has_resume %}
-                    <p class="card-text"><strong>Resume:</strong> <a href="" class="btn btn-success btn-sm" download>Download Resume</a></p>
+        <div class="d-flex flex-column align-items-center mb-1">
+            <!-- Profile Picture (optional) -->
+            <div class="profile-img mb-1">
+                {% if profiles.profile_picture %}
+                <img src="{{ profiles.profile_picture.url }}" class="rounded-circle" alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
                 {% else %}
-                    <p class="card-text">No resume uploaded.</p>
+                <img src="{% static 'images/default-profile.png' %}" class="rounded-circle" alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
                 {% endif %}
             </div>
+            <h3 class="card-title text-center font-weight-bold">{{ profiles.first_name }} {{ profiles.last_name }}</h3>
+            <p class="card-text text-center text-muted">{{ profiles.job_title|default:"No job title available" }}</p>
+        </div>
+        <div class="d-flex justify-conter-between">
+            <div class="card-body">
+                <div class="mb-3">
+                    <p class="card-text"><strong>Email:</strong> <span>{{ profiles.user.email }}</span></p>
+                    <p class="card-text"><strong>Gender:</strong> <span>{{ profiles.get_gender_display }}</span></p>
+                    <p class="card-text"><strong>Education:</strong> <span>{{ profiles.get_education_display }}</span></p>
+                    <p class="card-text"><strong>Skills:</strong> <span>
+                        <ul>
+                            {% for skill in profiles.skills.all %}
+                                <li>{{ skill.skill_name }}</li>
+                            {% empty %}
+                                <li>No skills added.</li>
+                            {% endfor %}
+                        </ul>
+                    </span></p>
+                    <p class="card-text"><strong>Experience:</strong> <span>{{ profiles.get_experience_display }}</span></p>
+                </div>  
 
-            <div class="mb-4">
-                <strong>About me:</strong>
-                <p class="card-text border border-secondary rounded p-3" style="min-height: 120px; max-width: 100%; word-wrap: break-word;">
-                    {{ profiles.bio|default:"No bio available." }}
-                </p>
+                <div class="mb-3">
+                    {% if profiles.has_resume %}
+                        <p class="card-text"><strong>Resume:</strong> <a href="" class="btn btn-success btn-sm" download>Download Resume</a></p>
+                    {% else %}
+                        <p class="card-text">No resume uploaded.</p>s
+                    {% endif %}
+                </div>
+                <p class="card-text"><strong>Resume:</strong> <span>{{ profiles.resume }}</span></p>
+                
+                
             </div>
-
-            <div class="text-center">
-                <a href="{% url 'Account:update_candidate_profile' %}" class="btn btn-warning btn-lg mb-3">Edit Profile</a>
-                <a href="{% url 'Account:signout' %}" class="btn btn-danger btn-lg mb-3">Logout</a>
+            <div>
+                {% if profiles.resume %}
+                <img src="{% static '/images/Azeemresume.png' %}" alt="Profile Image" class="img-responsive" style="height: 400px;width: 380px;">
+            {% else %}
+                <p>No profile image uploaded.</p>
+            {% endif %}
             </div>
+        </div>
+        <div class="mb-1">
+            <strong>About me:</strong>
+            <p class="card-text border border-secondary rounded p-3" style="min-height: 120px; max-width: 1111px; word-wrap: break-word;">
+                {{ profiles.bio|default:"No bio available." }}
+            </p>
+        </div>  
+        <div class="">
+            <a href="{% url 'Account:update_candidate_profile' %}" class="btn btn-warning btn-lg mb-3">Edit Profile</a>
+            <a href="{% url 'Account:signout' %}" class="btn btn-danger btn-lg mb-3">Logout</a>
         </div>
     </div>
     {% endif %}

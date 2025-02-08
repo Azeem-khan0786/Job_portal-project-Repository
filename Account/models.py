@@ -39,8 +39,9 @@ class CandidateProfile(models.Model):
     last_name=models.CharField(_("Last Name"),default='xyz', max_length=50)
     education= models.CharField(_("Add your education criteria"), max_length=50,choices=EDUCATION_CHOICES,default='masters')
     experience=models.CharField(_("Your work wxperience level"), max_length=50,choices=EXPERIENCE_CHOICES, default='0-1')
+    skills = models.ManyToManyField("JobApp.Skill", related_name='candidate_skill',blank=True)
     has_resume=models.BooleanField(_("Do you have resume"),default=True,max_length=5)
-    resume=models.FileField(_("Upload your resume here"), upload_to='profiles/', max_length=100,blank=True)
+    resume=models.ImageField(_("Upload your resume here"), upload_to='profiles/', max_length=100,blank=True)
     gender=models.CharField(_("Select your gender "), max_length=50,choices=gender_chioce,default="")
     bio=models.TextField(_("Write your bio here!"),blank=True)
     
