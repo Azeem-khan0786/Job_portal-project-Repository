@@ -32,42 +32,20 @@ def registration_view(request):
 
 # login page for candidates
 def login_view(request):   
-    print('request.session.session_key',request.session.session_key)
-    if request.method=='POST':
-        form =AuthenticationForm(request,data=request.POST)
-        if form.is_valid():
-            user=authenticate(
-                username=request.POST['username'],
-                password=request.POST['password']
-            )
-            if user is not None:
-                login(request,user)
-                print(request,user)
-        # Store custom data in the session
-                # request.session['user_id'] = user.id
-                # request.session['user_name'] = user.username
-                # request.session['is_logged_in'] = True  # Custom session flag for login state
-                userType=request.session['user_role'] = user.user_type  # Assuming user has 'user_type' field
-                
-                # Optionally set the session expiry time (e.g., session expires after 30 minutes)
-                print('userType pre login',userType)
-                request.session.set_expiry(0)  
-                   # Session will expire after 60 sec request.session.set_expiry(60) 
-                   # if  request.session.set_expiry(None) then expired when you delete manually
-                   # if request.session.set_expiry(0) then expired when you close the browser
-                print('userType post login',userType)
-                messages.info(request,'Candidate has been loged in !')
-                # return HttpResponse('hello signin')
-                if user.user_type=='recruiter':
-                   return redirect('JobApp:recruiter_job_view')
-                else:
-                    return redirect('JobApp:job_view')   
-                   
-            else:
-                messages.warning(request,'Invalid input ')
-                return redirect('Job:post_resume')
-    else:
-        form =AuthenticationForm()
+    form = AuthenticationForm()  # Always start with an empty form
+    if request.method == 'POST':
+  
+        # AuthenticationForm_can_also_be_used__
+  
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username = username, password = password)
+        if user is not None:
+            form = login(request, user)
+            messages.success(request, f' welcome {username} !!')
+            return redirect('JobApp:job_view')
+        else:
+            messages.info(request, f'account done not exit plz sign in')
     return render(request, 'account/login.html', {'loginform':form})
                   
 def logout_view(request):
@@ -137,7 +115,7 @@ class  recruitersignup(CreateView):
         login(self.request, user)  # after register create job
         return redirect('JobApp/create_job')    
 
-class  candidatesignup(CreateView):
+class candidatesignup(CreateView):
     model = CustomUser
     form_class = CandidateProfileForm
     template_name = 'account/candidate_register.html'

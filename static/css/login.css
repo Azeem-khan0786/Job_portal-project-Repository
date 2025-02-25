@@ -1,0 +1,26 @@
+/* Optional custom CSS for the form */
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-group input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 100%;
+    margin-top: 5px;
+}
+
+input[type="submit"] {
+    background-color: #f0c14b;
+    border: 1px solid #a88734;
+    color: #111;
+}
+
+input[type="submit"]:hover {
+    background-color: #e4a018;
+}

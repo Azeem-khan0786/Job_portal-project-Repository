@@ -27,6 +27,7 @@ urlpatterns = [
     path('Account/',include('Account.urls')),
     path('JobApp/',include('JobApp.urls')),
     path('',include('jsonApp.urls')),
+    path('__reload__/',include('django_browser_reload.urls')),
 
     
      # Redirect the root URL to the admin page
