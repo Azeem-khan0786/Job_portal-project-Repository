@@ -35,8 +35,8 @@ class CandidateProfile(models.Model):
     #     choices=USER_TYPE_CHOICES,
     #     default='candidate',  # Default to 'candidate'
     # )
-    first_name=models.CharField(_("First Name"),default='xyz', max_length=50)
-    last_name=models.CharField(_("Last Name"),default='xyz', max_length=50)
+    first_name=models.CharField(_("First Name"),blank=True,null=True, max_length=50)
+    last_name=models.CharField(_("Last Name"),blank=True,null=True, max_length=50)
     education= models.CharField(_("Add your education criteria"), max_length=50,choices=EDUCATION_CHOICES,default='masters')
     experience=models.CharField(_("Your work wxperience level"), max_length=50,choices=EXPERIENCE_CHOICES, default='0-1')
     skills = models.ManyToManyField("JobApp.Skill", related_name='candidate_skill',blank=True)

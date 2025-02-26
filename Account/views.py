@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponseRedirect ,redirect
-from Account.forms import CandidateRegisteration ,CandidateProfileForm,RecruiterProfileForm 
+from Account.forms import CandidateProfileForm,RecruiterProfileForm 
 from django.http import HttpResponse 
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -35,8 +35,7 @@ def login_view(request):
     form = AuthenticationForm()  # Always start with an empty form
     if request.method == 'POST':
   
-        # AuthenticationForm_can_also_be_used__
-  
+        # AuthenticationForm_can_also_be_used
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username = username, password = password)
@@ -54,7 +53,6 @@ def logout_view(request):
 
 # Candidate_profile view   
 def candidate_profile_view(request):
-    print('ccccccccccccccccccccccccccc')
     if not request.user.is_authenticated:
         return HttpResponse('You need to logged in first to view the profile')
     try:
@@ -83,7 +81,6 @@ def update_candidate_profile(request):
             
 # Recruiter Profile View@id:dongli.python-preview
 def recruiter_profile_view(request):
-    print('jjjjjjjjjjjjjjjjjjjj')
     if not request.user.is_authenticated:
         HttpResponse('You have to loggin first to view profile ')
     try:
@@ -95,17 +92,33 @@ def recruiter_profile_view(request):
 
 # update_recruiter_profile
 def update_recruiter_profile(request):
-    profile=RecruiterProfile.objects.get(user=request.user)
+    user=request.user  # get logged in user
+    recruiter_profile=get_object_or_404(RecruiterProfile,user=user)
     if request.method=='POST':
-        form=RecruiterProfileForm(request.POST,instance=profile)
+        form=RecruiterProfileForm(request.POST,instance=user) # bcz updating CustomerUser model
         if form.is_valid():
-            form.save()
+            user=form.save(commit=False)
+            user.save()
+            # Update RecruiterProfile fields
+            recruiter_profile.company_name = form.cleaned_data.get('company_name')
+            recruiter_profile.company_logo = form.cleaned_data.get('company_logo')
+            recruiter_profile.contact_phone = form.cleaned_data.get('contact_phone')
+            recruiter_profile.location = form.cleaned_data.get('location')
+            recruiter_profile.bio = form.cleaned_data.get('bio')
+            recruiter_profile.save()
+    
         return redirect('Account:recruiter_profile')    
     else:
-        form=RecruiterProfileForm(instance=profile)
+        form = RecruiterProfileForm(instance=user, initial={
+            'company_name': recruiter_profile.company_name,
+            'company_logo': recruiter_profile.company_logo,
+            'contact_phone': recruiter_profile.contact_phone,
+            'location': recruiter_profile.location,
+            'bio': recruiter_profile.bio,
+        })
     return render(request,"account/recruiter_update_profile_form.html", {'form':form})
      
-class  recruitersignup(CreateView):
+class recruitersignup(CreateView):
     model = CustomUser
     form_class = RecruiterProfileForm
     template_name = 'account/recruiter_register.html'
@@ -113,7 +126,8 @@ class  recruitersignup(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)  # after register create job
-        return redirect('JobApp/create_job')    
+        # return redirect('JobApp/create_job')  
+        return redirect('/')  
 
 class candidatesignup(CreateView):
     model = CustomUser

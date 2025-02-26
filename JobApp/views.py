@@ -147,10 +147,17 @@ def single_job_view(request, id):
     Provide the ability to view job details
     """ 
     single_job = get_object_or_404(Job, id=id)
+    print(f"Recruiter: {single_job.recruiter} (ID: {single_job.recruiter.id})")
+    recruiter=single_job.recruiter
     # Use regex to split on sentence-ending periods
     specifications_bullets = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', single_job.specifications)
     requirements_bullets = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', single_job.requirements)
-    company = single_job.recruiter.recruiterprofile.company_name
+    # Check if recruiter has a profile before accessing it
+    if hasattr(recruiter, 'recruiterprofile'):
+        company = recruiter.recruiterprofile.company_name
+    else:
+        company = "Company Not Available"  # Fallback value
+    # company = recruiter.recruiterprofile.company_name
     com_logo=single_job.recruiter.recruiterprofile.company_logo
     comments_count=CommentModel.objects.filter(job=single_job).count()
     # use to display number of likes
