@@ -258,12 +258,24 @@ def dashboard_view(request):
 def search_job(request):
     if request.method=='POST':
         # search_query=request.POST['job','location']
-        job = request.POST.get('job', '')
-        location = request.POST.get('location', '')
-        search_query={'job':job,'location':location}
-        
-        find_job=Job.objects.filter(Q(title__icontains=search_query) | Q(location__icontains=search_query))
-        print(find_job)
+        job_query = request.POST.get('job', '')
+        print('job_query',job_query)
+        location_query = request.POST.get('location', '')
+        print('location_query',location_query)
+        # Dynamically build query based on user input
+        query = Q()
+
+        if job_query and location_query:  # Case 1: Search by job title AND location
+            query &= Q(title__icontains=job_query) & Q(location__icontains=location_query)
+        elif job_query:  # Case 2: Search only by job title
+            query &= Q(title__icontains=job_query)
+        elif location_query:  # Case 3: Search only by location
+            query &= Q(location__icontains=location_query)
+
+        # Fetch jobs based on dynamic query
+        find_job = Job.objects.filter(query)
+        # find_job=Job.objects.filter(Q(title__icontains=search_query) | Q(location__icontains=search_query))
+        print('find_job',find_job)
         return render(request, 'JobApp/search_job.html', locals())
     else:
         return render(request, 'JobApp/search_job.html', {})    
@@ -381,47 +393,48 @@ def contact_us(request):
 
 
 # if have then show otherwise submit your comment 
-@login_required(login_url=reverse_lazy('Account:signin'))  
-def do_comment(request,id):
-    user=get_object_or_404(CustomUser,id=request.user.id)
-    # user = request.user
+@login_required(login_url=reverse_lazy('Account:signin'))
+def do_comment(request, id):
+    user = get_object_or_404(CustomUser, id=request.user.id)
     job = get_object_or_404(Job, id=id)
-    comments = CommentModel.objects.filter(job=job).order_by('-created_at')  # Fetch job's comments
-    comments_count=CommentModel.objects.filter(job=job).count()
-    form = CommentForm()
 
+    # Handle GET request: Fetch and return all comments
+    if request.method == 'GET':
+        comments = CommentModel.objects.filter(job=job).order_by('-created_at')
+        comments_data = [
+            {
+                'comment': c.comment,
+                'user': c.user.email,
+                'created_at': c.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            for c in comments
+        ]
+        return JsonResponse({'success': True, 'comments': comments_data})
+
+    # Handle POST request: Save a new comment
     if request.method == 'POST':
-        if  request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Check if the request is AJAX
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                instance = form.save(commit=False)
-                instance.user = usercomments_count=CommentModel.objects.filter(job=job).count()
-                instance.job = job
-                instance.save()
-                comments_count = CommentModel.objects.filter(job=job).count() 
-                # Return a JSON response with the new comment details
-                return JsonResponse({
-                    'success': True,
-                    'comment': comments,
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = user
+            instance.job = job
+            instance.save()
+
+            return JsonResponse({
+                'success': True,
+                'new_comment': {
+                    'comment': instance.comment,
                     'user': instance.user.email,
                     'created_at': instance.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-                    'comments_count':comments_count
-                })
-            return render(request, 'comment.html', {'form': form, 'job': job, 'comments': comments})
-    
-    # Serialize the comments into JSON-friendly format
-    comments_data = [
-        { 
-            'comment': c.comment,
-            'user': c.user.email,
-            'created_at': c.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-           
-        }
-        for c in comments
-          
-    ]
+                }
+            })
+        else:
+            print("❌ Form Errors:", form.errors)  # Debugging: Print form errors
+            return JsonResponse({'success': False, 'message': 'Invalid form submission', 'errors': form.errors}, status=400)    
 
-    return JsonResponse({'success': True, 'comments': comments_data,'comments_count':comments_count})
+    return JsonResponse({'success': False, 'message': 'Invalid request'}, status=400)
+
+
 
 # method to like job 
 @login_required(login_url=reverse_lazy('Account:signin'))  

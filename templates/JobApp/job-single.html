@@ -128,11 +128,6 @@
             </div>
             
           </div>
-          <!-- <form action="{% url 'JobApp:apply_job' single_job.id %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="job" value="{{ single_job.id }}">
-            <input type="submit" class="btn btn-block btn-primary btn-md" value="Apply Now" />
-          </form> -->
           <div class="row d-flex justify-content-between " style="font-weight: bold;">
                 <div class="col-md-6"><i class="fa-solid fa-thumbs-up   ml-3"></i>  {{ total_likes }}</div>
                 {% if comments_count == 1 %}
@@ -161,13 +156,17 @@
             <div class="col-md-4">Send</div>
           </div>
           <!-- form to submit comment -->
-          <div id="comment-form-section " class="mt-3">       
-              <form id="comment-form" method="POST">
-                  {% csrf_token %}
-                  <textarea name="comment" id="id_comment" class="form-control" placeholder="Write a comment..." required></textarea>
-                  <button type="submit" class="btn btn-primary mt-2">Post</button>
-              </form>
-          </div> 
+            
+            <!-- Comment Form -->
+        <div id="comment-form-section" class="mt-3">       
+          <form id="comment-form" action="{% url 'JobApp:do_comment' single_job.id %}" method="POST">
+              {% csrf_token %}
+              <textarea name="comment" id="id_comment" class="form-control" placeholder="Write a comment..." required></textarea>
+              <button type="submit" class="btn btn-primary mt-2">Post</button>
+          </form>
+        </div>
+        
+
           <div id="comments-container" style="display: none;">
             <!-- call when click on Comments button -->
                  <!-- <h3>I am displaying here</h3> -->
@@ -236,53 +235,89 @@
 <!-- Script to submit form  -->
 <script>
   $(document).ready(function(){
-    $('#comment-form').on('submit',function(e){
-      e.preventDefault();
-
-      /* $("body").bind("ajaxSend", function(elm, xhr, s){
-        if (s.type == "POST") {
-           xhr.setRequestHeader('X-CSRF-Token', getCSRFTokenValue());
-        }
-     }); */
-     $.ajaxSetup({
-      headers: { "X-CSRFToken": "{{ csrf_token }}" },
-  });
-      const formData = $(this).serialize();
-      console.log("Form Data Submitted: ", formData);
-
-      $.ajax({
-        url :  "{% url 'JobApp:do_comment' single_job.id %}",
-        method:'post',
-       // data:{'formData':formData, CSRF: getCSRFTokenValue()},
-        data:formData,
-        headers: {
-          'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
-        },
-        success: function(response){
-         // console.log('ServerResponse',response)
-          if (response.success) {
-            console.log('ResponseSuccess');
-            const newCommentHtml = `
-                <div class="comment">
-                    <strong>${response.user}</strong> (${response.created_at})
-                    <p>${response.comment}</p>
-                </div>`;
-            $('#comments-container').prepend(newCommentHtml);
-            $('#id_comment').val(''); // Clear the textarea
-        } else {
-            alert("Failed to submit comment");
-        }
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        console.error("Error Details: ", textStatus, errorThrown);
-        alert("An error occurred while submitting the comment. Please try again.");
-    },
-
-
+    
+      // Submit comment using AJAX
+      $('#comment-form').on('submit', function(e){
+          e.preventDefault(); // Prevent normal form submission
+          
+          $.ajaxSetup({
+              headers: { "X-CSRFToken": "{{ csrf_token }}" }  // CSRF token handling
+          });
+  
+          const formData = new FormData(this);  // Form data
+  
+          $.ajax({
+            
+              url: "{% url 'JobApp:do_comment' single_job.id %}",
+              method: "POST",
+              data: formData,
+              processData: false,  // Required for FormData
+              contentType: false,  // Required for FormData
+              success: function(response) {
+                  console.log("Comment Submitted:", response);
+  
+                  if (response.success) {
+                      // Append the new comment
+                      var newCommentHtml = `
+                          <div class="comment border p-2 mt-2">
+                              <strong>${response.new_comment.user}</strong> (${response.new_comment.created_at})
+                              <p>${response.new_comment.comment}</p>
+                          </div>`;
+                      $('#comments-container').prepend(newCommentHtml);
+                      
+                      $('#id_comment').val(''); // Clear textarea
+                  } else {
+                      alert("Failed to submit comment.");
+                  }
+              },
+              error: function(xhr, textStatus, errorThrown) {
+                  console.error("AJAX Error:", textStatus, errorThrown);
+                  alert("An error occurred. Please try again.");
+              }
+          });
       });
-    });
+  
+      // Fetch and toggle comments dynamically
+      $('#toggle-comments-btn').on('click', function(){
+          if ($('#comments-container').is(":hidden")) {
+              $('#comments-container').show(); // Show comments container
+  
+              // Fetch comments via AJAX
+              $.ajax({
+                  url: "{% url 'JobApp:do_comment' single_job.id %}",
+                  method: "GET",
+                  dataType: "json",
+                  success: function(data) {
+                      console.log("Comments Fetched:", data);
+                      
+                      if (data.success) {
+                          $('#comments-container').html("");  // Clear previous comments
+  
+                          data.comments.forEach(function(comment) {
+                              var commentHtml = `
+                                  <div class="comment border p-2 mt-2">
+                                      <strong>${comment.user}</strong> (${comment.created_at})
+                                      <p>${comment.comment}</p>
+                                  </div>`;
+                              $('#comments-container').append(commentHtml);
+                          });
+  
+                      } else {
+                          alert("Failed to load comments.");
+                      }
+                  },
+                  error: function(xhr, textStatus, errorThrown) {
+                      console.error("AJAX Error:", textStatus, errorThrown);
+                      alert("Error loading comments.");
+                  }
+              });
+          } else {
+              $('#comments-container').hide(); // Hide comments if already visible
+          }
+      });
   });
-</script>
+  </script>
+
 
 <!-- Script to disply comment using ajax call -->
 <script>
@@ -338,7 +373,7 @@
       }
    });
   }); 
-</script>
+</script> 
 
 
 {% endblock %}

@@ -101,7 +101,7 @@ class JobApplication(models.Model):
 class Applicant(models.Model):
     user= models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     job= models.ForeignKey(Job, on_delete=models.CASCADE)
-    timestamp=models.DateTimeField(auto_now=False)  
+    timestamp=models.DateTimeField(auto_now_add=True)  
 
     def __str__(self):
         return f"{self.job.title}  {self.user}"
@@ -109,7 +109,7 @@ class Applicant(models.Model):
 class BookmarkJob(models.Model):
     user= models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     job=models.ForeignKey(Job, on_delete=models.CASCADE)
-    timestamp=models.DateTimeField(auto_now=False)
+    timestamp=models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _("Bookmark")

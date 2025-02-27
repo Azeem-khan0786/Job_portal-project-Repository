@@ -21,12 +21,12 @@ ListPage{% endblock %} {% block content %}
             {% csrf_token %}
             <div class="search-input">
                 <i class="fas fa-briefcase"></i>
-                <input type="search" name="job" placeholder="Job Title, keywords, or company" id="job"  />
+                <input type="search" name="job" placeholder="Job Title, keywords, or company" id="job" value='{{job_query}}'   />
             </div>
             <div class="divider">|</div>
             <div class="search-input">
                 <i class="fas fa-map-marker-alt"></i>
-                <input type="search" name="location" placeholder="Location, city, code, 'Remote'" id="location" value='New Dehli'/>
+                <input type="search" name="location" placeholder="Location, city, code, 'Remote'" id="location" value='{{location_query}}'/>
             </div>
             <button type="submit" class="find-button">Find find_job</button>
         </form>
@@ -173,16 +173,18 @@ ListPage{% endblock %} {% block content %}
             </div>
         </div>
     </div>
-</div>
-{% elif not find_job %}
-NO Job
-{% endif %}
 
+{% elif not find_job %}
+            <div class="no-job-message m-auto text-center">
+                <p class ="text-center">🚀 Oops! No jobs match your search criteria.</p>
+                <p>Try searching with different keywords or check back later for new job postings.</p>
+                <a href="{% url 'JobApp:job_view' %}" class="btn btn-primary " >View All Jobs</a>
+            </div>
+{% endif %}
+</div>
 <!-- Footer -->
-<footer class="bg-light py-3">
-    <div class="container">
-        <p class="text-center mb-0">&copy; 2024 Job Portal. All Rights Reserved.</p>
-    </div>
+<footer class="bg-light footer text-center fixed-bottom">
+    <p>&copy; 2024 Job Portal. All Rights Reserved.</p>
 </footer>
 
 <!-- JavaScript to handle job clicks -->
