@@ -81,6 +81,7 @@ ListPage{% endblock %} {% block content %}
                 <article class="card-body" >
                     <div class="row card-title d-flex justify-content-between font-weight-bold" style="font-size: 16px;">
                         <div class="col-md-6"><b>{{ job.title }} </b></div>
+                    
                         <div class="col-md-6 text-right" onclick="showBox('buttonBox{{ forloop.counter }}')" >
                             <i class="fa-solid fa-ellipsis-vertical" ></i>
                             <!-- Hidden div for buttons -->
@@ -120,15 +121,16 @@ ListPage{% endblock %} {% block content %}
                         <strong>Experience Required:</strong> {{ job.experience_required }}
                     </p>
                    
-                    {% comment %} 
+                     
                             <div class="row m-1 mb-3 d-flex justify-content-between"> 
-                                <a href="{% url 'JobApp:single_job_view' job.id %}"
+                               
+                                    <a  href="{% url 'JobApp:single_job_view' job.id %}"
                                     style="text-decoration: none; color: black"><i class="fa-solid fa-paper-plane"></i> Easily
                                     apply</a> 
-                                    <a href="{% url 'JobApp:single_job_view' job.id %}"
-                                    style="text-decoration: none; "></i> View description</a>
+                               
+                                    
                             </div> 
-                     {% endcomment %}
+                     
                     
                     {% if postdays == 0 %}
                     <p>just post</p>
@@ -166,7 +168,13 @@ ListPage{% endblock %} {% block content %}
                 </div>
                 <!-- Button to trigger the URL copy -->
                  <div class="row d-flex justify-content-around w-50 m-3">
-                    <div class="col-md"> <button class="btn  bg-primary " >Apply Now</button>   </div>
+                     <div class="col-md">
+                        <form action="{% url 'JobApp:apply_job' jobs.0.id %}" method="POST" class="ml-3">
+                            {% csrf_token %}
+                            <input type="hidden" name="job" value="{{ jobs.0.id  }}">
+                            <input type="submit" class="btn  btn-primary " value="Apply Now" />
+                          </form>
+                    </div> 
                     <div class="col-md"><button class="btn  bg-success" id="copyURL">Copy URL</button></div>
                     <div class="col-md"><i class="fa-regular fa-square-dashed"></i></div>
                  </div>
@@ -204,9 +212,9 @@ ListPage{% endblock %} {% block content %}
                     <div>{{comment.comment}}</div>
                 </div>
             </div>
-            <div class="row p-1 m-1 d-flex justify-content-between">
+            <!-- <div class="row p-1 m-1 d-flex justify-content-between">
                 <a href="{% url 'JobApp:single_job_view' jobs.0.id %}" class="btn btn-primary">Apply Job</a>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

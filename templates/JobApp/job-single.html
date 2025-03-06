@@ -26,9 +26,10 @@
       <div class="d-flex align-items-center">
         <div class="border p-2 d-inline-block mr-3 rounded">
           {% if com_logo %}
-          <img src="{{ com_logo.url }}" alt="Company Logo" style="width: 100px; height: 80px;">
-          
-          {% endif %}
+    <img src="{{ com_logo.url }}" alt="Company Logo" style="width: 100px; height: 80px;">
+{% else %}
+    <img src="{% static 'images/shadow.png' %}" alt=" " style="width:80px; height: 60px;">
+{% endif %}
         </div>
         <div>
           <h5>{{ single_job.title }}</h5>
@@ -119,7 +120,7 @@
                      <form action="{% url 'JobApp:bookmark_view' single_job.id %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="job" value="{{single_job.id}}">
-                        <input type="submit" class="btn btn-block btn-warning btn-md" value="Saved Now" />
+                        <input type="submit" class="btn btn-block btn-warning btn-md" value="Save Now" />
                      </form>
                   {% endif %}
               {% elif request.user.id == single_job.user.id and user.user_type == 'recruiter' %}
@@ -176,7 +177,7 @@
       
       <!-- Right Side: Job Details -->
       <div class="col-lg-4 ">
-        <div class="bg-light p-3 border rounded mb-4 mr-3">
+        <div class="bg-light p-1 border rounded mb-4 mr-1">
           <h2 class="text-success  mt-3 h5 pl-3 mb-3 ">Job Summary</h2>
           <ul class="list-unstyled pl-3 mb-0">
             <li class="mb-2"><strong class="text-black">Published on:</strong> {{ single_job.timestamp|date:"d M Y" }}
